@@ -6,7 +6,7 @@
 #define MAXN 4
 #define N 256
 #define M 256
-#define F 256 //2040
+#define F 128 //2040
 
 //elements of GF16
 //unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -169,9 +169,9 @@ unsigned short buf; //一時的なデータを蓄える
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      a[i][j]=rand()%M;
-     printf("%d,",a[i][j]);
+     //printf("%d,",a[i][j]);
    }
-    printf("\n");
+   //printf("\n");
  }
  
 
@@ -203,8 +203,9 @@ for(j=0;j<n;j++){
  }
  }
  }
- 
- printf("\n\n逆行列を出力\n");
+
+
+ // printf("\n\n逆行列を出力\n");
  for(i=0;i<n;i++){
   count=0;
  for(j=0;j<n;j++){
@@ -214,11 +215,36 @@ for(j=0;j<n;j++){
      printf("\nbaka\n\n");
      goto lab;
    }
-  printf(" %d",inv_a[i][j]);
+   //printf(" %d",inv_a[i][j]);
  }
- printf("\n");
+ //printf("\n");
 }
-//exit(1); 
+
+printf("\n\n行列を出力\n");
+ for(i=0;i<n;i++){
+   for(j=0;j<n;j++){
+     //a[i][j]=rand()%M;
+     printf("%d,",c[i][j]);
+   }
+   printf("\n\n");
+ }
+ 
+ printf("\n\n逆行列を出力\n");
+ for(i=0;i<n;i++){
+   count=0;
+   for(j=0;j<n;j++){
+     if(inv_a[i][j]==0)
+       count++;
+     if(count==n){
+       printf("\nbaka\n\n");
+       goto lab;
+     }
+     printf(" %d",inv_a[i][j]);
+   }
+   printf("\n");
+ }
+
+ //exit(1); 
 //検算
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
