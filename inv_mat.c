@@ -5,8 +5,8 @@
 
 #define MAXN 4
 #define N 16
-#define M 64
-#define F 64 //2040
+#define M 32
+#define F 32 //2040
 
 //elements of GF16
 unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -56,18 +56,19 @@ double det=1.0,buf;
 int n=M;  //配列の次数
 int i,j,k;
 
- lab:
+// lab:
+/*
  for(i=0;i<M;i++){
    for(j=0;j<M;j++)
      a[i][j]=rand()%16;
  }
- 
+*/
 //三角行列を作成
 for(i=0;i<n;i++){
  for(j=0;j<n;j++){
   if(i<j){
-    if(a[i][i]==0)
-      goto lab;
+    //    if(a[i][i]==0)
+    //   goto lab;
    buf=a[j][i]/a[i][i];
    for(k=0;k<n;k++){
    a[j][k]-=a[i][k]*buf;
@@ -82,6 +83,10 @@ for(i=0;i<n;i++){
 }
  
 printf("%f\n",det); // -> 120.000000
+ if(det==0.0){
+   printf("baka\n");
+   exit(1);
+ }
  if(det==1.0)
  return 0;
  if(det!=1.0)
@@ -95,7 +100,7 @@ unsigned char bb[F][F]={0};
 
 #pragma omp parallel for    
   for(i=0;i<F;i++){
-    a[i][i]=1;
+    a[i][i]=rand()%16;
     bb[i][i]=1;
   }
   for(i=0;i<F;i++){
@@ -129,7 +134,7 @@ unsigned char bb[F][F]={0};
     for(j=0;j<F;j++){
       //#pragma omp parallel for  
       for(k=0;k<F;k++){
-	cc[i][j]^=gf[mlt(fg[bb[i][k]],fg[a[k][j]])];
+	cc[i][j]^=bb[i][k]&a[k][j];
       }
     }
   }
@@ -138,7 +143,7 @@ unsigned char bb[F][F]={0};
       printf("%d,",cc[i][j]);
     printf("\n");
   }
-  // exit(1);
+  //exit(1); 
 }
 
 
@@ -147,11 +152,11 @@ int matinv(){
 unsigned char inv_a[M][M]; //ここに逆行列が入る
 unsigned char buf; //一時的なデータを蓄える
  unsigned char b[M][M]={0},dd[M][M]={0};
-int i,j,k; //カウンタ
+ int i,j,k,count; //カウンタ
  int n=M;
 
  lab:
- /*
+ 
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      a[i][j]=rand()%16;
@@ -159,7 +164,7 @@ int i,j,k; //カウンタ
    }
     printf("\n");
  }
- */
+ 
 
  // printf("\n");
  for(i=0;i<n;i++){
@@ -191,12 +196,17 @@ for(j=0;j<n;j++){
 }
 //逆行列を出力
 for(i=0;i<n;i++){
+  count=0;
  for(j=0;j<n;j++){
+   if(inv_a[i][j]==0)
+     count++;
+   if(count==n)
+     goto lab;
   printf(" %d",inv_a[i][j]);
  }
  printf("\n");
 }
- 
+//exit(1); 
 //検算
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
@@ -223,8 +233,11 @@ int main(){
 
     srand(clock());
 
-    g2();
+    //g2();
+ lab:
     matinv();
+    //if(det()!=1.0)
+    //goto lab;
     
     return 0;
 }
