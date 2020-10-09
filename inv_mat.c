@@ -5,12 +5,17 @@
 
 #define MAXN 4
 #define N 16
-#define M 16
+#define M 64
+#define F 64 //2040
+
 //elements of GF16
 unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
 //index of GF16
 unsigned char fg[N]={0,1,2,13,3,10,14,8,4,5,11,6,15,12,9,7};
 unsigned char c[M][M]={0};
+
+unsigned char a[M][M]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+unsigned char cc[M][M]={0};
 
 int mlt(int x, int y){
 
@@ -41,19 +46,28 @@ int Inv(unsigned char b){
           return i;
       }
 
-    }
+}
 
-void det(){
-double a[4][4]={{2,-2,4,2},{2,-1,6,3},{3,-2,12,12},{-1,3,-4,4}};
+
+int det(){
+  //double a[M][M]={{2,-2,4,2},{2,-1,6,3},{3,-2,12,12},{-1,3,-4,4}};
 double det=1.0,buf;
 
-int n=8;  //配列の次数
+int n=M;  //配列の次数
 int i,j,k;
+
+ lab:
+ for(i=0;i<M;i++){
+   for(j=0;j<M;j++)
+     a[i][j]=rand()%16;
+ }
  
 //三角行列を作成
 for(i=0;i<n;i++){
  for(j=0;j<n;j++){
   if(i<j){
+    if(a[i][i]==0)
+      goto lab;
    buf=a[j][i]/a[i][i];
    for(k=0;k<n;k++){
    a[j][k]-=a[i][k]*buf;
@@ -68,16 +82,76 @@ for(i=0;i<n;i++){
 }
  
 printf("%f\n",det); // -> 120.000000
+ if(det==1.0)
+ return 0;
+ if(det!=1.0)
+   return -1;
 }
 
+
+void g2(){
+  int i,j,k;
+unsigned char bb[F][F]={0};
+
+#pragma omp parallel for    
+  for(i=0;i<F;i++){
+    a[i][i]=1;
+    bb[i][i]=1;
+  }
+  for(i=0;i<F;i++){
+    //#pragma omp parallel for  
+    for(j=i+1;j<F;j++){
+      a[i][j]=rand()%16;
+      // printf("%d,",a[i][j]);
+    }
+    //printf("\n");
+  }
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++)
+      printf("%d,",a[i][j]);
+    printf("\n");
+  }
+
+  for(i=0;i<F;i++){
+    //#pragma omp parallel for  
+    for(j=i+1;j<F;j++){
+      bb[j][i]=rand()%16;      
+    }
+
+  }
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++)
+      printf("%d,",bb[i][j]);
+    printf("\n");
+  }
+  //exit(1);
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++){
+      //#pragma omp parallel for  
+      for(k=0;k<F;k++){
+	cc[i][j]^=gf[mlt(fg[bb[i][k]],fg[a[k][j]])];
+      }
+    }
+  }
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++)
+      printf("%d,",cc[i][j]);
+    printf("\n");
+  }
+  // exit(1);
+}
+
+
 int matinv(){
-  unsigned char a[M][M]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+  //unsigned char a[M][M]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned char inv_a[M][M]; //ここに逆行列が入る
 unsigned char buf; //一時的なデータを蓄える
- unsigned char b[M][M]={0};
+ unsigned char b[M][M]={0},dd[M][M]={0};
 int i,j,k; //カウンタ
  int n=M;
 
+ lab:
+ /*
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      a[i][j]=rand()%16;
@@ -85,6 +159,8 @@ int i,j,k; //カウンタ
    }
     printf("\n");
  }
+ */
+
  // printf("\n");
  for(i=0;i<n;i++){
    for(j=0;j<n;j++)
@@ -128,10 +204,14 @@ for(i=0;i<n;i++){
        b[i][j]^=gf[mlt(fg[c[k][j]],fg[inv_a[i][k]])];
 
      printf("%d,",b[i][j]);
+     // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
+     //goto lab;
+       
    }
    printf("\n");
  }
-
+ //exit(1);
+ 
  return 0;
 }
 
@@ -139,11 +219,16 @@ for(i=0;i<n;i++){
 int main(){
   
     int i,j;
-    double b[4];
+    double b[4],k=0;
 
-
-      det();
+    srand(clock());
+    /*
+    do{
+      k=det();
+    }while(k!=1.0);
+    */
+    g2();
     matinv();
-  
+    
     return 0;
 }
