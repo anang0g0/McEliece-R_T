@@ -222,11 +222,7 @@ int main(){
     double b[4],k=0;
 
     srand(clock());
-    /*
-    do{
-      k=det();
-    }while(k!=1.0);
-    */
+
     g2();
     matinv();
     
