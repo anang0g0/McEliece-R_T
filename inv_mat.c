@@ -3,10 +3,14 @@
 // (over finite field) Gauss-Jordan法による逆行列
 //
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #define MAXN 4
 #define N 256
 #define M 256
-#define F 4 //2040
+#define F 32 //2040
 
 //elements of GF16
 //unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -23,12 +27,47 @@ unsigned char fg[M]={0,1,2,26,3,51,27,199,4,224,52,239,28,105,200,76,5,101,225,1
 
 unsigned short c[M][M]={0};
 
-unsigned short a[M][M]={{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
+unsigned short a[M][M]={0};//{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
 //{{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
 unsigned short inv_a[M][M]={0};
   //{{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
 //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short cc[M][M]={0};
+
+
+
+unsigned char x0[F];//={1,2,3,4,5,6,7,0};
+unsigned char x1[F];//={2,3,1,6,5,7,0,4};
+unsigned char x2[F]={0};
+
+ void rp(unsigned char* a) {
+        int i, j, x;
+        time_t t;
+
+	srand(clock()+time(&t));
+
+
+        for (i = 0; i < F; i++) {
+            a[i] = i;
+        }
+        for (i = 0; i < F - 2; i++) {
+            // rand from i+1 to F-1
+            j = (rand() % (F - 1 - i)) + i + 1;
+
+            // swap a[i] and a[j]
+            x = a[j];
+            a[j] = a[i];
+            a[i] = x;
+        }
+        if (a[F - 1] == F - 1) {
+            a[F - 1] = a[F - 2];
+            a[F - 2] = F - 1;
+        }
+
+
+ }
+
+
 
 int mlt(int x, int y){
 
@@ -271,21 +310,29 @@ printf("行列を出力\n");
 void matmul(){
   int i,j,k,tmp[F][F]={0};
 
+
+  rp(x0);
+  
+  for(i=0;i<F;i++){
+    a[i][x0[i]]=rand()%M;
+    printf("%d,",x0[i]);
+  }
+  printf("\n");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++){
       inv_a[i][j]=gf[Inv(fg[a[j][i]])];//*inv_a[k][j];
-
+      
     }
   }
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
-      printf("%d,",a[j][i]);
+      printf("%3d,",a[j][i]);
     printf("\n");
   }
   printf("\n");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++){
-	printf("%d,",inv_a[j][i]);	
+	printf("%3d,",inv_a[j][i]);	
     }
     printf("\n");
   }
@@ -313,6 +360,7 @@ int main(){
     double b[4],k=0;
 
     srand(clock());
+
 
     //g2();
  lab:
