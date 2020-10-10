@@ -1,5 +1,5 @@
 import itertools, random, functools
-import math
+from math import gcd
 from datetime import datetime
 import inspect
 from sympy.combinatorics import Permutation
