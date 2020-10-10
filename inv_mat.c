@@ -23,8 +23,10 @@ unsigned char fg[M]={0,1,2,26,3,51,27,199,4,224,52,239,28,105,200,76,5,101,225,1
 
 unsigned short c[M][M]={0};
 
-unsigned short a[M][M]={{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
-unsigned short inv_a[M][M]={{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
+unsigned short a[M][M]={{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
+//{{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
+unsigned short inv_a[M][M]={{0,71,0,0},{0,167,0,0},{0,0,0,122},{244,0,0,0}};
+  //{{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
 //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short cc[M][M]={0};
 
@@ -271,7 +273,7 @@ void matmul(){
 
   for(i=0;i<F;i++){
     for(j=0;j<F;j++){
-	inv_a[i][j]=a[j][i];//*inv_a[k][j];
+      //inv_a[i][j]=a[j][i];//*inv_a[k][j];
 
     }
   }
@@ -290,7 +292,7 @@ void matmul(){
   for(i=0;i<F;i++){
     for(j=0;j<F;j++){
       for(k=0;k<F;k++){
-	tmp[i][j]+=a[i][k]*inv_a[k][j];
+	tmp[i][j]^=gf[mlt(fg[a[i][k]],fg[inv_a[k][j]])];
       }
     }
   }
@@ -314,10 +316,13 @@ int main(){
 
     //g2();
  lab:
-    
+    printf("%d\n",gf[Inv(fg[3])]);
+    printf("%d\n",gf[Inv(fg[4])]);
+    printf("%d\n",gf[Inv(fg[5])]);
+    printf("%d\n",gf[Inv(fg[6])]);
     matmul();
     matinv();
-
+    printf("1=%d\n",gf[mlt(fg[3],fg[244])]);
     //if(det()!=1.0)
     //goto lab;
     
