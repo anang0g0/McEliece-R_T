@@ -6,7 +6,7 @@
 #define MAXN 4
 #define N 256
 #define M 256
-#define F 128 //2040
+#define F 4 //2040
 
 //elements of GF16
 //unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -23,7 +23,7 @@ unsigned char fg[M]={0,1,2,26,3,51,27,199,4,224,52,239,28,105,200,76,5,101,225,1
 
 unsigned short c[M][M]={0};
 
-unsigned short a[M][M]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+unsigned short a[M][M]={0}; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short cc[M][M]={0};
 
 int mlt(int x, int y){
@@ -162,12 +162,12 @@ unsigned short inv_a[M][M]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[M][M]={0},dd[M][M]={0};
  int i,j,k,count; //カウンタ
- int n=M;
+ int n=F;
 
  lab:
  
- for(i=0;i<n;i++){
-   for(j=0;j<n;j++){
+ for(i=0;i<F;i++){
+   for(j=0;j<F;j++){
      a[i][j]=rand()%M;
      //printf("%d,",a[i][j]);
    }
@@ -177,7 +177,7 @@ unsigned short buf; //一時的なデータを蓄える
 
  // printf("\n");
  for(i=0;i<n;i++){
-   for(j=0;j<n;j++)
+   for(j=0;j<F;j++)
      c[i][j]=a[i][j];
  }
 //単位行列を作る
