@@ -23,7 +23,9 @@ unsigned char fg[M]={0,1,2,26,3,51,27,199,4,224,52,239,28,105,200,76,5,101,225,1
 
 unsigned short c[M][M]={0};
 
-unsigned short a[M][M]={0}; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+unsigned short a[M][M]={{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
+unsigned short inv_a[M][M]={{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
+//={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short cc[M][M]={0};
 
 int mlt(int x, int y){
@@ -220,16 +222,16 @@ for(j=0;j<n;j++){
  //printf("\n");
 }
 
-printf("\n\n行列を出力\n");
+printf("行列を出力\n");
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      //a[i][j]=rand()%M;
-     printf("%d,",c[i][j]);
+     printf("%3d,",c[i][j]);
    }
-   printf("\n\n");
+   printf("\n");
  }
  
- printf("\n\n逆行列を出力\n");
+ printf("\n逆行列を出力\n");
  for(i=0;i<n;i++){
    count=0;
    for(j=0;j<n;j++){
@@ -239,7 +241,7 @@ printf("\n\n行列を出力\n");
        printf("\nbaka\n\n");
        goto lab;
      }
-     printf(" %d",inv_a[i][j]);
+     printf("%3d ",inv_a[i][j]);
    }
    printf("\n");
  }
@@ -264,6 +266,45 @@ printf("\n\n行列を出力\n");
 }
 
 
+void matmul(){
+  int i,j,k,tmp[F][F]={0};
+
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++){
+	inv_a[i][j]=a[j][i];//*inv_a[k][j];
+
+    }
+  }
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++)
+      printf("%d,",a[j][i]);
+    printf("\n");
+  }
+  printf("\n");
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++){
+	printf("%d,",inv_a[j][i]);	
+    }
+    printf("\n");
+  }
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++){
+      for(k=0;k<F;k++){
+	tmp[i][j]+=a[i][k]*inv_a[k][j];
+      }
+    }
+  }
+  printf("\n");
+  for(i=0;i<F;i++){
+    for(j=0;j<F;j++){
+      printf("%d,",tmp[j][i]);
+      //printf("%d,",inv_a[i][j]);
+    }
+    printf("\n");
+  }
+
+}
+
 int main(){
   
     int i,j;
@@ -273,7 +314,10 @@ int main(){
 
     //g2();
  lab:
+    
+    matmul();
     matinv();
+
     //if(det()!=1.0)
     //goto lab;
     
