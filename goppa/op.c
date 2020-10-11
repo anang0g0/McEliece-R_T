@@ -3143,13 +3143,14 @@ main (void)
 
   srand (clock () + time (&t));
 
-label:
+ label:
 
   //makeS();
   //exit(1);
   do {
-    int fail = 0;
+    fail=0;
     memset(g,0,sizeof(g));
+    memset(ta,0,sizeof(ta));
     ginit ();
 
     w = setpol (g, K + 1);
@@ -3180,9 +3181,9 @@ label:
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-  do{
+    do{
     i=deta(g);
-  } while(i<0);
+    } while(i<0);
   
 
 
