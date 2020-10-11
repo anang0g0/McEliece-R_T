@@ -3147,27 +3147,24 @@ label:
 
   //makeS();
   //exit(1);
+  do {
+    int fail = 0;
+    memset(g,0,sizeof(g));
+    ginit ();
 
-  memset(g,0,sizeof(g));
+    w = setpol (g, K + 1);
+    oprintpol (w);
 
-  ginit ();
-
-
-  w = setpol (g, K + 1);
-  oprintpol (w);
-  //exit(1);
-
-  //多項式の値が0でないことを確認
-  for (i = 0; i < N; i++)
-    {
+    //多項式の値が0でないことを確認
+    for (i = 0; i < N; i++){
       ta[i] = trace (w, i);
-      if (ta[i] == 0)
-	{
-	  printf ("trace 0 @ %d\n", i);
-	  goto label;
-	  //exit(1);
-	}
+      if (ta[i] == 0) {
+	printf ("trace 0 @ %d\n", i);
+	fail = 1;
+	break;
+      }
     }
+  }while(fail)
 
 #pragma omp parallel for
   for (i = 0; i < N; i++)
