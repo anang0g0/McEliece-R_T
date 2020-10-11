@@ -3325,20 +3325,15 @@ lab:
       //エラー表示
       for (i = 0; i < T * 2; i++)
 	{
-	  if (i == 0 && v.x[i] > 0)
-	    {
-	      printf ("%d う\n", v.x[i]);
-	      count++;
-	    }
-	  if (v.x[i] > 0 && i > 0)
-	    {
-	      ++count;
-	      printf ("%d お\n", v.x[i]);
-	    }
+	  if(count==0)
+	    printf ("%d う\n", v.x[i]);
+	  if(count>0)
+	    printf ("%d お\n", v.x[i]);
+	  count++;
 	}
       printf ("err=%dっ!! \n", count);
-      if (count < T)
-	printf ("error is too few\n");
+      if (count != T*2)
+	printf ("baka\n");
       
       
       //goto lab;
