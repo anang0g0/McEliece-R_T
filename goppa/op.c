@@ -3332,7 +3332,7 @@ lab:
   if (count != T*2)
     printf ("error is too few\n");
   
-  exit(1);
+
   //goto lab;
   //wait();
   
