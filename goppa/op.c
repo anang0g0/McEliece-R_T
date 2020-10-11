@@ -3071,18 +3071,18 @@ void trap(OP w,OP f){
 
 void readkey(){
 
-
+  /*
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
-  //key2 (g);
+  key2 (g);
 
-    /*
+    
      fp=fopen("sk.key","rb");
      fread(g,2,K+1,fp);
      fclose(fp);
-   */
+   
 
   //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
-  /*  
+    
      fq = fopen ("H.key", "rb");
      fread (dd, 2, K * N, fq);
      //#pragma omp parallel for
@@ -3092,7 +3092,7 @@ void readkey(){
      mat[i][j] = dd[K * i + j];
      }
      fclose (fq);
-   */
+  */   
 
 }
 
