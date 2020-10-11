@@ -157,7 +157,7 @@ oinv (unsigned short a)
   int i;
 
 
-  for (i = 0; i < M; i++)
+  for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], i)] == 1)
 	return (unsigned short) i;
@@ -175,7 +175,7 @@ equ (unsigned short a, unsigned short b)
   int i;
 
 
-  for (i = 0; i < M; i++)
+  for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], fg[i])] == b)
 	break;
@@ -2413,7 +2413,7 @@ isqrt (unsigned short u)
   int i, j, k;
 
 
-  for (i = 0; i < M; i++)
+  for (i = 0; i < N; i++)
     {
       if (gf[mlt (i, i)] == u)
 	return i;
@@ -3125,7 +3125,7 @@ main (void)
   OP g1 = { 0 }, tmp =
   {
   0};
-
+  int fail=0;
 
 
 //公開鍵matはグローバル変数でスタック領域に取る。
@@ -3164,7 +3164,7 @@ label:
 	break;
       }
     }
-  }while(fail)
+  }while(fail);
 
 #pragma omp parallel for
   for (i = 0; i < N; i++)
