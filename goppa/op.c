@@ -3236,7 +3236,8 @@ lab:
       //exit(1);
       
       f = synd (zz);
-      
+
+      count=0;
       /*
       count = 0;
       for (i = 0; i < N; i++)
@@ -3251,27 +3252,22 @@ lab:
 
       for (i = 0; i < T; i++)
 	{
-	  if (i == 0)
-	    {
-	      printf ("\ne=%d %d %s\n",r.t[i].a, r.t[i].n, "う");
-	    }
-	  else if (r.t[i].a >0)// == r.t[i].n)
+	  if (r.t[i].a >0 && count>0)// == r.t[i].n)
 	    {
 	      printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
+	      count++;
 	    }
-	  else if (r.t[i].a != r.t[i].n)
+	  if (count == 0 && r.t[i].a > 0)
 	    {
-	      for (l = 0; l < N; l++)
-		{
-		  if (zz[l] > 0)
-		    count++;
-		}
-	      if (count < T)
-		{
-		  printf ("error pattarn too few\n");
-		  exit (1);
-		}
-	    }	  
+	      printf ("\ne=%d %d %s\n",r.t[i].a, r.t[i].n, "う");
+	      count++;
+	    }
+	  
+	}
+      if (count != T)
+	{
+	  printf ("error pattarn too few %d\n",count);
+	  exit (1);
 	}
       
       o1 = 0;
@@ -3282,7 +3278,7 @@ lab:
 	    o1++;
 	}
       printf ("err=%dっ！！\n", o1);
-
+      //exit(1);
       //goto label;
     
 
@@ -3294,7 +3290,7 @@ lab:
 
 
       j = 0;
-      while (j < T * 2)
+      while (j < T*2)
 	{
 	  l = xor128 () % N;
 	  //printf ("l=%d\n", l);
@@ -3309,7 +3305,7 @@ lab:
       test (w, zz);
 
       for (i = 0; i < N; i++)
-	printf ("%d,", zz[i]);
+	printf ("%d= %d,\n", i,zz[i]);
       printf ("\n");
 
       f = synd (zz);
@@ -3323,26 +3319,26 @@ lab:
       //復号化の本体
       v = pattarson (w, f);
       //エラー表示
-      for (i = 0; i < T * 2; i++)
+      for (i = 0; i < T*2 ; i++)
 	{
-	  if(count==0)
-	    printf ("%d う\n", v.x[i]);
-	  if(count>0)
-	    printf ("%d お\n", v.x[i]);
+	  if(i==0)
+	    printf ("error position= %d う\n",  v.x[i]);
+	  if(i>0)
+	    printf ("error position= %d お\n",  v.x[i]);
 	  count++;
 	}
-      printf ("err=%dっ!! \n", count);
-      if (count != T*2)
-	printf ("baka\n");
-      
-      
-      //goto lab;
-      //wait();
-
-      break;
+    
+  printf ("err=%dっ!! \n", count);
+  if (count != T*2)
+    printf ("error is too few\n");
+  
+  exit(1);
+  //goto lab;
+  //wait();
+  
+  break;
     }
-
-
-
+  
   return 0;
 }
+  
