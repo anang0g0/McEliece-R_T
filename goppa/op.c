@@ -3319,7 +3319,7 @@ lab:
       //復号化の本体
       v = pattarson (w, f);
       //エラー表示
-      for (i = 0; i < T*2 ; i++)
+      for (i = 0; i < deg(v)+1 ; i++)
 	{
 	  if(i==0)
 	    printf ("error position= %d う\n",  v.x[i]);
