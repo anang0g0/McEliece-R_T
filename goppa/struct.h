@@ -1,5 +1,5 @@
 #define DEG 512
-#define N 256
+//#define N 16
 /* -*- mode: C; coding:utf-8 -*- */
 
 
