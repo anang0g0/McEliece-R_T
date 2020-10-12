@@ -826,8 +826,10 @@ omod (OP f, OP g)
 
 
   n = LT (g).n;
-
-  assert(("baka^\n",LT(f).n!=0));
+  if(LT(f).n==0)
+    return f;
+  
+  //assert(("baka^\n",LT(f).n!=0));
 
   /*
   if (LT (f).n == 0)
@@ -2510,7 +2512,7 @@ osqrt (OP f, OP w)
       printpol (o2v (r));
       printf (" r======0 バグです。計算できません!\n");
       //wait ();
-      exit (1);
+      //exit (1);
     }
 
   tmp = omod (omul (s, r), w);
@@ -2526,24 +2528,24 @@ osqrt (OP f, OP w)
       ww = omod (omul (h, s), w);
     }
 
-    /*
+    
      if(LT(ww).n==0 && LT(ww).a==0){
-     //printpol(o2v(s));
+     printpol(o2v(s));
      printf(" s===========\n");
-     //printpol(o2v(w));
+     printpol(o2v(w));
      printf(" w==============\n");
-     //printpol(o2v(r));
+     printpol(o2v(r));
      printf(" r===========\n");
-     //printpol(o2v(h));
+     printpol(o2v(h));
      printf(" h============\n");
-     //printpol (o2v (ww));
+     printpol (o2v (ww));
      printf (" ww==============\n");
      printf(" wwが０になりました。error\n");
      wait();
      return ww;;
      // exit(1);
      }
-   */
+   
   tmp = omod (omul (ww, ww), w);
   if (LT (tmp).n == 1)
     {
@@ -2552,17 +2554,17 @@ osqrt (OP f, OP w)
     }
   else
     {
-      //printpol (o2v (tmp));
+      printpol (o2v (tmp));
       printf (" mod w^2==========\n");
-      //printpol (o2v (ww));
+      printpol (o2v (ww));
       printf (" ww^2 failed!========\n");
-      //printpol (o2v (s));
+      printpol (o2v (s));
       printf (" g1^-1==============\n");
-      //printpol (o2v (w));
+      printpol (o2v (w));
       printf (" w==============\n");
-      //printpol (o2v (h));
+      printpol (o2v (h));
       printf (" g0===========\n");
-      //printpol (o2v (r));
+      printpol (o2v (r));
       printf (" r===========\n");
       printf ("この鍵では逆元が計算できません。error");
       wait ();
