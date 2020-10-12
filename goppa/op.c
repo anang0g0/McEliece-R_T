@@ -2542,7 +2542,7 @@ osqrt (OP f, OP w)
      printf (" ww==============\n");
      printf(" wwが０になりました。error\n");
      wait();
-     return ww;;
+     return ww;
      // exit(1);
      }
    
@@ -2646,15 +2646,15 @@ pattarson (OP w, OP f)
   printf (" h+x==============\n");
   //  exit(1);
   g1 = osqrt (r2, w);
-  //printpol (o2v (g1));
+  printpol (o2v (g1));
   b2 = omod (omul (g1, g1), w);
   if (LT2 (b2).a != LT2 (r2).a)
     {
-      //printpol (o2v (w));
+      printpol (o2v (w));
       printf (" w============\n");
-      //printpol (o2v (r2));
+      printpol (o2v (r2));
       printf (" r2============\n");
-      //printpol (o2v (g1));
+      printpol (o2v (g1));
       printf (" g1============\n");
       printf (" g1は平方ではありません。error");
       wait ();
@@ -2663,9 +2663,10 @@ pattarson (OP w, OP f)
   printf (" g1!=========\n");
   if (LT (g1).n == 0 && LT (g1).a == 0)
     {
-      //printpol (o2v (w));
+      printf("h+x が g で割り切れます！\n");
+      printpol (o2v (w));
       printf (" badkey=========\n");
-      //printpol (o2v (g1));
+      printpol (o2v (g1));
       printf (" g1============\n");
       printf ("平方が０になりました。 error\n");
       wait ();
@@ -2674,17 +2675,21 @@ pattarson (OP w, OP f)
   //exit(1);
   hh = xgcd (w, g1);
   flg = 0;
-aa:
+
+  //aa:
   ff = omod (omul (hh.v, g1), w);
-  //printpol (o2v (ff));
+  printpol (o2v (ff));
   printf (" beta!=========\n");
   if (odeg ((ff)) != K / 2)
     {
       flg = 1;
-      //printpol (o2v (w));
+      printf(" locater's degree is less than error!\n");
+      printpol (o2v (w));
       printf (" locater function failed!! error\n");
-      printf ("cannot correct(bad key) error============\n");
+      printpol(o2v(ff));
+      printf (" cannot correct(bad key) error============\n");
       wait ();
+      exit(1);
       //return -1;
     }
 
