@@ -2505,9 +2505,9 @@ osqrt (OP f, OP w)
   else if (LT (r).n == 0)
     {
       //printpol (o2v (r));
-      printf (" r======0\n");
+      printf (" r======0 g is not irreducible!\n");
       wait ();
-      //exit (1);
+      exit (1);
     }
 
   tmp = omod (omul (s, r), w);
