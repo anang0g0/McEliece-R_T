@@ -2509,8 +2509,8 @@ osqrt (OP f, OP w)
     {
       printpol (o2v (r));
       printf (" r======0 バグです。計算できません!\n");
-      wait ();
-      // exit (1);
+      //wait ();
+      exit (1);
     }
 
   tmp = omod (omul (s, r), w);
@@ -2525,17 +2525,8 @@ osqrt (OP f, OP w)
     {
       ww = omod (omul (h, s), w);
     }
+
     /*
-  if (LT (h).n == 0)
-    {
-      printf ("deg(h)=========0\n");
-      printf("バグです。計算できません\n");
-      ww = omod (omul (h, s), w);
-      //wait();
-      // exit (1);
-    }
-    */
-  /*
      if(LT(ww).n==0 && LT(ww).a==0){
      //printpol(o2v(s));
      printf(" s===========\n");
