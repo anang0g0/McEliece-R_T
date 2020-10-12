@@ -2457,6 +2457,8 @@ osqrt (OP f, OP w)
   j = 0;
   jj = 0;
   k = distance (f);
+  printpol(o2v(f));
+  printf(" syndrome pol\n");
   for (i = 0; i < k + 1; i++)
     {
       if (f.t[i].n % 2 == 0)
@@ -2472,8 +2474,9 @@ osqrt (OP f, OP w)
 	  //printf (" odd %d\n", i);
 	}
     }
-
+  printf("Goppa pol=");
   printpol(o2v(w));
+  printf("\n");
   k = odeg ((w));
   //printf ("%d\n", k);
   //exit(1);
@@ -2504,10 +2507,10 @@ osqrt (OP f, OP w)
     }
   else if (LT (r).n == 0)
     {
-      //printpol (o2v (r));
-      printf (" r======0 Goppa多項式が既役ではありません!\n");
+      printpol (o2v (r));
+      printf (" r======0 バグです。計算できません!\n");
       wait ();
-      exit (1);
+      // exit (1);
     }
 
   tmp = omod (omul (s, r), w);
@@ -2518,18 +2521,20 @@ osqrt (OP f, OP w)
       wait ();
       exit (1);
     }
-  if (LT (h).n > 0)
+  //  if (LT (h).n > 0)
     {
       ww = omod (omul (h, s), w);
     }
+    /*
   if (LT (h).n == 0)
     {
       printf ("deg(h)=========0\n");
       printf("バグです。計算できません\n");
-
-      wait();
-      exit (1);
+      ww = omod (omul (h, s), w);
+      //wait();
+      // exit (1);
     }
+    */
   /*
      if(LT(ww).n==0 && LT(ww).a==0){
      //printpol(o2v(s));
