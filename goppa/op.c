@@ -2505,7 +2505,7 @@ osqrt (OP f, OP w)
   else if (LT (r).n == 0)
     {
       //printpol (o2v (r));
-      printf (" r======0 g is not irreducible!\n");
+      printf (" r======0 Goppa多項式が既役ではありません!\n");
       wait ();
       exit (1);
     }
@@ -2524,7 +2524,10 @@ osqrt (OP f, OP w)
     }
   if (LT (h).n == 0)
     {
-      printf ("h=========0\n");
+      printf ("deg(h)=========0\n");
+      printf("バグです。計算できません\n");
+
+      wait();
       exit (1);
     }
   /*
