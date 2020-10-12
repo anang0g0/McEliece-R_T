@@ -942,8 +942,11 @@ odiv (OP f, OP g)
   //exit(1);
   k = odeg (g);
   b = LT (g);
-  //printpol (o2v (g));
-  //printf ("in odiv1 g===========%d %d\n", b.a, b.n);
+  printpol (o2v (g));
+  printf("\n");
+  printpol(o2v(f));
+  printf("\n");
+  printf ("in odiv1 g===========%d %d\n", b.a, b.n);
   if (b.a == 1 && b.n == 0)
     return f;
   if (b.a == 0 && b.n == 0)
@@ -965,15 +968,17 @@ odiv (OP f, OP g)
 
   //printf ("\nin odiv2 g=============%d\n", odeg ((g)));
 
+  //  exit(1);
   i = 0;
   while (LT (f).n > 0 && LT (g).n > 0)
     {
+      printf("%d!!\n",i);
       //  printf("in!\n");
       //    exit(1);
 
       c = LTdiv (f, b);
       //    if(c.a>0){
-      // printf("in odev c========%dx^%d\n",c.a,c.n);
+       printf("in odev c========%dx^%d\n",c.a,c.n);
       //    exit(1);
       if (c.n < DEG)
 	tt.t[c.n] = c;
@@ -2152,15 +2157,17 @@ det (unsigned short g[])
       a = trace (w, i);
       // cc[K] = k;
 
+      
       cc[K] = k ^ a;
       //tr[i];
       f = setpol (cc, K + 1);
 
       //f.t[0].a=k^ta[i]; //cc[K];
       h.t[0].a = i;
-
+      printf("%d!!\n",i);
       ww = odiv (f, h);
-
+      
+      
       b = oinv (a);
       t.a = gf[b];
 
@@ -2466,7 +2473,7 @@ osqrt (OP f, OP w)
 	}
     }
 
-
+  printpol(o2v(w));
   k = odeg ((w));
   //printf ("%d\n", k);
   //exit(1);
@@ -2500,7 +2507,7 @@ osqrt (OP f, OP w)
       //printpol (o2v (r));
       printf (" r======0\n");
       wait ();
-      exit (1);
+      //exit (1);
     }
 
   tmp = omod (omul (s, r), w);
@@ -2634,7 +2641,7 @@ pattarson (OP w, OP f)
   printf ("locater==========\n");
   //exit(1);
   r2 = oadd (ff, tt);
-//  //printpol (o2v (r2));
+  printpol (o2v (r2));
   printf (" h+x==============\n");
   //  exit(1);
   g1 = osqrt (r2, w);
@@ -3181,10 +3188,10 @@ main (void)
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-    do{
-    i=deta(g);
-    } while(i<0);
-  
+  //    do{
+    det (g);
+    //} while(i<0);
+    printf("!!\n");  
 
 
 lab:
