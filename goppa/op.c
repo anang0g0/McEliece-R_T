@@ -50,7 +50,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = { 0 };
+static unsigned short g[K + 1] = {1,0,0,9,15,0,0,9,9};//+9x^5+15x^4+9x^1+9x^0+};//{ 0 };
 unsigned short zz[N] = { 0 };
 
 
@@ -1411,12 +1411,15 @@ xgcd (OP f, OP g)
     {
       if (LT (g).n == 0)
 	{
-	  printf ("v[%d]=%d skipped\n", i, odeg ((v[i])));
+	  printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
+	  printpol(o2v(g));
+	  printf(" g========\n");
+	  wait();
 	  //exit(1);
 	  break;
 	}
 
-      if (odeg ((g)) > 0)
+      if (LT(g).n > 0)
 	h = omod (f, g);
 
       if (LT (g).a > 0)
@@ -2549,7 +2552,7 @@ osqrt (OP f, OP w)
   tmp = omod (omul (ww, ww), w);
   if (LT (tmp).n == 1)
     {
-      //printpol (o2v (ww));
+      printpol (o2v (ww));
       printf (" ww succsess!===========\n");
     }
   else
@@ -2675,10 +2678,15 @@ pattarson (OP w, OP f)
   //exit(1);
   hh = xgcd (w, g1);
   flg = 0;
-aa:
+
+  
   ff = omod (omul (hh.v, g1), w);
-  //printpol (o2v (ff));
+  printpol (o2v (ff));
   printf (" beta!=========\n");
+  printpol(o2v(w));
+  printf(" goppa=========\n");
+  printpol(o2v(f));
+  printf(" syn=========\n");
   if (odeg ((ff)) != K / 2)
     {
       flg = 1;
@@ -2690,7 +2698,7 @@ aa:
     }
 
 
-  ////printpol (o2v (hh.v));
+  printpol (o2v (hh.v));
   printf (" alpha!=========\n");
   //exit(1);
   if (odeg ((ff)) == K / 2)
@@ -2699,7 +2707,7 @@ aa:
     }
   else if (odeg ((ff)) == 1)
     {
-      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
+      ll = ff; //oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
     }
   else
     {
@@ -3158,9 +3166,9 @@ main (void)
   //exit(1);
   do {
     fail=0;
-    memset(g,0,sizeof(g));
+    //memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
-    ginit ();
+    //ginit ();
 
     w = setpol (g, K + 1);
     oprintpol (w);
