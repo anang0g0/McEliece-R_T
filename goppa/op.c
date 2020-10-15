@@ -50,7 +50,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1,0,0,9,15,0,0,9,9};//+9x^5+15x^4+9x^1+9x^0+};//{ 0 };
+static unsigned short g[K + 1] = {1,0,6,0,0,0,0,8,1};//{ 0 };
 unsigned short zz[N] = { 0 };
 
 
@@ -2456,14 +2456,14 @@ osqrt (OP f, OP w)
     {
       if (f.t[i].n % 2 == 0)
 	{
-	  even.t[i].n = f.t[i].n / 2;
-	  even.t[i].a = gf[isqrt (f.t[i].a)];
+	  even.t[j].n = f.t[i].n / 2;
+	  even.t[j++].a = gf[isqrt (f.t[i].a)];
 	  printf ("a=%d %d\n", f.t[i].a, i);
 	}
       if (f.t[i].n % 2 == 1)
 	{
-	  odd.t[i].n = (f.t[i].n - 1) / 2;
-	  odd.t[i].a = gf[isqrt (f.t[i].a)];
+	  odd.t[jj].n = (f.t[i].n - 1) / 2;
+	  odd.t[jj++].a = gf[isqrt (f.t[i].a)];
 	  printf (" odd %d\n", i);
 	}
     }
@@ -2478,14 +2478,14 @@ osqrt (OP f, OP w)
     {
       if (w.t[i].n % 2 == 0)
 	{
-	  h.t[i].a = gf[isqrt (w.t[i].a)];
-	  h.t[i].n = w.t[i].n / 2;
+	  h.t[j].a = gf[isqrt (w.t[i].a)];
+	  h.t[j++].n = w.t[i].n / 2;
 	  printf ("h==%d %d\n", (w.t[i].n / 2), i);
 	}
       if (w.t[i].n % 2 == 1)
 	{
-	  r.t[i].a = gf[isqrt (w.t[i].a)];
-	  r.t[i].n = (w.t[i].n - 1) / 2;
+	  r.t[jj].a = gf[isqrt (w.t[i].a)];
+	  r.t[jj++].n = (w.t[i].n - 1) / 2;
 	  printf("r=====%d %d\n",(w.t[i].n-1)/2,i);
 	}
     }
@@ -2505,12 +2505,14 @@ osqrt (OP f, OP w)
       printf (" goppa======0\n");
       printpol (o2v (f));
       printf (" syn======0\n");
-      //s = inv (r, w);
+      s.t[0].a=gf[isqrt(LT(r).a)];
+      s.t[0].n=0;
+  //s = inv (r, w);
       //wait ();
-      exit (1);
+      //exit (1);
     }
-
-  tmp = omod (omul (s, r), w);
+  if(deg(o2v(s))>0)
+    tmp = omod (omul (s, r), w);
   if (odeg ((tmp)) > 0)
     {
       //printpol (o2v (tmp));
@@ -2530,7 +2532,7 @@ osqrt (OP f, OP w)
       //wait();
       exit (1);
     }
-  /*
+  
      if(LT(ww).n==0 && LT(ww).a==0){
      //printpol(o2v(s));
      printf(" s===========\n");
@@ -2544,10 +2546,10 @@ osqrt (OP f, OP w)
      printf (" ww==============\n");
      printf(" wwが０になりました。error\n");
      wait();
-     return ww;;
-     // exit(1);
+     //return ww;;
+     exit(1);
      }
-   */
+     
   tmp = omod (omul (ww, ww), w);
   if (LT (tmp).n == 1)
     {
@@ -2560,7 +2562,7 @@ osqrt (OP f, OP w)
       printf (" mod w^2==========\n");
       //printpol (o2v (ww));
       printf (" ww^2 failed!========\n");
-      //printpol (o2v (s));
+      printpol (o2v (s));
       printf (" g1^-1==============\n");
       //printpol (o2v (w));
       printf (" w==============\n");
@@ -2570,18 +2572,18 @@ osqrt (OP f, OP w)
       printf (" r===========\n");
       printf ("この鍵では逆元が計算できません。error");
       wait ();
-      return ww;
-      // exit(1);
+      //return ww;
+       exit(1);
     }
 
 
   //    exit(1);
-  //  //printpol(o2v(s));
+  printpol(o2v(s));
   printf (" g1^-1=========\n");
-  // //printpol(o2v(h));
+  printpol(o2v(h));
   printf (" g0=========\n");
   //exit(1);
-  // //printpol(o2v(ww));
+  printpol(o2v(ww));
   printf (" ww==========\n");
   //  exit(1);
   h = ww;
@@ -2654,13 +2656,15 @@ pattarson (OP w, OP f)
   b2 = omod (omul (g1, g1), w);
   printpol(o2v(b2));
   printf(" g1*g1%w===========\n");
+  if(deg(o2v(b2))==0)
+    exit(1);
   if (LT2 (b2).a != LT2 (r2).a)
     {
-      //printpol (o2v (w));
+      printpol (o2v (w));
       printf (" w============\n");
-      //printpol (o2v (r2));
+      printpol (o2v (r2));
       printf (" r2============\n");
-      //printpol (o2v (g1));
+      printpol (o2v (g1));
       printf (" g1============\n");
       printf (" g1は平方ではありません。error");
       wait ();
@@ -2709,7 +2713,7 @@ pattarson (OP w, OP f)
     }
   else if (odeg ((ff)) == 1)
     {
-      ll = ff;
+      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));//ff;
       wait();
     }
   else
