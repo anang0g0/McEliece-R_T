@@ -2670,6 +2670,9 @@ pattarson (OP w, OP f)
       wait ();
       exit (1);
     }
+  printpol(o2v(w));
+  printf(" ========goppa\n");
+  printpol(o2v(g1));
   printf (" g1!=========\n");
   if (LT (g1).n == 0 && LT (g1).a == 0)
     {
@@ -3162,13 +3165,22 @@ main (void)
   //exit(1);
   do {
     fail=0;
-    //memset(g,0,sizeof(g));
+    k=0;
+    flg=0;
+    memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
-    //ginit ();
-
-    w = setpol (g, K + 1);
-    oprintpol (w);
-
+    ginit ();
+    
+    for(i=0;i<K+1;i++){
+      if(g[K-1]>0)
+	flg=1;
+      if(i%2==1 && g[i]>0 && i<K)
+	k++;
+    }
+    if((k>0 && flg==0) || (k>1 && flg==1)){
+      w = setpol (g, K + 1);
+      oprintpol (w);
+    }
     //多項式の値が0でないことを確認
     for (i = 0; i < D; i++){
       ta[i] = trace (w, i);
@@ -3178,8 +3190,9 @@ main (void)
 	break;
       }
     }
+    
   }while(fail);
-
+  
 #pragma omp parallel for
   for (i = 0; i < N; i++)
     tr[i] = oinv (ta[i]);
@@ -3335,11 +3348,11 @@ lab:
       for (i = 0; i < T*2 ; i++)
 	{
 	  if(i==0)
-	    printf ("error position= %d う\n",  v.x[i]);
+	    printf ("error position=%d %d う\n",i,  v.x[i]);
 	  if(i>0 && v.x[i]>0)
-	    printf ("error position= %d お\n",  v.x[i]);
+	    printf ("error position=%d %d お\n",i,  v.x[i]);
 	  if(i>0 && v.x[i]==0){
-	    printf("baka\n");
+	    printf("baka %d %d\n",i,v.x[i]);
 	    exit(1);
 	  }
 	    
