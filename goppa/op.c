@@ -2709,7 +2709,8 @@ pattarson (OP w, OP f)
     }
   else if (odeg ((ff)) == 1)
     {
-      ll = ff; //oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));
+      ll = ff;
+      wait();
     }
   else
     {
@@ -3157,9 +3158,9 @@ main (void)
   //exit(1);
   do {
     fail=0;
-    memset(g,0,sizeof(g));
+    //memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
-    ginit ();
+    //ginit ();
 
     w = setpol (g, K + 1);
     oprintpol (w);
