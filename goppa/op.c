@@ -38,7 +38,7 @@
 #include "chash.c"
 #include "lu.c"
 #include "sha3.c"
-
+#include "inv_mat.c"
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -3229,7 +3229,8 @@ lab:
       assert(flg != 0);
     }
 
-
+  matmul();
+  matinv();
 
 //decode開始
   k = 0;
