@@ -51,7 +51,7 @@
  }
 
 
-
+/*
 int mlt(int x, int y){
 
     if(x==0||y==0)
@@ -72,6 +72,7 @@ int mltn(int n,int x){
 
   return i;
 }
+*/
 
 int Inv(unsigned short b){
   int i;
@@ -82,7 +83,7 @@ int Inv(unsigned short b){
       }
 
 }
-
+/*
 //detarminant
 int det(){
   //double a[N][N]={{2,-2,4,2},{2,-1,6,3},{3,-2,12,12},{-1,3,-4,4}};
@@ -100,12 +101,6 @@ unsigned short inv_a[N][N]={0};
 unsigned short cc[N][N]={0};
 
 // lab:
-/*
- for(i=0;i<N;i++){
-   for(j=0;j<N;j++)
-     a[i][j]=rand()%16;
- }
-*/
 //三角行列を作成
 for(i=0;i<n;i++){
  for(j=0;j<n;j++){
@@ -135,9 +130,9 @@ printf("%f\n",det); // -> 120.000000
  if(det!=1.0)
    return -1;
 }
+*/
 
-
-void g2(){
+void g3(){
   int i,j,k;
 unsigned short bb[F][F]={0};
 unsigned short c[N][N]={0};
