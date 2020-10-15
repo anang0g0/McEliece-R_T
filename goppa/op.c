@@ -1178,7 +1178,6 @@ inv (OP a, OP n)
     {
       printf ("v=============0\n");
     }
-
   printf ("d==============\n");
   */
   //  } //end of a>0
@@ -2452,8 +2451,8 @@ osqrt (OP f, OP w)
 
   j = 0;
   jj = 0;
-  k = distance (f);
-  for (i = 0; i < k + 1; i++)
+  k = deg (o2v(f));
+  for (i = 0; i < k+1; i++)
     {
       if (f.t[i].n % 2 == 0)
 	{
@@ -2470,7 +2469,7 @@ osqrt (OP f, OP w)
     }
 
 
-  k = odeg ((w));
+  k = deg (o2v(w));
   //printf ("%d\n", k);
   //exit(1);
   j = 0;
@@ -2481,17 +2480,17 @@ osqrt (OP f, OP w)
 	{
 	  h.t[i].a = gf[isqrt (w.t[i].a)];
 	  h.t[i].n = w.t[i].n / 2;
-	  printf ("wi==%d %d\n", (w.t[i].n / 2), i);
+	  printf ("h==%d %d\n", (w.t[i].n / 2), i);
 	}
       if (w.t[i].n % 2 == 1)
 	{
 	  r.t[i].a = gf[isqrt (w.t[i].a)];
 	  r.t[i].n = (w.t[i].n - 1) / 2;
-
+	  printf("r=====%d %d\n",(w.t[i].n-1)/2,i);
 	}
     }
-  //  //printpol(o2v(r));
-  //printf (" sqrt(g1)=======\n");
+  printpol(o2v(r));
+  printf (" sqrt(g1)=======\n");
 
   //  exit(1);
   if (LT (r).n > 0)
@@ -2650,8 +2649,11 @@ pattarson (OP w, OP f)
   //wait();
   //  exit(1);
   g1 = osqrt (r2, w);
-  //printpol (o2v (g1));
+  printpol (o2v (g1));
+  printf(" sqrt(h+x)=======\n");
   b2 = omod (omul (g1, g1), w);
+  printpol(o2v(b2));
+  printf(" g1*g1%w===========\n");
   if (LT2 (b2).a != LT2 (r2).a)
     {
       //printpol (o2v (w));
@@ -2690,7 +2692,7 @@ pattarson (OP w, OP f)
   if (odeg ((ff)) != K / 2)
     {
       flg = 1;
-      //printpol (o2v (w));
+      printpol (o2v (ff));
       printf (" locater function failed!! error\n");
       printf ("cannot correct(bad key) error============\n");
       wait ();
@@ -3003,7 +3005,6 @@ test (OP w, unsigned short zz[])
 /*
 void trap(OP w,OP f){
   OP hh={0},d,tt,ff,tmp,r2;
-
   
   hh = gcd (w, f);
       if (odeg ((hh.d)) > 0)
@@ -3012,12 +3013,8 @@ void trap(OP w,OP f){
 	  wait ();
 	  goto label;
 	}
-
-
       tt.t[0].n = 1;
       tt.t[0].a = 1;
-
-
       ff = inv (f, w);
       tmp = omod (omul (ff, f), w);
       if (odeg ((tmp)) > 0)
@@ -3031,8 +3028,6 @@ void trap(OP w,OP f){
 	  wait ();
 	  //  goto label;
 	}
-
-
       r2 = oadd (ff, tt);
       //printpol (o2v (r2));
       printf (" h+x==============\n");
@@ -3070,8 +3065,6 @@ void trap(OP w,OP f){
 	  //exit(1);
 	  goto label;
 	}
-
-
       hh = xgcd (w, g1);
       ff = omod (omul (hh.v, g1), w);
       //printpol (o2v (ff));
@@ -3091,13 +3084,11 @@ void readkey(){
   /*
   //鍵をファイルに書き込むためにはkey2を有効にしてください。
   key2 (g);
-
     
      fp=fopen("sk.key","rb");
      fread(g,2,K+1,fp);
      fclose(fp);
    
-
   //固定した鍵を使いたい場合はファイルから読み込むようにしてください。  
     
      fq = fopen ("H.key", "rb");
@@ -3166,15 +3157,15 @@ main (void)
   //exit(1);
   do {
     fail=0;
-    //memset(g,0,sizeof(g));
+    memset(g,0,sizeof(g));
     memset(ta,0,sizeof(ta));
-    //ginit ();
+    ginit ();
 
     w = setpol (g, K + 1);
     oprintpol (w);
 
     //多項式の値が0でないことを確認
-    for (i = 0; i < N; i++){
+    for (i = 0; i < D; i++){
       ta[i] = trace (w, i);
       if (ta[i] == 0) {
 	printf ("trace 0 @ %d\n", i);
@@ -3319,7 +3310,7 @@ lab:
 	}
 
       //encryotion
-      test (w, z1);
+      //test (w, z1);
 
       for (i = 0; i < D; i++)
 	printf ("%d= %d,\n", i,z1[i]);
@@ -3340,8 +3331,13 @@ lab:
 	{
 	  if(i==0)
 	    printf ("error position= %d う\n",  v.x[i]);
-	  if(i>0)
+	  if(i>0 && v.x[i]>0)
 	    printf ("error position= %d お\n",  v.x[i]);
+	  if(i>0 && v.x[i]==0){
+	    printf("baka\n");
+	    exit(1);
+	  }
+	    
 	  count++;
 	}
     
@@ -3358,4 +3354,3 @@ lab:
   
   return 0;
 }
-  
