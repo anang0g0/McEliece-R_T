@@ -729,8 +729,8 @@ LT (OP f)
   oterm t = { 0 };
 
 
-  k = odeg ((f));
-  for (i = 0; i < k + 1; i++)
+  k = deg (o2v(f));
+  for (i = 0; i < DEG; i++)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
       if (f.t[i].a > 0)
@@ -2454,15 +2454,15 @@ osqrt (OP f, OP w)
     {
       if (f.t[i].n % 2 == 0)
 	{
-	  even.t[j].n = f.t[i].n / 2;
-	  even.t[j++].a = gf[isqrt (f.t[i].a)];
-	  //printf ("a=%d %d\n", f.t[i].a, i);
+	  even.t[i].n = f.t[i].n / 2;
+	  even.t[i].a = gf[isqrt (f.t[i].a)];
+	  printf ("a=%d %d\n", f.t[i].a, i);
 	}
       if (f.t[i].n % 2 == 1)
 	{
-	  odd.t[jj].n = (f.t[i].n - 1) / 2;
-	  odd.t[jj++].a = gf[isqrt (f.t[i].a)];
-	  //printf (" odd %d\n", i);
+	  odd.t[i].n = (f.t[i].n - 1) / 2;
+	  odd.t[i].a = gf[isqrt (f.t[i].a)];
+	  printf (" odd %d\n", i);
 	}
     }
 
@@ -2476,14 +2476,14 @@ osqrt (OP f, OP w)
     {
       if (w.t[i].n % 2 == 0)
 	{
-	  h.t[j].a = gf[isqrt (w.t[i].a)];
-	  h.t[j++].n = w.t[i].n / 2;
-	  //printf ("wi==%d %d\n", (w.t[i].n / 2), i);
+	  h.t[i].a = gf[isqrt (w.t[i].a)];
+	  h.t[i].n = w.t[i].n / 2;
+	  printf ("wi==%d %d\n", (w.t[i].n / 2), i);
 	}
       if (w.t[i].n % 2 == 1)
 	{
-	  r.t[jj].a = gf[isqrt (w.t[i].a)];
-	  r.t[jj++].n = (w.t[i].n - 1) / 2;
+	  r.t[i].a = gf[isqrt (w.t[i].a)];
+	  r.t[i].n = (w.t[i].n - 1) / 2;
 
 	}
     }
@@ -2497,9 +2497,14 @@ osqrt (OP f, OP w)
     }
   else if (LT (r).n == 0)
     {
-      //printpol (o2v (r));
-      printf (" r======0\n");
-      wait ();
+      printpol (o2v (r));
+      printf (" deg(r)======0!\n");
+      printpol (o2v (w));
+      printf (" goppa======0\n");
+      printpol (o2v (f));
+      printf (" syn======0\n");
+      //s = inv (r, w);
+      //wait ();
       exit (1);
     }
 
@@ -2517,7 +2522,10 @@ osqrt (OP f, OP w)
     }
   if (LT (h).n == 0)
     {
-      printf ("h=========0\n");
+      printpol(o2v(h));
+      printf (" h=========0\n");
+      //ww = omod (omul (h, s), w);
+      //wait();
       exit (1);
     }
   /*
@@ -2636,7 +2644,7 @@ pattarson (OP w, OP f)
   r2 = oadd (ff, tt);
   printpol (o2v (r2));
   printf (" h+x==============\n");
-  wait();
+  //wait();
   //  exit(1);
   g1 = osqrt (r2, w);
   //printpol (o2v (g1));
