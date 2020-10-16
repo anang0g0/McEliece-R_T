@@ -116,7 +116,6 @@ op_print_raw (const OP f)
       if (f.t[i].a > 0)
         printf ("[%d] %ux^%u\n", i, f.t[i].a, f.t[i].n);
     }
-
 }
 
 bool
@@ -130,8 +129,8 @@ op_verify (const OP f)
         {
           op_print_raw (f);
           printf ("found data after end: i=%d\n", i);
-          fflush (stdout);
           print_trace ();
+          fflush (stdout);
           return false;
         }
       if (f.t[i].a == 0)
@@ -143,6 +142,7 @@ op_verify (const OP f)
         {
           op_print_raw (f);
           printf ("found invalid order: i=%d\n", i);
+          print_trace ();
           fflush (stdout);
           return false;
         }
@@ -623,11 +623,8 @@ odiv (OP f, OP g)
   assert (op_verify (f));
   assert (op_verify (g));
   int i = 0, j, n, k;
-  OP h = { 0 }, e = { 0 }, tt = { 0 }, o = { 0 };
+  OP h = { 0 }, e = { 0 }, tt = { 0 };
   oterm a, b = { 0 }, c = { 0 };
-
-
-  o = f;
 
   if (LT (f).n == 0 && LT (g).a == 0)
     {
@@ -637,13 +634,12 @@ odiv (OP f, OP g)
     }
   if (LT (g).a == 0)
     {
-      printf ("baka--\n");
+      print_trace ();
       exit (1);
     }
   if (LT (g).n == 0 && LT (g).a > 1)
     return coeff (f, LT (g).a);
 
-  g = conv (g);
   k = odeg (g);
   b = LT (g);
   if (b.a == 1 && b.n == 0)
@@ -653,8 +649,6 @@ odiv (OP f, OP g)
       printf ("baka in odiv\n");
       exit (1);
     }
-  f = conv (f);
-  g = conv (g);
   if (odeg ((f)) < odeg ((g)))
     {
       return f;
@@ -664,26 +658,14 @@ odiv (OP f, OP g)
   i = 0;
   while (LT (f).n > 0 && LT (g).n > 0)
     {
-      //  printf("in!\n");
-      //    exit(1);
-
       c = LTdiv (f, b);
-      //    if(c.a>0){
-      // printf("in odev c========%dx^%d\n",c.a,c.n);
-      //    exit(1);
-      if (c.n < DEG)
-        tt.t[c.n] = c;
-
-      ////printpol(o2v(g));
-      //printf("\ng=================\n");
+      assert (c.n < DEG);
+      tt.t[i] = c;
+      i++;
 
       h = oterml (g, c);
 
       f = oadd (f, h);
-      f = conv (f);
-      g = conv (g);
-      ////printpol(o2v(f));
-      //printf("\nff=====================\n");
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
         {
           //printf ("blake2\n");
@@ -694,9 +676,16 @@ odiv (OP f, OP g)
         break;
     }
 
+  // tt は逆順に入ってるので入れ替える
+  OP ret = { 0 };
+  int tt_terms = terms (tt);
+  for (i = 0; i < tt_terms; i++)
+    {
+      ret.t[i] = tt.t[tt_terms - i - 1];
+    }
 
-  assert (op_verify (tt));
-  return tt;
+  assert (op_verify (ret));
+  return ret;
 }
 
 
