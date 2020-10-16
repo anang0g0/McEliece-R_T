@@ -1,5 +1,5 @@
 #ifndef DEG
-  #include "struct.h"
+#include "struct.h"
 #endif
 
 //有限体の元の逆数
@@ -100,16 +100,55 @@ oprintpol (OP f)
   printf ("terms=%d\n", terms (f));
   printf ("deg=%d\n", odeg (f));
 
-//exit(1);
-
   for (i = n; i > -1; i--)
     {
       if (f.t[i].a > 0)
         printf ("%ux^%u+", f.t[i].a, f.t[i].n);
     }
-//printf("\n");
-//exit(1);
-  return;
+}
+
+void
+op_print_raw (const OP f)
+{
+  puts ("op_print_raw:");
+  for (int i = 0; i < DEG; i++)
+    {
+      if (f.t[i].a > 0)
+        printf ("[%d] %ux^%u\n", i, f.t[i].a, f.t[i].n);
+    }
+
+}
+
+bool
+op_verify (const OP f)
+{
+  bool end = false;
+  unsigned short n_max = 0;
+  for (int i = 0; i < DEG; i++)
+    {
+      if (end && (f.t[i].n != 0 || f.t[i].a != 0))
+        {
+          op_print_raw (f);
+          printf ("found data after end: i=%d\n", i);
+          fflush (stdout);
+          print_trace ();
+          return false;
+        }
+      if (f.t[i].a == 0)
+        {
+          end = true;
+          continue;
+        }
+      if (f.t[i].n + 1 <= n_max)
+        {
+          op_print_raw (f);
+          printf ("found invalid order: i=%d\n", i);
+          fflush (stdout);
+          return false;
+        }
+      n_max = f.t[i].n + 1;
+    }
+  return true;
 }
 
 
@@ -139,6 +178,9 @@ norm (OP f)
 OP
 oadd (OP f, OP g)
 {
+  assert (op_verify (f));
+  assert (op_verify (g));
+
   vec a = { 0 }
   , b = {
     0
@@ -149,42 +191,24 @@ oadd (OP f, OP g)
   int i, j, k, l = 0;
   OP h = { 0 }, f2 = { 0 }, g2 = { 0 };
 
-  //for(i=0;i<257;i++)
-  // printf("%d %d %d %d %d\n",i,f.t[i].a,f.t[i].n,g.t[i].a,g.t[i].n);
-
-  //  exit(1);
-
-  //f2=norm(f);
-  //g2=norm(g);
   a = o2v (f);
-  //exit(1);
   b = o2v (g);
 
-  //  oprintpol((g));
-  //  exit(1);
   if (deg (o2v (f)) >= deg (o2v (g)))
     {
       k = deg (o2v (f)) + 1;
     }
   else
     {
-
       k = deg (o2v (g)) + 1;
-
     }
-  //for(i=0;i<k;i++)
-  //printf("%d %d\n",i,b.x[i]);
-  //  exit(1);
 
   for (i = 0; i < k; i++)
     {
-      //if(f.t[i].a>0 || g.t[i].a>0)
-      //h.t[i].a=f.t[i].a^g.t[i].a;
       c.x[i] = a.x[i] ^ b.x[i];
     }
-  // 
   h = v2o (c);
-
+  assert (op_verify (h));
   return h;
 }
 
@@ -343,6 +367,7 @@ add (OP f, OP g)
 OP
 oterml (OP f, oterm t)
 {
+  assert (op_verify (f));
   int i, k;
   OP h = { 0 };
   vec test;
@@ -355,7 +380,7 @@ oterml (OP f, oterm t)
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
     }
 
-
+  assert (op_verify (h));
   return h;
 }
 
@@ -364,6 +389,8 @@ oterml (OP f, oterm t)
 OP
 omul (OP f, OP g)
 {
+  assert (op_verify (f));
+  assert (op_verify (g));
   int i, count = 0, k;
   oterm t = { 0 };
   OP h = { 0 }, e = {
@@ -374,6 +401,7 @@ omul (OP f, OP g)
   vec c = { 0 };
 
   f = conv (f);
+  assert (op_verify (f));
   g = conv (g);
   if (odeg ((f)) > odeg ((g)))
     {
@@ -390,11 +418,7 @@ omul (OP f, OP g)
       e = oterml (f, t);
       h = oadd (h, e);
     }
-
-  //printpol(o2v(h));
-  //printf(" debug======\n");
-  //  exit(1);
-
+  assert (op_verify (h));
   return h;
 }
 
@@ -596,12 +620,11 @@ omod (OP f, OP g)
 OP
 odiv (OP f, OP g)
 {
+  assert (op_verify (f));
+  assert (op_verify (g));
   int i = 0, j, n, k;
-  OP h = { 0 }, e = { 0 }, tt = { 0 }, o = { 0 };
+  OP h = { 0 }, e = { 0 }, tt = { 0 };
   oterm a, b = { 0 }, c = { 0 };
-
-
-  o = f;
 
   if (LT (f).n == 0 && LT (g).a == 0)
     {
@@ -611,21 +634,14 @@ odiv (OP f, OP g)
     }
   if (LT (g).a == 0)
     {
-      printf ("baka--\n");
+      print_trace ();
       exit (1);
     }
   if (LT (g).n == 0 && LT (g).a > 1)
     return coeff (f, LT (g).a);
 
-  //printf ("in odiv\n");
-  ////printpol(o2v(g));
-
-  //exit(1);
-  g = conv (g);
   k = odeg (g);
   b = LT (g);
-  //printpol (o2v (g));
-  //printf ("in odiv1 g===========%d %d\n", b.a, b.n);
   if (b.a == 1 && b.n == 0)
     return f;
   if (b.a == 0 && b.n == 0)
@@ -633,51 +649,23 @@ odiv (OP f, OP g)
       printf ("baka in odiv\n");
       exit (1);
     }
-  f = conv (f);
-  g = conv (g);
   if (odeg ((f)) < odeg ((g)))
     {
       return f;
       //  a=LT(f);
     }
-  //printf ("odiv in b=========%dx^%d\n", b.a, b.n);
-  //printpol (o2v (g));
-  //printf ("\nf===================\n");
-  // e=omul(g,g);
-  ////printpol(o2v(e));
-  //printf("\ng^2================\n");
-
-  //printf ("\nin odiv2 g=============%d\n", odeg ((g)));
 
   i = 0;
   while (LT (f).n > 0 && LT (g).n > 0)
     {
-      //  printf("in!\n");
-      //    exit(1);
-
       c = LTdiv (f, b);
-      //    if(c.a>0){
-      // printf("in odev c========%dx^%d\n",c.a,c.n);
-      //    exit(1);
-      if (c.n < DEG)
-        tt.t[c.n] = c;
-
-      ////printpol(o2v(g));
-      //printf("\ng=================\n");
+      assert (c.n < DEG);
+      tt.t[i] = c;
+      i++;
 
       h = oterml (g, c);
-      ////printpol(o2v(h));
-      //printf("\n");
-      //printf("h===================\n");
-      ////printpol(o2v(f));
-      //printf("\nf===================\n");
-      //     exit(1);
 
       f = oadd (f, h);
-      f = conv (f);
-      g = conv (g);
-      ////printpol(o2v(f));
-      //printf("\nff=====================\n");
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
         {
           //printf ("blake2\n");
@@ -687,10 +675,16 @@ odiv (OP f, OP g)
       if (c.n == 0)
         break;
     }
-  //exit(1);
 
+  // tt は逆順に入ってるので入れ替える
+  OP ret = { 0 };
+  int tt_deg = odeg (tt);
+  for (i = 0; i < tt_deg; i++)
+    {
+      ret.t[i] = tt.t[tt_deg - i - 1];
+    }
 
-
+  assert (op_verify (ret));
   return tt;
 }
 
@@ -920,42 +914,26 @@ vx (OP f, OP g)
   v[1].t[0].a = 1;
   v[1].t[1].n = 0;
 
-  //printf("in vx\n");
-  //  exit(1);
   i = 0;
 
   while (1)
     {
       if (odeg ((g)) == 0)
         break;
-      // if(odeg((g))>0)
       h = omod (f, g);
-      //printpol (o2v (h));
-      //printf (" modh vx==============\n");
       if (LT (g).a == 0)
         break;
-      //if(LT(g).a>0)
       ww = odiv (f, g);
-      //printf ("ww======= ");
-      //printpol (o2v (ww));
-      //printf ("\n");
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
-      //printf ("-------");
       f = g;
       g = h;
 
       vv = v[i + 2];
-      //printf ("vv==");
-      //printpol (o2v (vv));
-      //printf (" ll========\n");
 
       if (odeg ((vv)) == T)
         break;
       i++;
     }
-  //printpol (o2v (vv));
-  //printf (" vv============\n");
-  //exit(1);
 
   return vv;
 }
