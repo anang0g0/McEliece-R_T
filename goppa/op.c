@@ -38,6 +38,7 @@ o2v (OP f)
   vec a = { 0 };
   int i;
 
+#pragma omp parallel for
   for (i = 0; i < DEG; i++)
     {
       if (f.t[i].a > 0 && f.t[i].n < DEG)
@@ -53,16 +54,16 @@ o2v (OP f)
 OP
 v2o (vec a)
 {
-  int i;
+  int i,j=0;
   OP f = { 0 };
 
-
+  //#pragma omp parallel for
   for (i = 0; i < DEG; i++)
     {
       if (a.x[i] > 0)
 	{
-	  f.t[i].n = i;
-	  f.t[i].a = a.x[i];
+	  f.t[j].n = i;
+	  f.t[j++].a = a.x[i];
 	}
     }
 
@@ -76,6 +77,7 @@ oprintpol (OP f)
 {
   int i, n;
 
+  f=conv(f);
   n = distance (f);
   printf ("n=%d\n", n);
   printf ("terms=%d\n", terms (f));
@@ -310,6 +312,7 @@ add (OP f, OP g)
      }
      }
    */
+  h=conv(h);
   if (odeg (h) > 0)
     oprintpol (h);
   printf (" addh==============\n");
@@ -353,6 +356,8 @@ omul (OP f, OP g)
   };
   vec c = { 0 };
 
+  f=conv(f);
+  g=conv(g);
   if (odeg ((f)) > odeg ((g)))
     {
       k = odeg ((f));
@@ -457,7 +462,8 @@ coeff (OP f, unsigned short d)
   int i, j, k;
   vec a, b;
 
-
+  
+  f=conv(f);
   k = odeg ((f)) + 1;
   for (i = 0; i < k; i++)
     f.t[i].a = gf[mlt (fg[f.t[i].a], oinv (d))];
@@ -549,14 +555,16 @@ omod (OP f, OP g)
       //     exit(1);
 
       f = oadd (f, h);
+      f=conv(f);
       if (odeg ((f)) > 0)
 	//printpol (o2v (f));
 	//printf ("\nff1=====================\n");
-	if (odeg ((f)) == 0 || odeg ((g)) == 0)
-	  {
-	    printf ("blake1\n");
-	    break;
-	  }
+	g=conv(g);
+      if (odeg ((f)) == 0 || odeg ((g)) == 0)
+	{
+	  printf ("blake1\n");
+	  break;
+	}
 
       if (c.n == 0 || b.n == 0)
 	break;
@@ -596,6 +604,7 @@ odiv (OP f, OP g)
   ////printpol(o2v(g));
 
   //exit(1);
+  g=conv(g);
   k = odeg (g);
   b = LT (g);
   //printpol (o2v (g));
@@ -607,6 +616,8 @@ odiv (OP f, OP g)
       printf ("baka in odiv\n");
       exit (1);
     }
+  f=conv(f);
+  g=conv(g);
   if (odeg ((f)) < odeg ((g)))
     {
       return f;
@@ -646,7 +657,8 @@ odiv (OP f, OP g)
       //     exit(1);
 
       f = oadd (f, h);
-
+      f=conv(f);
+      g=conv(g);
       ////printpol(o2v(f));
       //printf("\nff=====================\n");
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
