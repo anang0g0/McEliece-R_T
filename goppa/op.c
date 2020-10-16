@@ -400,9 +400,6 @@ omul (OP f, OP g)
   };
   vec c = { 0 };
 
-  f = conv (f);
-  assert (op_verify (f));
-  g = conv (g);
   if (odeg ((f)) > odeg ((g)))
     {
       k = odeg ((f));
