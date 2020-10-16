@@ -603,12 +603,20 @@ det2 (int i, unsigned short g[])
   //  omp_set_num_threads(8);
   id = omp_get_thread_num ();
 
+  // h[id] = x+i
+  if (i == 0)
+    {
+      h[id].t[0].a = 1;
+      h[id].t[0].n = 1;
+    }
+  else
+    {
+      h[id].t[0].a = i;
+      h[id].t[1].a = 1;
+      h[id].t[1].n = 1;
+    }
 
-  h[id].t[0].n = 0;
-  h[id].t[1].a = 1;
-  h[id].t[1].n = 1;
   t[id].n = 0;
-
 
   f[id] = setpol (cc, K + 1);
 
@@ -617,7 +625,6 @@ det2 (int i, unsigned short g[])
   f[id] = setpol (cc, K + 1);
 
   //f.t[0].a=k^ta[i]; //cc[K];
-  h[id].t[0].a = i;
 
   ww[id] = odiv (f[id], h[id]);
 
