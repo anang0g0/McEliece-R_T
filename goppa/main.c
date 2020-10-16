@@ -1937,7 +1937,13 @@ main (void)
   }
 */
 
-  srand (clock () + time (&t));
+#ifdef SRAND
+  srand (SRAND);
+#else
+  const unsigned int seed = clock () + time (&t);
+  printf ("srand(%u)\n", seed);
+  srand (seed);
+#endif
 
 label:
 
