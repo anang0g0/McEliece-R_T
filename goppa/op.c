@@ -1,5 +1,3 @@
-#include "struct.h"
-
 //有限体の元の逆数
 unsigned short
 oinv (unsigned short a)
@@ -9,7 +7,7 @@ oinv (unsigned short a)
   for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], i)] == 1)
-        return (unsigned short) i;
+	return (unsigned short) i;
     }
 
   printf ("no return \n");
@@ -27,7 +25,7 @@ equ (unsigned short a, unsigned short b)
   for (i = 0; i < N; i++)
     {
       if (gf[mlt (fg[a], fg[i])] == b)
-        break;
+	break;
     }
   return i;
 }
@@ -44,7 +42,7 @@ o2v (OP f)
   for (i = 0; i < DEG; i++)
     {
       if (f.t[i].a > 0 && f.t[i].n < DEG)
-        a.x[f.t[i].n] = f.t[i].a;
+	a.x[f.t[i].n] = f.t[i].a;
     }
 
 
@@ -56,17 +54,17 @@ o2v (OP f)
 OP
 v2o (vec a)
 {
-  int i, j = 0;
+  int i,j=0;
   OP f = { 0 };
 
   //#pragma omp parallel for
   for (i = 0; i < DEG; i++)
     {
       if (a.x[i] > 0)
-        {
-          f.t[j].n = i;
-          f.t[j++].a = a.x[i];
-        }
+	{
+	  f.t[j].n = i;
+	  f.t[j++].a = a.x[i];
+	}
     }
 
 
@@ -92,7 +90,7 @@ oprintpol (OP f)
 {
   int i, n;
 
-  f = conv (f);
+  f=conv(f);
   n = distance (f);
   printf ("n=%d\n", n);
   printf ("terms=%d\n", terms (f));
@@ -103,7 +101,7 @@ oprintpol (OP f)
   for (i = n; i > -1; i--)
     {
       if (f.t[i].a > 0)
-        printf ("%ux^%u+", f.t[i].a, f.t[i].n);
+	printf ("%ux^%u+", f.t[i].a, f.t[i].n);
     }
 //printf("\n");
 //exit(1);
@@ -121,10 +119,10 @@ norm (OP f)
   for (i = 0; i < 512; i++)
     {
       if (f.t[i].a > 0)
-        {
-          //      h.t[f.t[i].n].n=f.t[i].n;
-          h.t[f.t[i].n].a = f.t[i].a;
-        }
+	{
+	  //      h.t[f.t[i].n].n=f.t[i].n;
+	  h.t[f.t[i].n].a = f.t[i].a;
+	}
     }
 
   // exit(1);
@@ -199,14 +197,14 @@ sort (OP f)
   for (i = 0; i < k + 1; ++i)
     {
       for (j = i + 1; j < k + 1; ++j)
-        {
-          if (f.t[i].n > f.t[j].n)
-            {
-              o = f.t[i];
-              f.t[i] = f.t[j];
-              f.t[j] = o;
-            }
-        }
+	{
+	  if (f.t[i].n > f.t[j].n)
+	    {
+	      o = f.t[i];
+	      f.t[i] = f.t[j];
+	      f.t[j] = o;
+	    }
+	}
     }
 
   return f;
@@ -227,22 +225,22 @@ oLT (OP f)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
       if (f.t[i].a > 0)
-        {
-          printf ("in LT=%d %d\n", s.a, s.n);
-          for (j = i; j < k + 1; j++)
-            {
-              if (s.n < f.t[j].n)
-                {
-                  s.n = f.t[j].n;
-                  s.a = f.t[j].a;
-                }
+	{
+	  printf ("in LT=%d %d\n", s.a, s.n);
+	  for (j = i; j < k + 1; j++)
+	    {
+	      if (s.n < f.t[j].n)
+		{
+		  s.n = f.t[j].n;
+		  s.a = f.t[j].a;
+		}
 
-              //  else{
-              // t=s;
-              // }
+	      //  else{
+	      // t=s;
+	      // }
 
-            }
-        }
+	    }
+	}
     }
   //  exit(1);
 
@@ -285,33 +283,33 @@ add (OP f, OP g)
   for (i = 0; i < n1 + 1; i++)
     {
       for (j = 0; j < n2 + 1; j++)
-        {
-          if (f.t[i].n == g.t[j].n && g.t[j].a > 0 && f.t[i].a > 0)
-            {
-              o1 = oLT (f);
-              o2 = oLT (g);
-              printf ("LT==%d %d\n", o1.n, o2.n);
-              printf ("f.n==%d %d %d %d\n", f.t[i].n, g.t[j].n, i, j);
-              f.t[i].a = 0;
-              g.t[j].a = 0;
-            }
-        }
+	{
+	  if (f.t[i].n == g.t[j].n && g.t[j].a > 0 && f.t[i].a > 0)
+	    {
+	      o1 = oLT (f);
+	      o2 = oLT (g);
+	      printf ("LT==%d %d\n", o1.n, o2.n);
+	      printf ("f.n==%d %d %d %d\n", f.t[i].n, g.t[j].n, i, j);
+	      f.t[i].a = 0;
+	      g.t[j].a = 0;
+	    }
+	}
     }
   for (i = 0; i < n2 + 1; i++)
     {
       if (g.t[i].a > 0)
-        {
-          h.t[count++] = g.t[i];
-          g.t[i].a = 0;
-        }
+	{
+	  h.t[count++] = g.t[i];
+	  g.t[i].a = 0;
+	}
     }
   for (i = 0; i < n1 + 1; i++)
     {
       if (f.t[i].a > 0)
-        {
-          h.t[count++] = f.t[i];
-          f.t[i].a = 0;
-        }
+	{
+	  h.t[count++] = f.t[i];
+	  f.t[i].a = 0;
+	}
 
     }
 
@@ -327,7 +325,7 @@ add (OP f, OP g)
      }
      }
    */
-  h = conv (h);
+  h=conv(h);
   if (odeg (h) > 0)
     oprintpol (h);
   printf (" addh==============\n");
@@ -371,8 +369,8 @@ omul (OP f, OP g)
   };
   vec c = { 0 };
 
-  f = conv (f);
-  g = conv (g);
+  f=conv(f);
+  g=conv(g);
   if (odeg ((f)) > odeg ((g)))
     {
       k = odeg ((f));
@@ -410,10 +408,10 @@ LT (OP f)
     {
       //printf("a=%d %d\n",f.t[i].a,f.t[i].n);
       if (f.t[i].a > 0)
-        {
-          t.n = f.t[i].n;
-          t.a = f.t[i].a;
-        }
+	{
+	  t.n = f.t[i].n;
+	  t.a = f.t[i].a;
+	}
     }
 
   return t;
@@ -477,8 +475,8 @@ coeff (OP f, unsigned short d)
   int i, j, k;
   vec a, b;
 
-
-  f = conv (f);
+  
+  f=conv(f);
   k = odeg ((f)) + 1;
   for (i = 0; i < k; i++)
     f.t[i].a = gf[mlt (fg[f.t[i].a], oinv (d))];
@@ -570,19 +568,19 @@ omod (OP f, OP g)
       //     exit(1);
 
       f = oadd (f, h);
-      f = conv (f);
+      f=conv(f);
       if (odeg ((f)) > 0)
-        //printpol (o2v (f));
-        //printf ("\nff1=====================\n");
-        g = conv (g);
+	//printpol (o2v (f));
+	//printf ("\nff1=====================\n");
+	g=conv(g);
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
-        {
-          printf ("blake1\n");
-          break;
-        }
+	{
+	  printf ("blake1\n");
+	  break;
+	}
 
       if (c.n == 0 || b.n == 0)
-        break;
+	break;
     }
 
 
@@ -619,7 +617,7 @@ odiv (OP f, OP g)
   ////printpol(o2v(g));
 
   //exit(1);
-  g = conv (g);
+  g=conv(g);
   k = odeg (g);
   b = LT (g);
   //printpol (o2v (g));
@@ -631,8 +629,8 @@ odiv (OP f, OP g)
       printf ("baka in odiv\n");
       exit (1);
     }
-  f = conv (f);
-  g = conv (g);
+  f=conv(f);
+  g=conv(g);
   if (odeg ((f)) < odeg ((g)))
     {
       return f;
@@ -658,7 +656,7 @@ odiv (OP f, OP g)
       // printf("in odev c========%dx^%d\n",c.a,c.n);
       //    exit(1);
       if (c.n < DEG)
-        tt.t[c.n] = c;
+	tt.t[c.n] = c;
 
       ////printpol(o2v(g));
       //printf("\ng=================\n");
@@ -672,18 +670,18 @@ odiv (OP f, OP g)
       //     exit(1);
 
       f = oadd (f, h);
-      f = conv (f);
-      g = conv (g);
+      f=conv(f);
+      g=conv(g);
       ////printpol(o2v(f));
       //printf("\nff=====================\n");
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
-        {
-          //printf ("blake2\n");
-          break;
-        }
+	{
+	  //printf ("blake2\n");
+	  break;
+	}
 
       if (c.n == 0)
-        break;
+	break;
     }
   //exit(1);
 
@@ -798,11 +796,11 @@ inv (OP a, OP n)
   while (odeg ((a)) > 0)
     {
       if (odeg ((a)) > 0)
-        r = omod (d, a);
+	r = omod (d, a);
       if (LT (a).a == 0)
-        break;
+	break;
       if (LT (a).a > 0)
-        q = odiv (d, a);
+	q = odiv (d, a);
 
       d = a;
       a = r;
@@ -827,7 +825,7 @@ inv (OP a, OP n)
 
   ////printpol (o2v (d));
   //printf ("\nout1================\n");
-  gcd = d;                      // $\gcd(a, n)$
+  gcd = d;			// $\gcd(a, n)$
   ////printpol (o2v (gcd));
   //printf ("\n");
   ////printpol (o2v (n));
@@ -925,13 +923,13 @@ vx (OP f, OP g)
   while (1)
     {
       if (odeg ((g)) == 0)
-        break;
+	break;
       // if(odeg((g))>0)
       h = omod (f, g);
       //printpol (o2v (h));
       //printf (" modh vx==============\n");
       if (LT (g).a == 0)
-        break;
+	break;
       //if(LT(g).a>0)
       ww = odiv (f, g);
       //printf ("ww======= ");
@@ -948,7 +946,7 @@ vx (OP f, OP g)
       //printf (" ll========\n");
 
       if (odeg ((vv)) == T)
-        break;
+	break;
       i++;
     }
   //printpol (o2v (vv));
@@ -967,7 +965,7 @@ distance (OP f)
   for (i = 0; i < DEG; i++)
     {
       if (f.t[i].a > 0)
-        j = i;
+	j = i;
     }
 
   return j;
@@ -999,7 +997,7 @@ odeg (OP f)
   for (i = 0; i < 512; i++)
     {
       if (j < f.t[i].n && f.t[i].a > 0)
-        j = f.t[i].n;
+	j = f.t[i].n;
     }
 
   return j;
@@ -1016,10 +1014,10 @@ chk (OP f)
   for (i = 0; i < DEG; i++)
     {
       if (x.x[i] > 0)
-        {
-          flg = 1;
-          return 1;
-        }
+	{
+	  flg = 1;
+	  return 1;
+	}
     }
   if (flg == 0)
     return 0;
@@ -1044,16 +1042,16 @@ ogcd (OP f, OP g)
   for (i = 0; i < T; i++)
     {
       if (odeg ((g)) == 0)
-        break;
+	break;
       h = omod (f, g);
       if (odeg ((h)) == T - 1)
-        {
-          //printpol (o2v (h));
-          printf (" in ogcd=============\n");
-          //wait();
-          //break;
-          return h;
-        }
+	{
+	  //printpol (o2v (h));
+	  printf (" in ogcd=============\n");
+	  //wait();
+	  //break;
+	  return h;
+	}
       f = g;
       g = h;
     }
@@ -1109,17 +1107,17 @@ xgcd (OP f, OP g)
   while (1)
     {
       if (LT (g).n == 0)
-        {
-          printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
-          printf (" g========\n");
-          exit (1);
-        }
+	{
+	  printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
+	  printf (" g========\n");
+	  exit (1);
+	}
 
       if (LT (g).n > 0)
-        h = omod (f, g);
+	h = omod (f, g);
 
       if (LT (g).a > 0)
-        ww = odiv (f, g);
+	ww = odiv (f, g);
 
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
       u[i + 2] = oadd (u[i], omul (ww, u[i + 1]));
@@ -1129,9 +1127,9 @@ xgcd (OP f, OP g)
 
       //if(
       if (odeg ((f)) == T - 1 || odeg ((v[i])) == T - 1)
-        {
-          break;
-        }
+	{
+	  break;
+	}
       i++;
     }
 
@@ -1209,13 +1207,13 @@ gcd (OP f, OP g)
   while (odeg ((g)) > 0)
     {
       if (LT (g).a == 0)
-        break;
+	break;
       if (odeg ((g)) > 0)
-        h = omod (f, g);
+	h = omod (f, g);
       if (LT (g).a == 0)
-        break;
+	break;
       if (LT (g).a > 0)
-        ww = odiv (f, g);
+	ww = odiv (f, g);
 
       v[2] = oadd (v[0], omul (ww, v[1]));
       u[2] = oadd (u[0], omul (ww, u[1]));
