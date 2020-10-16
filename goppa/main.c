@@ -17,6 +17,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -26,11 +27,13 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <assert.h>
+#include <execinfo.h>
 
 
 //#include "omp.h" //clang-12
 #include <omp.h>                //clang-10
 
+#include "debug.c"
 //#include "8192.h"
 #include "global.h"
 #include "struct.h"
