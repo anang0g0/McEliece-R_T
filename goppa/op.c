@@ -1,4 +1,6 @@
-#include "struct.h"
+#ifndef DEG
+  #include "struct.h"
+#endif
 
 //有限体の元の逆数
 unsigned short
