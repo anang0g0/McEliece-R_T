@@ -1,6 +1,7 @@
 #ifndef DEG
-  #include "struct.h"
+#include "struct.h"
 #endif
+#include <stdbool.h>
 
 //有限体の元の逆数
 unsigned short
@@ -100,16 +101,54 @@ oprintpol (OP f)
   printf ("terms=%d\n", terms (f));
   printf ("deg=%d\n", odeg (f));
 
-//exit(1);
-
   for (i = n; i > -1; i--)
     {
       if (f.t[i].a > 0)
         printf ("%ux^%u+", f.t[i].a, f.t[i].n);
     }
-//printf("\n");
-//exit(1);
-  return;
+}
+
+void
+op_print_raw (const OP f)
+{
+  puts ("op_print_raw:");
+  for (int i = 0; i < DEG; i++)
+    {
+      if (f.t[i].a > 0)
+        printf ("[%d] %ux^%u\n", i, f.t[i].a, f.t[i].n);
+    }
+
+}
+
+bool
+op_verify (const OP f)
+{
+  bool end = false;
+  unsigned short n_max = 0;
+  for (int i = 0; i < DEG; i++)
+    {
+      if (end && (f.t[i].n != 0 || f.t[i].a != 0))
+        {
+          op_print_raw (f);
+          printf ("found data after end: i=%d\n", i);
+          fflush (stdout);
+          return false;
+        }
+      if (f.t[i].a == 0)
+        {
+          end = true;
+          continue;
+        }
+      if (f.t[i].n + 1 <= n_max)
+        {
+          op_print_raw (f);
+          printf ("found invalid order: i=%d\n", i);
+          fflush (stdout);
+          return false;
+        }
+      n_max = f.t[i].n + 1;
+    }
+  return true;
 }
 
 
@@ -139,6 +178,9 @@ norm (OP f)
 OP
 oadd (OP f, OP g)
 {
+  assert (op_verify (f));
+  assert (op_verify (g));
+
   vec a = { 0 }
   , b = {
     0
@@ -149,42 +191,24 @@ oadd (OP f, OP g)
   int i, j, k, l = 0;
   OP h = { 0 }, f2 = { 0 }, g2 = { 0 };
 
-  //for(i=0;i<257;i++)
-  // printf("%d %d %d %d %d\n",i,f.t[i].a,f.t[i].n,g.t[i].a,g.t[i].n);
-
-  //  exit(1);
-
-  //f2=norm(f);
-  //g2=norm(g);
   a = o2v (f);
-  //exit(1);
   b = o2v (g);
 
-  //  oprintpol((g));
-  //  exit(1);
   if (deg (o2v (f)) >= deg (o2v (g)))
     {
       k = deg (o2v (f)) + 1;
     }
   else
     {
-
       k = deg (o2v (g)) + 1;
-
     }
-  //for(i=0;i<k;i++)
-  //printf("%d %d\n",i,b.x[i]);
-  //  exit(1);
 
   for (i = 0; i < k; i++)
     {
-      //if(f.t[i].a>0 || g.t[i].a>0)
-      //h.t[i].a=f.t[i].a^g.t[i].a;
       c.x[i] = a.x[i] ^ b.x[i];
     }
-  // 
   h = v2o (c);
-
+  assert (op_verify (h));
   return h;
 }
 
