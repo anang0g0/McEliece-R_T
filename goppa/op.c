@@ -3249,19 +3249,6 @@ main (void)
 lab:
   
 
-  
-  //列に0がないかチェック
-  for (j = 0; j < D; j++)
-    {
-      flg = 0;
-      for (i = 0; i < K; i++)
-	{
-	  if (mat[j][i] > 0)
-	    flg = 1;
-	}
-      assert(flg != 0);
-    }
-
   matmul();
   matinv();
 
