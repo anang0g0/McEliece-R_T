@@ -290,6 +290,18 @@ v2o (vec a)
 }
 
 
+//OP型を正規化する
+OP conv(OP f){
+  vec v={0};
+  OP g={0};
+  
+  v=o2v(f);
+  g=v2o(v);
+
+  return g;
+}
+
+
 //整数からベクトル型への変換
 vec
 i2v (unsigned int n)
