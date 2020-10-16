@@ -1,5 +1,8 @@
 files=op.c main.c
-all:
+dev:
+	clang-10 -w -g -rdynamic -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp main.c
+
+clang:
 	clang-10 -w -g -pg -O3 -mtune=znver2 -march=znver2 -ffast-math -funroll-loops  -fopenmp main.c
 
 gcc:
