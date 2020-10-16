@@ -71,6 +71,19 @@ v2o (vec a)
   return f;
 }
 
+//OP型を正規化する
+OP
+conv (OP f)
+{
+  vec v = { 0 };
+  OP g = { 0 };
+
+  v = o2v (f);
+  g = v2o (v);
+
+  return g;
+}
+
 //多項式を表示する（OP型）
 void
 oprintpol (OP f)
@@ -988,19 +1001,6 @@ odeg (OP f)
     }
 
   return j;
-}
-
-//OP型を正規化する
-OP
-conv (OP f)
-{
-  vec v = { 0 };
-  OP g = { 0 };
-
-  v = o2v (f);
-  g = v2o (v);
-
-  return g;
 }
 
 //０多項式かどうかのチェック
