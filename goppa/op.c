@@ -2,6 +2,28 @@
 #include "struct.h"
 #endif
 #include <stdbool.h>
+#include <execinfo.h>
+
+/* Obtain a backtrace and print it to stdout. */
+void
+print_trace (void)
+{
+  void *array[10];
+  char **strings;
+  int size, i;
+
+  size = backtrace (array, 10);
+  strings = backtrace_symbols (array, size);
+  if (strings != NULL)
+    {
+
+      printf ("Obtained %d stack frames.\n", size);
+      for (i = 0; i < size; i++)
+        printf ("%s\n", strings[i]);
+    }
+
+  free (strings);
+}
 
 //有限体の元の逆数
 unsigned short
@@ -132,6 +154,7 @@ op_verify (const OP f)
           op_print_raw (f);
           printf ("found data after end: i=%d\n", i);
           fflush (stdout);
+          print_trace ();
           return false;
         }
       if (f.t[i].a == 0)
@@ -367,6 +390,7 @@ add (OP f, OP g)
 OP
 oterml (OP f, oterm t)
 {
+  assert (op_verify (f));
   int i, k;
   OP h = { 0 };
   vec test;
@@ -379,7 +403,7 @@ oterml (OP f, oterm t)
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
     }
 
-
+  assert (op_verify (h));
   return h;
 }
 
@@ -388,6 +412,8 @@ oterml (OP f, oterm t)
 OP
 omul (OP f, OP g)
 {
+  assert (op_verify (f));
+  assert (op_verify (g));
   int i, count = 0, k;
   oterm t = { 0 };
   OP h = { 0 }, e = {
@@ -398,6 +424,7 @@ omul (OP f, OP g)
   vec c = { 0 };
 
   f = conv (f);
+  assert (op_verify (f));
   g = conv (g);
   if (odeg ((f)) > odeg ((g)))
     {
@@ -414,11 +441,7 @@ omul (OP f, OP g)
       e = oterml (f, t);
       h = oadd (h, e);
     }
-
-  //printpol(o2v(h));
-  //printf(" debug======\n");
-  //  exit(1);
-
+  assert (op_verify (h));
   return h;
 }
 
@@ -620,6 +643,8 @@ omod (OP f, OP g)
 OP
 odiv (OP f, OP g)
 {
+  assert (op_verify (f));
+  assert (op_verify (g));
   int i = 0, j, n, k;
   OP h = { 0 }, e = { 0 }, tt = { 0 }, o = { 0 };
   oterm a, b = { 0 }, c = { 0 };
@@ -641,15 +666,9 @@ odiv (OP f, OP g)
   if (LT (g).n == 0 && LT (g).a > 1)
     return coeff (f, LT (g).a);
 
-  //printf ("in odiv\n");
-  ////printpol(o2v(g));
-
-  //exit(1);
   g = conv (g);
   k = odeg (g);
   b = LT (g);
-  //printpol (o2v (g));
-  //printf ("in odiv1 g===========%d %d\n", b.a, b.n);
   if (b.a == 1 && b.n == 0)
     return f;
   if (b.a == 0 && b.n == 0)
@@ -664,14 +683,6 @@ odiv (OP f, OP g)
       return f;
       //  a=LT(f);
     }
-  //printf ("odiv in b=========%dx^%d\n", b.a, b.n);
-  //printpol (o2v (g));
-  //printf ("\nf===================\n");
-  // e=omul(g,g);
-  ////printpol(o2v(e));
-  //printf("\ng^2================\n");
-
-  //printf ("\nin odiv2 g=============%d\n", odeg ((g)));
 
   i = 0;
   while (LT (f).n > 0 && LT (g).n > 0)
@@ -690,12 +701,6 @@ odiv (OP f, OP g)
       //printf("\ng=================\n");
 
       h = oterml (g, c);
-      ////printpol(o2v(h));
-      //printf("\n");
-      //printf("h===================\n");
-      ////printpol(o2v(f));
-      //printf("\nf===================\n");
-      //     exit(1);
 
       f = oadd (f, h);
       f = conv (f);
@@ -711,10 +716,9 @@ odiv (OP f, OP g)
       if (c.n == 0)
         break;
     }
-  //exit(1);
 
 
-
+  assert (op_verify (tt));
   return tt;
 }
 
@@ -944,42 +948,26 @@ vx (OP f, OP g)
   v[1].t[0].a = 1;
   v[1].t[1].n = 0;
 
-  //printf("in vx\n");
-  //  exit(1);
   i = 0;
 
   while (1)
     {
       if (odeg ((g)) == 0)
         break;
-      // if(odeg((g))>0)
       h = omod (f, g);
-      //printpol (o2v (h));
-      //printf (" modh vx==============\n");
       if (LT (g).a == 0)
         break;
-      //if(LT(g).a>0)
       ww = odiv (f, g);
-      //printf ("ww======= ");
-      //printpol (o2v (ww));
-      //printf ("\n");
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
-      //printf ("-------");
       f = g;
       g = h;
 
       vv = v[i + 2];
-      //printf ("vv==");
-      //printpol (o2v (vv));
-      //printf (" ll========\n");
 
       if (odeg ((vv)) == T)
         break;
       i++;
     }
-  //printpol (o2v (vv));
-  //printf (" vv============\n");
-  //exit(1);
 
   return vv;
 }
