@@ -50,7 +50,7 @@ extern void makeS ();
 unsigned short sy[K] = { 0 };
 
 //Goppa多項式
-static unsigned short g[K + 1] = {1,0,6,0,0,0,0,8,1};//{ 0 };
+static unsigned short g[K + 1] = {0};//{1,0,6,0,0,0,0,8,1};
 unsigned short zz[N] = { 0 };
 
 
@@ -2454,13 +2454,13 @@ osqrt (OP f, OP w)
   k = deg (o2v(f));
   for (i = 0; i < k+1; i++)
     {
-      if (f.t[i].n % 2 == 0)
+      if (f.t[i].n % 2 == 0 && f.t[i].a>0)
 	{
 	  even.t[j].n = f.t[i].n / 2;
 	  even.t[j++].a = gf[isqrt (f.t[i].a)];
 	  printf ("a=%d %d\n", f.t[i].a, i);
 	}
-      if (f.t[i].n % 2 == 1)
+      if (f.t[i].n % 2 == 1 && f.t[i].a>0)
 	{
 	  odd.t[jj].n = (f.t[i].n - 1) / 2;
 	  odd.t[jj++].a = gf[isqrt (f.t[i].a)];
@@ -2476,13 +2476,13 @@ osqrt (OP f, OP w)
   jj = 0;
   for (i = 0; i < k + 1; i++)
     {
-      if (w.t[i].n % 2 == 0)
+      if (w.t[i].n % 2 == 0 && w.t[i].a>0)
 	{
 	  h.t[j].a = gf[isqrt (w.t[i].a)];
 	  h.t[j++].n = w.t[i].n / 2;
 	  printf ("h==%d %d\n", (w.t[i].n / 2), i);
 	}
-      if (w.t[i].n % 2 == 1)
+      if (w.t[i].n % 2 == 1 && w.t[i].a>0)
 	{
 	  r.t[jj].a = gf[isqrt (w.t[i].a)];
 	  r.t[jj++].n = (w.t[i].n - 1) / 2;
@@ -2505,8 +2505,12 @@ osqrt (OP f, OP w)
       printf (" goppa======0\n");
       printpol (o2v (f));
       printf (" syn======0\n");
-      s.t[0].a=gf[isqrt(LT(r).a)];
-      s.t[0].n=0;
+      if(LT(r).a>0){
+	s.t[0].a=gf[isqrt(LT(r).a)];
+	s.t[0].n=0;
+	return omod(oadd(even,omul(coeff(h,s.t[0].a),odd)),w);
+      }
+      return even;
   //s = inv (r, w);
       //wait ();
       //exit (1);
@@ -3181,6 +3185,10 @@ main (void)
       w = setpol (g, K + 1);
       oprintpol (w);
     }
+    
+    //w = setpol (g, K + 1);
+    //oprintpol (w);
+    
     //多項式の値が0でないことを確認
     for (i = 0; i < D; i++){
       ta[i] = trace (w, i);
