@@ -376,8 +376,10 @@ oterml (OP f, oterm t)
   k = distance (f);
   for (i = 0; i < k + 1; i++)
     {
+      if(f.t[i].a>0){
       h.t[i].n = f.t[i].n + t.n;
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
+      }
     }
 
   h=conv(h);
@@ -620,7 +622,7 @@ odiv (OP f, OP g)
 {
   assert (op_verify (f));
   assert (op_verify (g));
-  int i = 0, j, n, k;
+  int i = 0, j=0, n, k;
   OP h = { 0 }, e = { 0 }, tt = { 0 };
   oterm a, b = { 0 }, c = { 0 };
 
@@ -677,9 +679,11 @@ odiv (OP f, OP g)
   // tt は逆順に入ってるので入れ替える
   OP ret = { 0 };
   int tt_terms = terms (tt);
+  j=0;
   for (i = 0; i < tt_terms; i++)
     {
-      ret.t[i] = tt.t[tt_terms - i - 1];
+      if(tt.t[tt_terms - i - 1].a>0)
+      ret.t[j++] = tt.t[tt_terms - i - 1];
     }
 
   assert (op_verify (ret));
