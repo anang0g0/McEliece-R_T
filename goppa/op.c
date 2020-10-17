@@ -368,7 +368,7 @@ OP
 oterml (OP f, oterm t)
 {
   assert (op_verify (f));
-  int i, k;
+  int i, k,j=0;
   OP h = { 0 };
   vec test;
   unsigned short n;
@@ -380,6 +380,7 @@ oterml (OP f, oterm t)
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
     }
 
+  h=conv(h);
   assert (op_verify (h));
   return h;
 }
