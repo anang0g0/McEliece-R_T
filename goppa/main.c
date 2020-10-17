@@ -1494,7 +1494,7 @@ pattarson (OP w, OP f)
     }
   else if (odeg ((ff)) == 1)
     {
-      ll = oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
+      ll = ff; //oadd (omul (ff, ff), omul (tt, omul (hh.v, hh.v)));  //ff;
       wait ();
     }
   else
@@ -1509,10 +1509,10 @@ pattarson (OP w, OP f)
     }
   printf ("あっ、でる・・・！\n");
   count = 0;
-  //printpol (o2v (ll));
-  //printf (" ll=================\n");
-  //printpol (o2v (f));
-  //printf (" syn=================\n");
+  printpol (o2v (ll));
+  printf (" ll=================\n");
+  printpol (o2v (f));
+  printf (" syn=================\n");
   v = chen (ll);
   /*
      if (count < 2 * T - 1)
@@ -1684,7 +1684,7 @@ synd (unsigned short zz[])
 
   printf ("in synd\n");
 
-#pragma omp parallel for        //num_threads(8)
+  #pragma omp parallel for        //num_threads(8)
   for (i = 0; i < K; i++)
     {
       syn[i] = 0;
@@ -1946,6 +1946,9 @@ label:
 
   //makeS();
   //exit(1);
+
+
+  
   do
     {
       fail = 0;
@@ -1985,7 +1988,8 @@ label:
 
     }
   while (fail);
-
+  
+  
 #pragma omp parallel for
   for (i = 0; i < N; i++)
     tr[i] = oinv (ta[i]);
@@ -2000,13 +2004,13 @@ label:
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
+  
   do
     {
       i = deta (g);
     }
   while (i < 0);
-
-
+  
 
 lab:
 
@@ -2056,7 +2060,11 @@ lab:
          }
          printf ("%d\n", count);
        */
-
+      printpol(o2v(w));
+      printf(" ==========goppa\n");
+      printpol(o2v(f));
+      printf(" ==========synd\n");
+      
       r = decode (w, f);
 
       for (i = 0; i < T; i++)
@@ -2088,7 +2096,7 @@ lab:
         }
       printf ("err=%dっ！！\n", count);
       //exit(1);
-      goto label;
+      //goto label;
 
 
 
@@ -2146,12 +2154,13 @@ lab:
       printf ("err=%dっ!! \n", count);
       if (count != T * 2)
         printf ("error is too few\n");
-
+      //if(odeg(v)==1)
+      //wait();
       //exit(1);
       //goto lab;
       //wait();
 
-      break;
+      //break;
     }
 
   return 0;
