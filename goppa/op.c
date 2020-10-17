@@ -620,6 +620,9 @@ omod (OP f, OP g)
 OP
 odiv (OP f, OP g)
 {
+
+  f=conv(f);
+  g=conv(g);
   assert (op_verify (f));
   assert (op_verify (g));
   int i = 0, j=0, n, k;
@@ -1051,9 +1054,9 @@ EX
 xgcd (OP f, OP g)
 {
   OP h = { 0 }
-  , ww = {
-    0
-  }
+  , ww =
+  {
+  0}
   , *v, *u;
   oterm a, b;
   int i = 0, j, k, flg = 0;
@@ -1091,17 +1094,17 @@ xgcd (OP f, OP g)
   while (1)
     {
       if (LT (g).n == 0)
-        {
-          printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
-          printf (" g========\n");
-          exit (1);
-        }
+	{
+	  printf ("v[%d]=%d skipped\n", i, odeg ((v[i])));
+	  //exit(1);
+	  break;
+	}
 
-      if (LT (g).n > 0)
-        h = omod (f, g);
+      if (odeg ((g)) > 0)
+	h = omod (f, g);
 
       if (LT (g).a > 0)
-        ww = odiv (f, g);
+	ww = odiv (f, g);
 
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
       u[i + 2] = oadd (u[i], omul (ww, u[i + 1]));
@@ -1111,9 +1114,9 @@ xgcd (OP f, OP g)
 
       //if(
       if (odeg ((f)) == T - 1 || odeg ((v[i])) == T - 1)
-        {
-          break;
-        }
+	{
+	  break;
+	}
       i++;
     }
 
@@ -1141,6 +1144,7 @@ xgcd (OP f, OP g)
 
   return e;
 }
+
 
 
 //拡張ユークリッドアルゴリズム(Tで止まらない)
