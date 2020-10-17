@@ -95,7 +95,7 @@ oprintpol (OP f)
   int i, n;
 
   f = conv (f);
-  n = distance (f);
+  n = odeg (f);
   printf ("n=%d\n", n);
   printf ("terms=%d\n", terms (f));
   printf ("deg=%d\n", odeg (f));
@@ -373,7 +373,8 @@ oterml (OP f, oterm t)
   vec test;
   unsigned short n;
 
-  k = distance (f);
+  f=conv(f);
+  k = odeg (f);
   j=0;
   for (i = 0; i < k + 1; i++)
     {
