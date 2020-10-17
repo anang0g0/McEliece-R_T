@@ -619,6 +619,9 @@ omod (OP f, OP g)
 OP
 odiv (OP f, OP g)
 {
+  
+  f=conv(f);
+  g=conv(g);
   assert (op_verify (f));
   assert (op_verify (g));
   int i = 0, j, n, k;
@@ -893,6 +896,7 @@ inv (OP a, OP n)
 }
 
 
+
 //error locater for decode
 OP
 vx (OP f, OP g)
@@ -936,6 +940,8 @@ vx (OP f, OP g)
 
   return vv;
 }
+
+
 
 //最終の項までの距離
 int
@@ -1091,7 +1097,8 @@ xgcd (OP f, OP g)
         {
           printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
           printf (" g========\n");
-          exit (1);
+          //exit (1);
+	  break;
         }
 
       if (LT (g).n > 0)
