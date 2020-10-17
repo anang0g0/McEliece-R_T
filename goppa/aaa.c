@@ -3142,6 +3142,18 @@ main (void)
     memset(ta,0,sizeof(ta));
     ginit ();
 
+    for(i=0;i<K+1;i++){
+      if(g[K-1]>0)
+	flg=1;
+      if(i%2==1 && g[i]>0 && i<K)
+	k++;
+    }
+    if((k>0 && flg==0) || (k>1 && flg==1)){
+      w = setpol (g, K + 1);
+      //w=conv(w);
+      oprintpol (w);
+    }
+
     w = setpol (g, K + 1);
     oprintpol (w);
 
@@ -3170,9 +3182,9 @@ main (void)
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-   do{
-    i=deta(g);
-    } while(i<0);
+  // do{
+    det(g);
+    //} while(i<0);
   
 
 
@@ -3268,7 +3280,7 @@ lab:
 	}
       printf ("err=%dっ！！\n", count);
       //exit(1);
-      //goto label;
+      goto label;
     
     patta:
 
@@ -3322,7 +3334,7 @@ lab:
     printf ("error is too few\n");
   
   //exit(1);
-  goto patta;
+  //goto label;
   //wait();
   
   //break;
