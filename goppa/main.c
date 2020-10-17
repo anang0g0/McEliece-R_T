@@ -1881,7 +1881,7 @@ label:
   van();
   mm(g);
   tr1e(g);
-  exit(1);
+  //  exit(1);
 
   
 #pragma omp parallel for
