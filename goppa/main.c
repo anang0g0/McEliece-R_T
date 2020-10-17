@@ -434,13 +434,13 @@ OP
 decode (OP f, OP s)
 {
   int i, j, k, count = 0;
-  OP r = { 0 }, w = {
-    0
-  }, e = {
-    0
-  }, l = {
-    0
-  };
+  OP r = { 0 }, w =
+  {
+  0}, e =
+  {
+  0}, l =
+  {
+  0};
   oterm t1, t2, d1, a, b;
   vec x = { 0 };
   unsigned short d = 0;
@@ -470,16 +470,16 @@ decode (OP f, OP s)
     {
       // printf ("x[%d]=1\n", x.x[i]);
       if (x.x[i] == 0)
-        k++;
+	k++;
       if (k > 1)
-        {
-          printf ("baka0\n");
-          printvec (o2v (f));
-          for (i = 0; i < N; i++)
-            printf ("%d,", zz[i]);
-          exit (1);
-          //return f;
-        }
+	{
+	  printf ("baka0\n");
+	  printvec (o2v (f));
+	  for (i = 0; i < N; i++)
+	    printf ("%d,", zz[i]);
+	  exit (1);
+	  //return f;
+	}
     }
   //exit(1);
 
@@ -528,12 +528,12 @@ decode (OP f, OP s)
   for (i = 0; i < j; i++)
     {
       if (x.x[i] > 0)
-        {
-          e.t[i].a =
-            gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
-          //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
-          e.t[i].n = x.x[i];
-        }
+	{
+	  e.t[i].a =
+	    gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
+	  //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+	  e.t[i].n = x.x[i];
+	}
     }
   //printpol (o2v (f));
   printf (" f============\n");
@@ -581,6 +581,63 @@ setpol (unsigned short f[], int n)
 unsigned short tr[N] = { 0 };
 unsigned short ta[N] = { 0 };
 
+
+
+void
+det2 (int i, unsigned short g[])
+{
+  OP f[16] = { 0 }, h[16] =
+  {
+  0}, w, u[16] =
+  {
+  0};
+  unsigned short cc[K + 1] = { 0 }, d[2] =
+  {
+  0};
+  int j, a, b, k, t1, l = 0, flg = 0, id;
+  oterm t[16] = { 0 };
+  vec e[16] = { 0 };
+  OP ww[16] = { 0 };
+
+
+  memcpy (cc, g, sizeof (cc));
+
+  k = cc[K];
+  w = setpol (g, K + 1);
+
+  //  omp_set_num_threads(8);
+  id = omp_get_thread_num ();
+
+
+  h[id].t[0].n = 0;
+  h[id].t[1].a = 1;
+  h[id].t[1].n = 1;
+  t[id].n = 0;
+
+
+  f[id] = setpol (cc, K + 1);
+
+  cc[K] = k ^ ta[i];
+  //tr[i];
+  f[id] = setpol (cc, K + 1);
+
+  //f.t[0].a=k^ta[i]; //cc[K];
+  h[id].t[0].a = i;
+
+  ww[id] = odiv (f[id], h[id]);
+
+  //b = oinv (a);
+  t[id].a = gf[tr[i]];
+  u[id] = oterml (ww[id], t[id]);
+  e[id] = o2v (u[id]);
+
+  memcpy (mat[i], e[id].x, sizeof (mat[i]));
+
+
+}
+
+
+/*
 void
 det2 (int i, unsigned short g[])
 {
@@ -640,7 +697,7 @@ det2 (int i, unsigned short g[])
 
 
 }
-
+*/
 
 
 //パリティチェック行列を生成する
@@ -1856,10 +1913,12 @@ label:
         {
           w = setpol (g, K + 1);
           oprintpol (w);
-        }
+        }else {
+	goto label;
+      }
 
-      //w = setpol (g, K + 1);
-      //oprintpol (w);
+      w = setpol (g, K + 1);
+      oprintpol (w);
 
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
@@ -1878,9 +1937,10 @@ label:
 
   
   printf("\n\n");
-  van();
-  mm(g);
-  tr1e(g);
+
+  //van();
+  //mm(g);
+  //tr1e(g);
   //  exit(1);
 
   
@@ -1907,8 +1967,8 @@ label:
 
 
 lab:
-  matmul ();
-  matinv ();
+  //matmul ();
+  //matinv ();
 
 //decode開始
   k = 0;
@@ -1985,9 +2045,9 @@ lab:
         }
       printf ("err=%dっ！！\n", count);
       //exit(1);
-      //goto label;
+      goto label;
 
-
+    patta:
 
       //printf("パターソンアルゴリズムを実行します。何か数字を入れてください。\n");
       //wait();
@@ -2045,7 +2105,7 @@ lab:
         printf ("error is too few\n");
 
       //exit(1);
-      //goto lab;
+      goto patta;
       //wait();
 
       break;
