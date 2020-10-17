@@ -368,20 +368,19 @@ OP
 oterml (OP f, oterm t)
 {
   assert (op_verify (f));
-  int i, k,j=0;
+  int i, k,j;
   OP h = { 0 };
   vec test;
   unsigned short n;
 
   k = distance (f);
+  j=0;
   for (i = 0; i < k + 1; i++)
     {
-      if(f.t[i].a>0){
       h.t[i].n = f.t[i].n + t.n;
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
-      }
     }
-
+  
   h=conv(h);
   assert (op_verify (h));
   return h;
@@ -620,12 +619,9 @@ omod (OP f, OP g)
 OP
 odiv (OP f, OP g)
 {
-
-  f=conv(f);
-  g=conv(g);
   assert (op_verify (f));
   assert (op_verify (g));
-  int i = 0, j=0, n, k;
+  int i = 0, j, n, k;
   OP h = { 0 }, e = { 0 }, tt = { 0 };
   oterm a, b = { 0 }, c = { 0 };
 
@@ -682,11 +678,9 @@ odiv (OP f, OP g)
   // tt は逆順に入ってるので入れ替える
   OP ret = { 0 };
   int tt_terms = terms (tt);
-  j=0;
   for (i = 0; i < tt_terms; i++)
     {
-      if(tt.t[tt_terms - i - 1].a>0)
-      ret.t[j++] = tt.t[tt_terms - i - 1];
+      ret.t[i] = tt.t[tt_terms - i - 1];
     }
 
   assert (op_verify (ret));
@@ -1054,9 +1048,9 @@ EX
 xgcd (OP f, OP g)
 {
   OP h = { 0 }
-  , ww =
-  {
-  0}
+  , ww = {
+    0
+  }
   , *v, *u;
   oterm a, b;
   int i = 0, j, k, flg = 0;
@@ -1094,17 +1088,17 @@ xgcd (OP f, OP g)
   while (1)
     {
       if (LT (g).n == 0)
-	{
-	  printf ("v[%d]=%d skipped\n", i, odeg ((v[i])));
-	  //exit(1);
-	  break;
-	}
+        {
+          printf ("v[%d]=%d skipped deg(g)==0!\n", i, odeg ((v[i])));
+          printf (" g========\n");
+          exit (1);
+        }
 
-      if (odeg ((g)) > 0)
-	h = omod (f, g);
+      if (LT (g).n > 0)
+        h = omod (f, g);
 
       if (LT (g).a > 0)
-	ww = odiv (f, g);
+        ww = odiv (f, g);
 
       v[i + 2] = oadd (v[i], omul (ww, v[i + 1]));
       u[i + 2] = oadd (u[i], omul (ww, u[i + 1]));
@@ -1114,9 +1108,9 @@ xgcd (OP f, OP g)
 
       //if(
       if (odeg ((f)) == T - 1 || odeg ((v[i])) == T - 1)
-	{
-	  break;
-	}
+        {
+          break;
+        }
       i++;
     }
 
@@ -1144,7 +1138,6 @@ xgcd (OP f, OP g)
 
   return e;
 }
-
 
 
 //拡張ユークリッドアルゴリズム(Tで止まらない)
