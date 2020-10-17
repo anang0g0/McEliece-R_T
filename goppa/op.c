@@ -116,7 +116,6 @@ op_print_raw (const OP f)
       if (f.t[i].a > 0)
         printf ("[%d] %ux^%u\n", i, f.t[i].a, f.t[i].n);
     }
-
 }
 
 bool
@@ -130,8 +129,8 @@ op_verify (const OP f)
         {
           op_print_raw (f);
           printf ("found data after end: i=%d\n", i);
-          fflush (stdout);
           print_trace ();
+          fflush (stdout);
           return false;
         }
       if (f.t[i].a == 0)
@@ -143,6 +142,7 @@ op_verify (const OP f)
         {
           op_print_raw (f);
           printf ("found invalid order: i=%d\n", i);
+          print_trace ();
           fflush (stdout);
           return false;
         }
@@ -400,9 +400,6 @@ omul (OP f, OP g)
   };
   vec c = { 0 };
 
-  f = conv (f);
-  assert (op_verify (f));
-  g = conv (g);
   if (odeg ((f)) > odeg ((g)))
     {
       k = odeg ((f));
@@ -678,14 +675,14 @@ odiv (OP f, OP g)
 
   // tt は逆順に入ってるので入れ替える
   OP ret = { 0 };
-  int tt_deg = odeg (tt);
-  for (i = 0; i < tt_deg; i++)
+  int tt_terms = terms (tt);
+  for (i = 0; i < tt_terms; i++)
     {
-      ret.t[i] = tt.t[tt_deg - i - 1];
+      ret.t[i] = tt.t[tt_terms - i - 1];
     }
 
   assert (op_verify (ret));
-  return tt;
+  return ret;
 }
 
 
