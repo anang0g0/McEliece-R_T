@@ -6,6 +6,8 @@ https://arxiv.org/pdf/1108.2462.pdf
 
 https://www.zora.uzh.ch/id/eprint/128304/1/Baldi_et_al2014.pdf
 
+https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
+
 Reed-Solomonでも暗号に使えるなんて画期的です。
 
 
