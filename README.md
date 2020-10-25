@@ -10,6 +10,9 @@ https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
 
 Reed-Solomonでも暗号に使えるなんて画期的です。
 
+# 20201025
+
+半信半疑だったけどちゃんと動いてる。奇跡だｗ
 
 # 20201016
 
