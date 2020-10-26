@@ -3679,10 +3679,9 @@ lab:
   //makeS();
   //exit(1);
 
-  printf("gen\n");
-  
-  //置換行列をかける時
   /*
+  printf("gen\n");
+  //置換行列をかける時
   for(i=0;i<K;i++){
     for(j=0;j<M;j++){
       for(k=0;k<M;k++)
@@ -3693,7 +3692,8 @@ lab:
   }
   printf("\n");
   */
-
+  
+  
   //スクランブル行列をかける時
   for(i=0;i<K;i++){
     for(j=0;j<D;j++){
@@ -3705,7 +3705,7 @@ lab:
     printf("\n");
   }
   printf("\n");
-
+  
   printf("mat\n");
   for(i=0;i<K;i++){
     for(j=0;j<N;j++){
@@ -3730,6 +3730,7 @@ lab:
   //exit(1);
 
   /*
+  //スクランブルの確認
   memset(mat,0,sizeof(mat));
   
   for(j=0;j<N;j++){
@@ -3747,8 +3748,26 @@ lab:
   printf("\n");
   exit(1);
   */
-  
 
+  /*
+  //置換の確認
+  memset(mat,0,sizeof(mat));
+
+  for(i=0;i<K;i++){
+    for(j=0;j<N;j++){
+      for(k=0;k<N;k++)
+	mat[j][i]^=gf[mlt(fg[gen[k][i]],fg[invP[k][j]])];
+    }
+  }
+
+  for(j=0;j<K;j++){
+    for(i=0;i<N;i++)
+      printf("%d,",mat[i][j]);
+    printf("\n");
+  }
+  printf("\n");
+  //  exit(1);
+  */
 
   memcpy(mat,gen,sizeof(mat));
   /*  
