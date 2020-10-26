@@ -3424,7 +3424,8 @@ main (void)
     0
   };
   int fail = 0;
-  /*
+
+  /*  
   unsigned short P[N][N]=
     {
      {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0},
@@ -3463,8 +3464,8 @@ unsigned short invP[N][N]=
    {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0},
    {  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
   };
-  */
-  
+*/  
+
   unsigned short P[N][N]=
     {
     {0,  0,  0,  0,  0,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0},
@@ -3666,7 +3667,9 @@ lab:
   // makeS();
   //exit(1);
 
+
   printf("gen\n");
+  //置換行列をかける時
   for(i=0;i<K;i++){
     for(j=0;j<M;j++){
       for(k=0;k<M;k++)
@@ -3676,6 +3679,8 @@ lab:
     printf("\n");
   }
   printf("\n");
+  
+
 
   printf("mat\n");
 
@@ -3686,27 +3691,25 @@ lab:
   }
   printf("\n");
 
-  /*
-  for(i=0;i<K;i++){
-    for(j=0;j<N;j++)
-      mat[j][i]=0;
-  }
+
+  memset(mat,0,sizeof(mat));
+
   
   for(i=0;i<K;i++){
     for(j=0;j<N;j++){
       for(k=0;k<N;k++)
-	mat[j][i]^=gf[mlt(fg[gen[i][k]],invP[k][j])];
+	mat[j][i]^=gf[mlt(fg[gen[k][i]],fg[invP[k][j]])];
     }
   }
   
   for(j=0;j<K;j++){
     for(i=0;i<N;i++)
-      printf("%d,",mat[i][k]);
+      printf("%d,",mat[i][j]);
     printf("\n");
   }
   printf("\n");
-  exit(1);
-  */
+  //exit(1);
+  
   
   vec ef={0},gh={0};
 
