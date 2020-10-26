@@ -3411,7 +3411,6 @@ main (void)
   };
   int fail = 0;
   
-  /*
   unsigned short P[N][N]=
     {
      {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0},
@@ -3451,8 +3450,8 @@ unsigned short invP[N][N]=
    {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0},
    {  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
   };
-  */  
-
+  
+/*
   unsigned short P[N][N]=
     {
     {0,  0,  0,  0,  0,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0},
@@ -3472,7 +3471,6 @@ unsigned short invP[N][N]=
     {0,  0,  0,  0,  0,  7,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
     {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 15,  0,  0}
 };
-
 unsigned short invP[N][N]=
     {
      {0,  0,  0,  0, 14,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
@@ -3492,7 +3490,7 @@ unsigned short invP[N][N]=
      {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5,  0,  0,  0,  0},
      {0,  0,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
     };
-
+*/  
   
  unsigned short A0[K][K] =
    {
@@ -3683,6 +3681,18 @@ lab:
 
   printf("gen\n");
   
+  //置換行列をかける時
+  /*
+  for(i=0;i<K;i++){
+    for(j=0;j<M;j++){
+      for(k=0;k<M;k++)
+	gen[j][i]^=gf[mlt(fg[mat[k][i]],fg[P[k][j]])];
+    printf("%2d,",gen[j][i]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+  */
 
   //スクランブル行列をかける時
   for(i=0;i<K;i++){
@@ -3704,23 +3714,7 @@ lab:
     printf("\n");
   }
   printf("\n");
-
-
-  memset(mat,0,sizeof(mat));
   
-  //置換行列をかける時
-  
-  for(i=0;i<K;i++){
-    for(j=0;j<M;j++){
-      for(k=0;k<M;k++)
-	mat[j][i]^=gf[mlt(fg[mat[k][i]],fg[P[k][j]])];
-    printf("%2d,",mat[j][i]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-  
-
   unsigned short o[K][K]={0};
   for(i=0;i<K;i++){
     for(j=0;j<K;j++){
@@ -3734,6 +3728,7 @@ lab:
     printf("\n");
   }
   //exit(1);
+
   /*
   memset(mat,0,sizeof(mat));
   
@@ -3743,7 +3738,6 @@ lab:
 	mat[j][i]^=gf[mlt(fg[invA0[i][k]],fg[gen[j][k]])];
     }
   }
-
   printf("after inv_S\n");
   for(j=0;j<K;j++){
     for(i=0;i<N;i++)
@@ -3994,3 +3988,5 @@ lab:
 
   return 0;
 }
+
+ 
