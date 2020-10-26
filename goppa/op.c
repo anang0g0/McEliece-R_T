@@ -3464,7 +3464,7 @@ unsigned short invP[N][N]=
    {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0},
    {  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
   };
-*/  
+  */
 
   unsigned short P[N][N]=
     {
@@ -3505,7 +3505,7 @@ unsigned short invP[N][N]=
      {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5,  0,  0,  0,  0},
      {0,  0,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
     };
-  
+
   
  unsigned short A0[K][K] =
    {
@@ -3818,7 +3818,22 @@ lab:
 	  printf("%d baka1\n",count);
 	  exit(1);
 	}
-
+ 
+      ef=o2v(r);
+      for(i=0;i<N;i++)
+	printf("e=%d\n",ef.x[i]);
+      printf("\n\n");
+      
+      for(i=0;i<N;i++){
+	for(j=0;j<N;j++){
+	  gh.x[i]^=gf[mlt(fg[ef.x[j]],fg[invP[i][j]])];
+	}
+      }
+      
+      for(i=0;i<N;i++){
+	if(gh.x[i]>0)
+	  printf("e=%d %d\n",i,gh.x[i]);
+      }
       exit(1);
       //goto label;
 
