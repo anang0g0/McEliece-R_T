@@ -9,7 +9,7 @@
 
 #define MAXN 4
 #define N 16 //order of GF(q)
-#define F 8  //dimension of matrix
+#define F 16  //dimension of matrix
 
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -261,17 +261,24 @@ for(j=0;j<n;j++){
 }
 
 printf("行列を出力\n");
+ printf("unsigned short P[N][N]=\n{\n");
  for(i=0;i<n;i++){
+   printf("{");
    for(j=0;j<n;j++){
      //a[i][j]=rand()%N;
      printf("%3d,",c[i][j]);
    }
+   printf("},");
    printf("\n");
  }
+ printf("};\n");
+
  
  printf("\n逆行列を出力\n");
+ printf("unsigned short invP[N][N]=\n{\n");
  for(i=0;i<n;i++){
    count=0;
+   printf("{");
    for(j=0;j<n;j++){
      if(inv_a[i][j]==0)
        count++;
@@ -279,10 +286,12 @@ printf("行列を出力\n");
        printf("\nbaka\n\n");
        goto lab;
      }
-     printf("%3d ",inv_a[i][j]);
+     printf("%3d,",inv_a[i][j]);
    }
+   printf("},");
    printf("\n");
  }
+ printf("};\n");
 
  //exit(1); 
 //検算
