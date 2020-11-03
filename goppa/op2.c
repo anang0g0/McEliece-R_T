@@ -1897,7 +1897,7 @@ decode (OP f, OP s)
         {
           printf ("baka0\n");
 
-          printvec (o2v (f));
+          printpol (o2v (f));
           for (i = 0; i < M; i++)
             printf ("%d,", zz[i]);
          exit (1);
