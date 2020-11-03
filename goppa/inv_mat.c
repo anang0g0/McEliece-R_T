@@ -8,8 +8,8 @@
 #include <time.h>
 
 #define MAXN 4
-#define N 16 //order of GF(q)
-#define F 16  //dimension of matrix
+#define N 256 //order of GF(q)
+#define F 128  //dimension of matrix
 
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -30,21 +30,21 @@
 	srand(clock()+time(&t));
 
 
-        for (i = 0; i < F; i++) {
+        for (i = 0; i < N; i++) {
             a[i] = i;
         }
-        for (i = 0; i < F - 2; i++) {
+        for (i = 0; i < N - 2; i++) {
             // rand from i+1 to F-1
-            j = (rand() % (F - 1 - i)) + i + 1;
+            j = (rand() % (N - 1 - i)) + i + 1;
 
             // swap a[i] and a[j]
             x = a[j];
             a[j] = a[i];
             a[i] = x;
         }
-        if (a[F - 1] == F - 1) {
-            a[F - 1] = a[F - 2];
-            a[F - 2] = F - 1;
+        if (a[N - 1] == N - 1) {
+            a[N - 1] = a[N - 2];
+            a[N - 2] = N - 1;
         }
 
 
@@ -53,23 +53,17 @@
 
 /*
 int mlt(int x, int y){
-
     if(x==0||y==0)
         return 0;
-
   return ((x+y-2)%(N-1))+1;
 }
-
-
 int mltn(int n,int x){
   int i,j;
-
   if(n==0)
     return 1;
   i=x;
     for(j=0;j<n-1;j++)
       i=mlt(i,x);
-
   return i;
 }
 */
@@ -88,18 +82,15 @@ int Inv(unsigned short b){
 int det(){
   //double a[N][N]={{2,-2,4,2},{2,-1,6,3},{3,-2,12,12},{-1,3,-4,4}};
 double det=1.0,buf;
-
 int n=N;  //配列の次数
 int i,j,k;
 unsigned short c[N][N]={0};
-
 unsigned short a[N][N]={0};//{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
 //{{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
 unsigned short inv_a[N][N]={0};
   //{{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,1,0}};
 //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short cc[N][N]={0};
-
 // lab:
 //三角行列を作成
 for(i=0;i<n;i++){
@@ -261,7 +252,7 @@ for(j=0;j<n;j++){
 }
 
 printf("行列を出力\n");
- printf("unsigned short P[N][N]=\n{\n");
+ printf("unsigned short A0[N][N]=\n{\n");
  for(i=0;i<n;i++){
    printf("{");
    for(j=0;j<n;j++){
@@ -275,7 +266,7 @@ printf("行列を出力\n");
 
  
  printf("\n逆行列を出力\n");
- printf("unsigned short invP[N][N]=\n{\n");
+ printf("unsigned short invA0[N][N]=\n{\n");
  for(i=0;i<n;i++){
    count=0;
    printf("{");
@@ -314,10 +305,10 @@ printf("行列を出力\n");
 
 //Q-matrix
 void matmul(){
-  int i,j,k,tmp[F][F]={0};
-unsigned char x0[F];//={1,2,3,4,5,6,7,0};
-unsigned char x1[F];//={2,3,1,6,5,7,0,4};
-unsigned char x2[F]={0};
+  int i,j,k,tmp[N][N]={0};
+unsigned char x0[N];//={1,2,3,4,5,6,7,0};
+unsigned char x1[N];//={2,3,1,6,5,7,0,4};
+unsigned char x2[N]={0};
 unsigned short c[N][N]={0};
 
 unsigned short a[N][N]={0};//{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
@@ -330,43 +321,48 @@ unsigned short cc[N][N]={0};
 
   rp(x0);
   printf("置換配列を表示\n");
-  for(i=0;i<F;i++){
+  for(i=0;i<N;i++){
     a[i][x0[i]]=rand()%N;
     printf("%d,",x0[i]);
   }
   printf("\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++){
       inv_a[i][j]=gf[Inv(fg[a[j][i]])];//*inv_a[k][j];
       
     }
   }
   
   printf("Q1-置換行列を表示\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++)
+  printf("unsigned short P[N][N]=\n{\n");
+  for(i=0;i<N;i++){
+    printf("{");
+    for(j=0;j<N;j++)
       printf("%3d,",a[j][i]);
-    printf("\n");
+    printf("},\n");
   }
-  printf("\n");
+  printf("};\n");
 
   printf("逆置換行列\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
+  printf("unsigned short invP[N][N]=\n{\n");
+  for(i=0;i<N;i++){
+    printf("{");
+    for(j=0;j<N;j++){
 	printf("%3d,",inv_a[j][i]);	
     }
-    printf("\n");
+    printf("},\n");
   }
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
-      for(k=0;k<F;k++){
+  printf("};\n");
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++){
+      for(k=0;k<N;k++){
 	tmp[i][j]^=gf[mlt(fg[a[i][k]],fg[inv_a[k][j]])];
       }
     }
   }
   printf("\n");
-  for(i=0;i<F;i++){
-    for(j=0;j<F;j++){
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++){
       printf("%d,",tmp[j][i]);
       //printf("%d,",inv_a[i][j]);
     }
@@ -374,28 +370,3 @@ unsigned short cc[N][N]={0};
   }
 
 }
-
-/*
-int main(){
-  
-    int i,j;
-    double b[4],k=0;
-
-    srand(clock());
-
-
-    //g2();
- lab:
-    printf("%d\n",gf[Inv(fg[3])]);
-    printf("%d\n",gf[Inv(fg[4])]);
-    printf("%d\n",gf[Inv(fg[5])]);
-    printf("%d\n",gf[Inv(fg[6])]);
-    matmul();
-    matinv();
-    printf("1=%d\n",gf[mlt(fg[3],fg[244])]);
-    //if(det()!=1.0)
-    //goto lab;
-    
-    return 0;
-}
-*/
