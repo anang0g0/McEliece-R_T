@@ -10,6 +10,7 @@ Reed-Solomonでも暗号に使えるなんて画期的です。
 
 また、この方法はまだ十分な時間が経過していないので、攻撃法がこれから見つかるかもしれません。
 
+クローンの方法：
 git clone -b master https://github.com/anang0g0/McEliece-R_T
 
 
@@ -19,7 +20,7 @@ git clone -b master https://github.com/anang0g0/McEliece-R_T
 
 自動化はまだです。
 
-make dual で実行。
+make dual でビルド。
 
 # 20201102
 
