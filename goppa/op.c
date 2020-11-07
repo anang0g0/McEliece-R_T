@@ -117,7 +117,7 @@ o2v (OP f)
   vec a = { 0 };
   int i;
 
-#pragma omp parallel for
+  #pragma omp parallel for
   for (i = 0; i < DEG; i++)
     {
       if (f.t[i].a > 0 && f.t[i].n < DEG)
@@ -137,7 +137,7 @@ v2o (vec a)
   OP f = { 0 };
 
   //#pragma omp parallel for
-  for (i = 0; i < DEG; i++)
+  for (i = 0; i < 400; i++)
     {
       if (a.x[i] > 0)
         {
@@ -240,16 +240,75 @@ op_verify (const OP f)
 
 
 
-
 //20200816:正規化したいところだがうまく行かない
 //多項式の足し算
 OP
 oadd (OP f, OP g)
 {
-  f=conv(f);
-  g=conv(g);
-  assert (op_verify (f));
-  assert (op_verify (g));
+  vec a = { 0 }
+  , b =
+  {
+  0}
+  , c =
+  {
+  0};
+  int i, j, k, l = 0;
+  OP h = { 0 },f2={0},g2={0};
+
+  //for(i=0;i<257;i++)
+  // printf("%d %d %d %d %d\n",i,f.t[i].a,f.t[i].n,g.t[i].a,g.t[i].n);
+
+   //  exit(1);
+  //f=conv(f);
+  //g=conv(g);
+
+  a = o2v (f);
+  //exit(1);
+  b = o2v (g);
+
+  j=odeg(f);
+  l=odeg(g);
+  //  oprintpol((g));
+  //  exit(1);
+  if (j >= l)
+    {
+      k = j + 1;
+    }
+  else
+    {
+
+      k = l + 1;
+
+    }
+  //for(i=0;i<k;i++)
+  //printf("%d %d\n",i,b.x[i]);
+  //  exit(1);
+  
+  for (i = 0; i < k; i++)
+    {
+      //if(f.t[i].a>0 || g.t[i].a>0)
+      //h.t[i].a=f.t[i].a^g.t[i].a;
+      c.x[i] = a.x[i] ^ b.x[i];
+    }
+  // 
+  h = v2o (c);
+
+  return h;
+}
+
+
+/*
+//20200816:正規化したいところだがうまく行かない
+//多項式の足し算
+OP
+oadd (OP f, OP g)
+{
+
+
+  //f=conv(f);
+  //g=conv(g);
+  //assert (op_verify (f));
+  //assert (op_verify (g));
 
   vec a = { 0 }
   , b = {
@@ -282,7 +341,7 @@ oadd (OP f, OP g)
   assert (op_verify (h));
   return h;
 }
-
+*/
 
 
 OP
@@ -462,13 +521,13 @@ OP
 oterml (OP f, oterm t)
 {
 
- assert (op_verify (f));
+  //assert (op_verify (f));
   int i, k,j;
   OP h = { 0 };
   vec test;
   unsigned short n;
 
-  f=conv(f);
+  //f=conv(f);
   k = odeg (f);
   j=0;
   for (i = 0; i < k + 1; i++)
@@ -477,8 +536,8 @@ oterml (OP f, oterm t)
       h.t[i].a = gf[mlt (fg[f.t[i].a], fg[t.a])];
     }
   
-  h=conv(h);
-  assert (op_verify (h));
+  //h=conv(h);
+  //assert (op_verify (h));
   return h;
 }
 
@@ -487,12 +546,12 @@ oterml (OP f, oterm t)
 OP
 omul (OP f, OP g)
 {
-  f=conv(f);
-  g=conv(g);
+  //f=conv(f);
+  //g=conv(g);
 
-  assert (op_verify (f));
-  assert (op_verify (g));
-  int i, count = 0, k;
+  //assert (op_verify (f));
+  //assert (op_verify (g));
+  int i, count = 0, k,l,m;
   oterm t = { 0 };
   OP h = { 0 }, e = {
     0
@@ -500,14 +559,16 @@ omul (OP f, OP g)
     0
   };
   vec c = { 0 };
-
-  if (odeg ((f)) > odeg ((g)))
+  l=odeg(f);
+  m=odeg(g);
+  
+  if (l >= m)
     {
-      k = odeg ((f));
+      k = l;
     }
   else
     {
-      k = odeg ((g));
+      k = m;
     }
 
   for (i = 0; i < k + 1; i++)
@@ -516,7 +577,7 @@ omul (OP f, OP g)
       e = oterml (f, t);
       h = oadd (h, e);
     }
-  assert (op_verify (h));
+  //assert (op_verify (h));
   return h;
 }
 
@@ -1080,7 +1141,7 @@ odeg (OP f)
 
 
   //k=terms(f);
-  for (i = 0; i < 512; i++)
+  for (i = 0; i < DEG; i++)
     {
       if (j < f.t[i].n && f.t[i].a > 0)
         j = f.t[i].n;
@@ -1761,17 +1822,15 @@ ipow (unsigned int q, unsigned int u)
 }
 
 
-
-
 //多項式の形式的微分
 OP
 bibun (vec a)
 {
   OP w[T * 2] = { 0 };
   OP l = { 0 }
-  , t = {
-    0
-  };
+  , t =
+  {
+   0},d={0};
   int i, j, n, id;
   vec tmp = { 0 };
 
@@ -1794,38 +1853,45 @@ bibun (vec a)
       w[i].t[1].n = 1;
       ////printpol(o2v(w[i]));
     }
-  //exit(1);
+  //  exit(1);
 
   tmp.x[0] = 1;
   //
-
+  d = v2o (tmp);
   //#pragma omp parallel for private(i,j)
-  for (i = 0; i < T; i++)
-    {
-      t = v2o (tmp);
-      //
-      for (j = 0; j < T; j++)
-        {
-          // #pragma omp critical
-          if (i != j)
-            {
-              t = omul (t, w[j]);
-            }
-        }
-      
-      //printpol(o2v(t));
-      //
-      if (deg (o2v(t)) == 0)
-        {
-          printf ("baka9\n");
-          // exit(1);
-        }
-      l = oadd (l, t);
-    }
-
+  //#pragma omp parallel num_threads(8)
+  {
+    //#pragma omp for schedule(static)
+    //id = omp_get_thread_num ();
+    for (i = 0; i < T; i++)
+      {
+	printf("i=%d　%d\n",i,DEG);
+	t=d;
+	//
+	for (j = 0; j < T; j++)
+	  {
+	    // #pragma omp critical
+	    if (i != j)
+	      {
+		t = omul (t, w[j]);
+	      }
+	  }
+	
+      ////printpol(o2v(t));
+	/*
+	if (odeg ((t)) == 0)
+	  {
+	    printf ("baka9\n");
+	    // exit(1);
+	  }
+	*/
+	l = oadd (l, t);
+      }
+  }
 
   return l;
 }
+
 
 
 //chen探索
@@ -1922,14 +1988,14 @@ decode (OP f, OP s)
 
   printf ("あっ、でる！\n");
   //  exit(1);
-  r=conv(r);
+  //r=conv(r);
   if (deg (o2v(r)) < T)
     {
       //printpol (o2v (r));
       printf ("baka5 deg(r)<T\n");
       exit (1);
     }
-
+  printf("aaaaaaaaaaaaaaaa");
 
   w = bibun (x);
   //exit(1);
@@ -1938,7 +2004,7 @@ decode (OP f, OP s)
   printf ("@@@@@@@@@\n");
   //exit(1);
 
-  hh = xgcd (f, s);
+  h = ogcd (f, s);
   //printpol (o2v (hh.d));
   //wait();
 
@@ -1964,9 +2030,9 @@ decode (OP f, OP s)
     {
       if (x.x[i] > 0)
         {
-          e.t[i].a =
-            gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
-          //e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+          //e.t[i].a =
+	  //gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
+          e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
           e.t[i].n = x.x[i];
         }
     }
@@ -4452,12 +4518,12 @@ label:
   unsigned short gen[N][K]={0};
   
 lab:
-
+/*
   matmul ();
   matinv ();
   // makeS();
   //exit(1);
-
+  */
 
   printf("gen\n");
   //置換行列をかける時
