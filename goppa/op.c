@@ -1014,40 +1014,6 @@ chk (OP f)
 }
 
 
-//decode用の多項式の最大公約数
-OP
-ogcd (OP f, OP g)
-{
-  OP h;
-  //oterm a, b;
-  int i = 0;
-
-
-  //oprintpol((f));
-  //oprintpol((g));
-  //  exit(1);
-
-  for (i = 0; i < T; i++)
-    {
-      if (odeg ((g)) == 0)
-        break;
-      h = omod (f, g);
-      if (odeg ((h)) == T - 1)
-        {
-          //printpol (o2v (h));
-          printf (" in ogcd=============\n");
-          //wait();
-          //break;
-          return h;
-        }
-      f = g;
-      g = h;
-    }
-  // exit(1);
-
-
-  return h;
-}
 
 
 //拡張ユークリッドアルゴリズム
