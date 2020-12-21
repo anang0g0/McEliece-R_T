@@ -10,7 +10,9 @@ https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
 
 Reed-Solomonでも暗号に使えるなんて画期的です。
 
+# 20201221
 
+今まで頻繁に止まっていたバグを、GCDの関数を変えることで解決。
 
 # 20201026
 
