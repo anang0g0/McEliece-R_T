@@ -1172,40 +1172,26 @@ chk (OP f)
   exit (1);
 }
 
-
-//decode用の多項式の最大公約数
+// GCD for decode
 OP
-ogcd (OP f, OP g)
+ogcd (OP xx, OP yy)
 {
-  OP h;
-  //oterm a, b;
-  int i = 0;
+  OP tt;
 
-
-  //oprintpol((f));
-  //oprintpol((g));
-  //  exit(1);
-
-  for (i = 0; i < T; i++)
+  while (odeg (yy) > T-1)
     {
-      if (odeg ((g)) == 0)
-        break;
-      h = omod (f, g);
-      if (odeg ((h)) == T - 1)
-        {
-          //printpol (o2v (h));
-          printf (" in ogcd=============\n");
-          //wait();
-          //break;
-          return h;
-        }
-      f = g;
-      g = h;
+      tt = omod (xx, yy);
+      xx = yy;
+      yy = tt;
     }
-  // exit(1);
 
+  //printpol(o2v(yy));
+  printf(" =========yy\n");
+  //printpol(o2v(tt));
+  printf(" =========tt\n");
 
-  return h;
+  return tt;
+
 }
 
 
@@ -4673,15 +4659,16 @@ memcpy(mat,gen,sizeof(mat));
       printf(" ==========synd\n");
       
       r = decode (w, f);
-
+      
+      count=0;
       for (i = 0; i < T; i++)
         {
-          if (r.t[i].a > 0 && count > 0)        // == r.t[i].n)
+          if (r.t[i].a > 0 && i>0)        // == r.t[i].n)
             {
               printf ("e=%d %d %s\n", r.t[i].a, r.t[i].n, "お");
               count++;
             }
-          if (count == 0 && r.t[i].a > 0)
+          if (i==0)
             {
               printf ("\ne=%d %d %s\n", r.t[i].a, r.t[i].n, "う");
               count++;
@@ -4695,12 +4682,6 @@ memcpy(mat,gen,sizeof(mat));
         }
 
       printf ("err=%dっ！！\n", count);
-      if(count<T)
-	{
-	  
-	  printf("%d baka1\n",count);
-	  exit(1);
-	}
  
       ef=o2v(r);
       for(i=0;i<N;i++)
