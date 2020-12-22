@@ -11,6 +11,8 @@
 #define N 512 //order of GF(q)
 #define F 256  //dimension of matrix
 
+unsigned short PP[N][N]={0},invPP[N][N]={0};
+
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
 //index of GF16
@@ -194,7 +196,7 @@ unsigned short inv_a[N][N]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=F;
+ int n=F; //F;
 unsigned short c[N][N]={0};
 
 unsigned short cc[N][N]={0};
@@ -203,7 +205,7 @@ unsigned short cc[N][N]={0};
  
  for(i=0;i<F;i++){
    for(j=0;j<F;j++){
-     a[i][j]=rand()%N;
+     PP[i][j]=a[i][j]=rand()%N;
      //printf("%d,",a[i][j]);
    }
    //printf("\n");
@@ -244,6 +246,7 @@ for(j=0;j<n;j++){
  for(i=0;i<n;i++){
   count=0;
  for(j=0;j<n;j++){
+   invPP[i][j]=inv_a[i][j];
    if(inv_a[i][j]==0)
      count++;
    if(count==n){
@@ -365,6 +368,7 @@ unsigned short cc[N][N]={0};
       if(a[j][i]>0)
 	count++;
       printf("%3d,",a[j][i]);
+      PP[j][i]=a[j][i];
       if(count>1)
 	exit(1);
     }

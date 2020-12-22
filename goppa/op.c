@@ -3246,7 +3246,7 @@ synd (unsigned short zz[])
       //#pragma omp parallel num_threads(8)
       for (j = 0; j < M; j++)
         {
-          syn[i] ^= gf[mlt (fg[zz[j]], fg[mat[j][i]])];
+          syn[i] ^= gf[mlt (fg[zz[j]], fg[mat2[j][i]])];
         }
       sy[i] = syn[i];           //=s;
       //printf ("syn%d,", syn[i]);
@@ -4554,7 +4554,7 @@ lab:
   //exit(1);
   */
 
-/*
+
   //スクランブル行列をかける時
   for(i=0;i<K;i++){
     for(j=0;j<D;j++){
@@ -4575,7 +4575,7 @@ lab:
     printf("\n");
   }
   printf("\n");
-*/
+
   
   vec ef={0},gh={0};
 
@@ -4632,17 +4632,17 @@ memcpy(mat,gen,sizeof(mat));
 
       
       //exit(1);
-      /*      
+          
       f=conv(f);
       ef=o2v(f);
       for(j=0;j<K;j++){
       for(i=0;i<K;i++)
-	gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[i][j]])];
+	gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[j][i]])];
       }
       f=v2o(gh);
       f=conv(f);
       //exit(1);
-      */
+      
       count = 0;
       /*
          count = 0;
