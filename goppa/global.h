@@ -24,6 +24,7 @@ unsigned char pub[E * K][N]={0};
 unsigned char BH[E * K][N]={0};
 static unsigned short c[2 * K + 1]={0};
 static unsigned short mat[N][K]={0};
+unsigned short mat2[N][N]={0};
 
 
 /*
