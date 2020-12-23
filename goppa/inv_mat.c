@@ -12,6 +12,7 @@
 #define F K  //dimension of matrix
 
 unsigned short PP[N][N]={0},invPP[N][N]={0};
+unsigned short BB[N][N]={0},invBB[N][N]={0};
 
 //elements of GF16
 //static const unsigned char gf[N]={0,1,2,4,8,9,11,15,7,14,5,10,13,3,6,12};
@@ -203,6 +204,7 @@ unsigned short cc[N][N]={0};
 
  lab:
 
+ 
  for(i=0;i<F;i++){
    for(j=0;j<F;j++){
      A0[i][j]=a[i][j]=rand()%N;
@@ -325,11 +327,51 @@ unsigned short buf; //一時的なデータを蓄える
  int i,j,k,count; //カウンタ
  int n=K; //F;
 unsigned short c[N][N]={0};
-
+int r,s;
 unsigned short cc[N][N]={0};
+unsigned char x0[N]={0};
+
 
  lab:
 
+rp(x0);
+
+ count=0;i=0;
+ while(count<N){
+    k=rand()%N;
+    r=rand()%N;
+    //s=rand()%N;
+    if(k>0 && r>0){
+    a[x0[i]][i]=k;
+    a[N-1-i][i]=k;
+    a[i][x0[i]]=k;
+    a[i][i]=1;
+    //inv_a[i][N-1-i]=gf[Inv(fg[k])];
+    //inv_a[i][inv_x[i]]=gf[Inv(fg[k])];
+    //inv_a[x0[i]][i]=gf[Inv(fg[k])];
+    count++;
+      i++;    
+    }
+ }
+
+
+/*
+  while(count<N){
+    k=rand()%N;
+    r=rand()%N;
+    s=rand()%N;
+    //s=rand()%N;
+    //a[N-1-i][i]=r;
+    a[i][x0[i]]=s;
+      //a[i][i]=k;
+      printf("%d %d\n",i,N-1-i);
+      count++;
+      i++;  
+      printf("count=%d %d %d\n",count,k,r);
+    
+  }
+  */
+/*
  for(i=0;i<N;i++){
    for(j=0;j<N;j++){
      PP[i][j]=a[i][j]=rand()%N;
@@ -337,12 +379,12 @@ unsigned short cc[N][N]={0};
    }
    //printf("\n");
  }
- 
+ */
 
  // printf("\n");
  for(i=0;i<N;i++){
    for(j=0;j<N;j++)
-     c[i][j]=a[i][j];
+     BB[i][j]=c[i][j]=a[i][j];
  }
 //単位行列を作る
 for(i=0;i<N;i++){
@@ -418,13 +460,13 @@ printf("行列を出力\n");
    printf("\n");
  }
  printf("};\n");
-
+memcpy(invBB,inv_a,sizeof(invBB));
  //exit(1); 
 //検算
  for(i=0;i<N;i++){
    for(j=0;j<N;j++){
      for(k=0;k<N;k++)
-       b[i][j]^=gf[mlt(fg[PP[k][j]],fg[invPP[i][k]])];
+       b[i][j]^=gf[mlt(fg[BB[k][j]],fg[invBB[i][k]])];
 
      printf("%d,",b[i][j]);
      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
@@ -433,10 +475,13 @@ printf("行列を出力\n");
    }
    printf("\n");
  }
- //exit(1);
+ printf("bb\n");
+// exit(1);
  
  return 0;
-}
+ }
+
+
 
 
 
@@ -445,12 +490,12 @@ printf("行列を出力\n");
 
 //Q-matrix
 void matmul(){
-  int i,j,k,r,s,tmp[N][N]={0};
+  int i,j,k,r,s,v,w,y,tmp[N][N]={0};
   unsigned short x0[N]={0};//={1,2,3,4,5,6,7,0};
 unsigned short x1[N];//={2,3,1,6,5,7,0,4};
 unsigned short x2[N]={0};
 unsigned short c[N][N]={0};
-
+unsigned short inv_x[N]={0};
 unsigned short a[N][N]={0};//{{0,3,0,0,},{0,0,4,0},{0,0,0,5},{6,0,0,0}};
 //{{0,1,0,0},{0,0,1,0},{0,0,0,1},{1,0,0,0}};
 unsigned short inv_a[N][N]={0};
@@ -464,27 +509,66 @@ unsigned short cc[N][N]={0};
  memset(a,0,sizeof(a));
  memset(x0,0,sizeof(x0));
   rp(x0);
-  rp(x1);
+
+  for(i=0;i<N;i++)
+  inv_x[x0[i]]=i;
+
+  //rp(x1);
   printf("置換配列を表示\n");
-  for(i=0;i<N;i++){
+ count=0;i=0;
+  while(count<N){
     k=rand()%N;
     r=rand()%N;
-    //a[i][i]=1;
-    if(k>0){
-      a[i][i]=k;
-      a[N-i][N-i]=r;
-      //a[i][x0[i]]=k;
-      count++;
+    //s=rand()%N;
+    if(k>0 && r>0){
+    //a[x0[i]][i]=k;
+
+    a[i][x0[i]]=k;
+    /*
+    a[i][x0[i]]=k;
+    inv_a[i][N-1-i]=gf[Inv(fg[k])];
+    inv_a[i][inv_x[i]]=gf[Inv(fg[k])];
+    inv_a[x0[i]][i]=gf[Inv(fg[k])];
+    */
+    count++;
+      i++;    
     }
-    printf("%d,",x0[i]);
-    if(count>N){
+
+      printf("count=%d %d %d %d\n",count,k,r,s);
+    
+  }
+  for(i=0;i<N;i++){
+    for(j=0;j<N;j++)
+      printf("%d,",inv_a[i][j]);
+      printf("\n");
+  }
+    //exit(1);
+  
+    if(count>N+1){
       printf("baka=%d\n",count);
       exit(1);
-    }
-  }
+    }   
+  
   printf("count=%d\n",count);
   //exit(1);
   count=0;
+
+for(i=0;i<N;i++){
+  count=0;
+for(j=0;j<N;j++){
+if(a[i][j]>0)
+count++;
+
+printf("%d,",a[i][j]);
+}
+
+if(count==0)
+exit(1);
+printf("\n");
+}
+printf("aaaaaaaaaaaaa\n");
+//exit(1);
+
 
   printf("\n");
   for(i=0;i<N;i++){
@@ -492,17 +576,17 @@ unsigned short cc[N][N]={0};
     for(j=0;j<N;j++){
       if(a[j][i]>0)
 	count++;
-      if(count>2){
+      if(count>3){
 	printf("baka %d %d\n",i,j);
 	exit(1);
       }
       inv_a[i][j]=gf[Inv(fg[a[j][i]])];//*inv_a[k][j];
-      
+      printf("%d,",inv_a[i][j]);
     }
+    printf("\n");
     //if(count!=2)
     //exit(1);
       //goto val;
-
   }
 
   count=0; 
@@ -515,7 +599,7 @@ unsigned short cc[N][N]={0};
 	count++;
       printf("%3d,",a[j][i]);
       PP[j][i]=a[j][i];
-      if(count>2)
+      if(count>4)
       	exit(1);
     }
     count=0;
@@ -537,7 +621,7 @@ unsigned short cc[N][N]={0};
   for(i=0;i<N;i++){
     for(j=0;j<N;j++){
       for(k=0;k<N;k++){
-	tmp[i][j]^=gf[mlt(fg[a[i][k]],fg[inv_a[k][j]])];
+	tmp[i][j]^=gf[mlt(fg[PP[i][k]],fg[invPP[k][j]])];
       }
     }
   }
@@ -553,3 +637,4 @@ unsigned short cc[N][N]={0};
 //exit(1);
 
 }
+

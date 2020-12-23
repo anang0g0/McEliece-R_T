@@ -3639,6 +3639,8 @@ unsigned char inv_S[K][K]=
   srand (seed);
 #endif
 
+
+
 label:
 
   //makeS();
@@ -3738,6 +3740,7 @@ lab:
   printf("\n");
   
 
+
   printf("mat\n");
 
   for(i=0;i<K;i++){
@@ -3748,18 +3751,39 @@ lab:
   printf("\n");
 
 
+  memset(mat,0,sizeof(mat));
+
+/*
+  for(i=0;i<K;i++){
+    for(j=0;j<N;j++){
+      for(k=0;k<N;k++)
+	mat[j][i]^=gf[mlt(fg[gen[k][i]],fg[invP[k][j]])];
+    }
+  }
+  
+  for(j=0;j<K;j++){
+    for(i=0;i<N;i++)
+      printf("%d,",mat[i][j]);
+    printf("\n");
+  }
+  printf("\n");
+  //exit(1);
+  */
 
 
   //スクランブル行列をかける時
   for(i=0;i<K;i++){
-    for(j=0;j<N;j++){
+    for(j=0;j<D;j++){
       for(k=0;k<K;k++){
-	mat2[j][i]^=gf[mlt(fg[A0[k][i]],fg[gen[j][k]])];
+	mat2[j][i]^=gf[mlt(fg[A0[i][k]],fg[gen[j][k]])];
       }
+      printf("%2d,",mat2[j][i]);
     }
+    printf("\n");
   }
+  printf("\n");
   
-  printf("mat2\n");
+  printf("mat\n");
   for(i=0;i<K;i++){
     for(j=0;j<N;j++){
       printf("%2d,",mat2[j][i]);
@@ -3771,7 +3795,7 @@ lab:
   
   vec ef={0},gh={0};
 
-//memcpy(mat,gen,sizeof(mat));
+memcpy(mat,gen,sizeof(mat));
   /*  
   for(i=0;i<8;i++){
     for(j=0;j<M;j++)
@@ -3781,7 +3805,7 @@ lab:
   printf("gen2mat\n");
   for(i=0;i<8;i++){
     for(j=0;j<M;j++)
-      printf("%2d,",mat2[j][i]);
+      printf("%2d,",mat[j][i]);
     printf("\n");
   }
   //exit(1);
@@ -3824,18 +3848,15 @@ lab:
 
       
       //exit(1);
-    
-      //f=conv(f);
+          
+      f=conv(f);
       ef=o2v(f);
       for(j=0;j<K;j++){
-      for(i=0;i<K;i++){
-	gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[i][j]])];
-  printf("%d,",invA0[j][i]);
-      }
-      printf("\n");
+      for(i=0;i<K;i++)
+	gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[j][i]])];
       }
       f=v2o(gh);
-      //f=conv(f);
+      f=conv(f);
       //exit(1);
       
       count = 0;
@@ -3854,8 +3875,7 @@ lab:
       printf(" ==========synd\n");
       
       r = decode (w, f);
-      //r=conv(r);
-
+      
       count=0;
       for (i = 0; i < T; i++)
         {
@@ -3879,30 +3899,27 @@ lab:
 
       printf ("err=%dっ！！\n", count);
  
-
   memset(gh.x,0,sizeof(gh.x));
+
       ef=o2v(r);
- 
       for(i=0;i<N;i++)
 	printf("e=%d\n",ef.x[i]);
       printf("\n\n");
       
       for(i=0;i<N;i++){
-    	  for(j=0;j<N;j++){
-          if(ef.x[j]>0)
-	        gh.x[i]^=gf[mlt(fg[ef.x[j]],fg[invPP[i][j]])];
-	      }
+	for(j=0;j<N;j++){
+	  gh.x[i]^=gf[mlt(fg[ef.x[j]],fg[invPP[i][j]])];
+	}
       }
       
       for(i=0;i<N;i++){
 	if(gh.x[i]>0)
 	  printf("e=%d %d\n",i,gh.x[i]);
       }
-
-
       exit(1);
       //goto label;
-
+  
+      
     
     patta:
 
