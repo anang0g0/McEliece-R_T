@@ -25,7 +25,8 @@ unsigned char BH[E * K][N]={0};
 static unsigned short c[2 * K + 1]={0};
 static unsigned short mat[N][K]={0};
 unsigned short mat2[N][N]={0};
-
+//unsigned short P[N][N]={0},invP[N][N]={0};
+unsigned short A0[K][K]={0},invA0[K][K]={0};
 
 /*
 unsigned char a[F][F]={0};
