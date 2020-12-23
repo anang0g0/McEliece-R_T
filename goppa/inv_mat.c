@@ -9,7 +9,7 @@
 
 #define MAXN 4
 #define N 512 //order of GF(q)
-#define F 256  //dimension of matrix
+#define F K  //dimension of matrix
 
 unsigned short PP[N][N]={0},invPP[N][N]={0};
 
@@ -191,12 +191,12 @@ unsigned short cc[N][N]={0};
 
 //inverse matrix
 int matinv(){
-  unsigned short a[N][N]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
-unsigned short inv_a[N][N]; //ここに逆行列が入る
+  unsigned short a[K][K]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+unsigned short inv_a[K][K]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=F; //F;
+ int n=K; //F;
 unsigned short c[N][N]={0};
 
 unsigned short cc[N][N]={0};
@@ -205,7 +205,7 @@ unsigned short cc[N][N]={0};
  
  for(i=0;i<F;i++){
    for(j=0;j<F;j++){
-     PP[i][j]=a[i][j]=rand()%N;
+     A0[i][j]=a[i][j]=rand()%N;
      //printf("%d,",a[i][j]);
    }
    //printf("\n");
@@ -246,7 +246,7 @@ for(j=0;j<n;j++){
  for(i=0;i<n;i++){
   count=0;
  for(j=0;j<n;j++){
-   invPP[i][j]=inv_a[i][j];
+   //invPP[i][j]=inv_a[i][j];
    if(inv_a[i][j]==0)
      count++;
    if(count==n){
@@ -284,6 +284,7 @@ printf("行列を出力\n");
        printf("\nbaka\n\n");
        goto lab;
      }
+     invA0[i][j]=inv_a[i][j];
      printf("%3d,",inv_a[i][j]);
    }
    printf("},");
@@ -296,7 +297,7 @@ printf("行列を出力\n");
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      for(k=0;k<n;k++)
-       b[i][j]^=gf[mlt(fg[c[k][j]],fg[inv_a[i][k]])];
+       b[i][j]^=gf[mlt(fg[A0[k][j]],fg[invA0[i][k]])];
 
      printf("%d,",b[i][j]);
      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
@@ -370,7 +371,7 @@ unsigned short cc[N][N]={0};
       printf("%3d,",a[j][i]);
       PP[j][i]=a[j][i];
       if(count>1)
-	exit(1);
+      	exit(1);
     }
     count=0;
     printf("},\n");
@@ -382,7 +383,8 @@ unsigned short cc[N][N]={0};
   for(i=0;i<N;i++){
     printf("{");
     for(j=0;j<N;j++){
-	printf("%3d,",inv_a[j][i]);	
+	printf("%3d,",inv_a[j][i]);
+  invPP[j][i]=inv_a[j][i];	
     }
     printf("},\n");
   }
@@ -390,7 +392,7 @@ unsigned short cc[N][N]={0};
   for(i=0;i<N;i++){
     for(j=0;j<N;j++){
       for(k=0;k<N;k++){
-	tmp[i][j]^=gf[mlt(fg[a[i][k]],fg[inv_a[k][j]])];
+	tmp[i][j]^=gf[mlt(fg[PP[i][k]],fg[invPP[k][j]])];
       }
     }
   }
@@ -402,5 +404,6 @@ unsigned short cc[N][N]={0};
     }
     printf("\n");
   }
+//exit(1);
 
 }
