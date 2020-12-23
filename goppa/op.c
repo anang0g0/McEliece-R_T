@@ -3720,6 +3720,7 @@ lab:
 
   matmul ();
   matinv ();
+  //invmat();
   // makeS();
   //exit(1);
   
@@ -3878,7 +3879,6 @@ lab:
 
       printf ("err=%dっ！！\n", count);
  
-// exit(1);
 
   memset(gh.x,0,sizeof(gh.x));
       ef=o2v(r);
