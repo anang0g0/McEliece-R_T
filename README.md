@@ -20,6 +20,12 @@ BBCSR方式で、Tの階数zが0、列ベクトルの重みmが1のシンプル�
 
 今回の場合、Q=0+Tなので、一応定義に従っている。
 
+T = n × n permutation matrix,
+
+R = n × n rank 1 matrix, R = α^T β,
+
+Q = n × n invertible matrix, Q = R + T,
+
 # 20201223
 
 q元Niederreiter暗号を、現実的なパラメータで実装できた。
