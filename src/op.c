@@ -352,7 +352,7 @@ norm (OP f)
   int i;
 
 
-  for (i = 0; i < 512; i++)
+  for (i = 0; i < N; i++)
     {
       if (f.t[i].a > 0)
         {
@@ -3303,7 +3303,7 @@ main (void)
   };
   int fail = 0;
 
-#include "data.txt"
+//#include "data.txt"
 
 /*  
   unsigned short P[N][N]=
@@ -3492,9 +3492,9 @@ for(i=0;i<N;i++){
   DDT.x[i][j]=rand()%N;
 }
 
-DDT=invmat(DDT,N);
+DDT=invmat(DDT);
 }
-//exit(1);
+exit(1);
 
 
 label:
@@ -3580,7 +3580,7 @@ lab:
   matinv ();
 //  invmat();
   // makeS();
-  //exit(1);
+  exit(1);
   
 
   printf("gen\n");
