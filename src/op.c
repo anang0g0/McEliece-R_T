@@ -2092,7 +2092,8 @@ det2 (int i, unsigned short g[])
   w = setpol (g, K + 1);
 
   //  omp_set_num_threads(8);
-  id = omp_get_thread_num ();
+  id = omp_get_max_threads();
+//  id = omp_get_thread_num ();
 
   // h[id] = x+i
   if (i == 0)
