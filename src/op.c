@@ -2132,184 +2132,6 @@ det2 (int i, unsigned short g[])
 
 
 
-
-void
-f1 (unsigned short g[])
-{
-  int i;
-
-  for (i = 0; i < 836; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f2 (unsigned short g[])
-{
-  int i;
-
-  for (i = 836; i < 1672; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f3 (unsigned short g[])
-{
-  int i;
-
-  for (i = 1672; i < 2508; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f4 (unsigned short g[])
-{
-  int i;
-
-  for (i = 2508; i < 3344; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f5 (unsigned short g[])
-{
-  int i;
-
-  for (i = 3344; i < 4180; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f6 (unsigned short g[])
-{
-  int i;
-
-  for (i = 4180; i < 5016; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f7 (unsigned short g[])
-{
-  int i;
-
-  for (i = 5016; i < 5852; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-void
-f8 (unsigned short g[])
-{
-  int i;
-
-  for (i = 5852; i < 6688; i++)
-    {
-      det2 (i, g);
-    }
-
-
-}
-
-
-int
-detb (unsigned short g[])
-{
-  int i, j, flg = 0;
-  /*
-     for(i=0;i<N;i++){
-     for(j=0;j<K;j++)
-     mat[i][j]=0;
-     }
-   */
-#pragma omp parallel num_threads(8)
-  {
-#pragma omp sections
-    {
-      //if(omp_get_thread_num() == 0){
-#pragma omp section
-      f1 (g);
-
-      //if(omp_get_thread_num() == 1){
-#pragma omp section
-      f2 (g);
-      //}
-      //if(omp_get_thread_num() == 2){
-#pragma omp section
-      f3 (g);
-      //}
-      //if(omp_get_thread_num() == 3){
-#pragma omp section
-      f4 (g);
-      //}
-      //if(omp_get_thread_num() == 4){
-#pragma omp section
-      f5 (g);
-      //}
-      //if(omp_get_thread_num() == 5){
-#pragma omp section
-      f6 (g);
-      //}
-      //if(omp_get_thread_num() == 6){
-#pragma omp section
-      f7 (g);
-      //}
-      //if(omp_get_thread_num() == 7){
-#pragma omp section
-      f8 (g);
-      //}
-    }
-  }
-  printf ("enf of detb\n");
-  for (j = 0; j < N; j++)
-    {
-      flg = 0;
-      for (i = 0; i < K; i++)
-        {
-          //printf("%d,",mat[i][j]);
-          if (mat[j][i] > 0)
-            flg = 1;
-          //      printf("\n");
-        }
-      if (flg == 0)
-        {
-          printf ("0 is %d\n", j);
-          //exit(1);
-          return -1;
-        }
-    }
-
-  return 0;
-}
-
-
-
 //パリティチェック行列を生成する
 int
 deta (unsigned short g[])
@@ -2354,7 +2176,7 @@ deta (unsigned short g[])
 unsigned short *base;
 
 //パリティチェック行列を生成する
-void
+int
 det (unsigned short g[])
 {
   OP f, h = { 0 }, w, u;
@@ -2453,6 +2275,7 @@ det (unsigned short g[])
     }
   //exit(1);
 
+return 0;
 }
 
 
@@ -3730,7 +3553,7 @@ label:
   
   do
     {
-      i = deta (g);
+      i = det (g);
     }
   while (i < 0);
   
