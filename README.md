@@ -13,6 +13,9 @@ Reed-Solomonでも暗号に使えるなんて画期的です。
 クローンの方法：
 git clone -b master https://github.com/anang0g0/McEliece-R_T
 
+# 20201225
+
+有限体上の逆行列を返す関数、invmatを作りました。
 
 # 20201103
 
