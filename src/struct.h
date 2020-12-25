@@ -1,4 +1,4 @@
-#define DEG N
+#define DEG 512
 
 /* -*- mode: C; coding:utf-8 -*- */
 
@@ -39,15 +39,15 @@ typedef union{ //test(SIMN)
 
 typedef union {
   unsigned long long int u[8];
-  unsigned char d[64];
+  unsigned short d[32];
 } arrayul;
 
 typedef struct a4 {
-  unsigned char ar[4];
+  unsigned short ar[4];
 } array;
 
 typedef struct a8 {
-  unsigned char ar[8];
+  unsigned short ar[8];
 } array8;
 
 typedef struct {
@@ -55,12 +55,12 @@ typedef struct {
 } array16;
 
 typedef struct aN {
-  unsigned char ar[8192];
+  unsigned short ar[8192];
 } arrayn;
 
 typedef struct pub {
-  unsigned char a[8192];
-  unsigned char b[8192];
+  unsigned short a[8192];
+  unsigned short b[8192];
 } set;
 
 typedef struct {
