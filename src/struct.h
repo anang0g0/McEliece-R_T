@@ -67,6 +67,7 @@ typedef struct {
   unsigned short x[N][N];
   unsigned short y[N][N];
   int i;
+  int rank;
 } MAT;
 
 
