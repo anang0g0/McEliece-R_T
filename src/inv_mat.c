@@ -435,7 +435,6 @@ printf("行列を出力\n");
 
 
 
-//MAT DDT={0};
 //inverse matrix
 MAT invmat(MAT A){
 MAT a; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
@@ -460,53 +459,6 @@ printf("\n");
  lab:
 
 rp(x0);
-
-//memcpy(a,DDT,sizeof(a));
-/*
- count=0;i=0;
- while(count<N){
-    k=rand()%N;
-    r=rand()%N;
-    //s=rand()%N;
-    if(k>0 && r>0){
-    a[x0[i]][i]=k;
-    a[N-1-i][i]=k;
-    a[i][x0[i]]=k;
-    a[i][i]=1;
-    //inv_a[i][N-1-i]=gf[Inv(fg[k])];
-    //inv_a[i][inv_x[i]]=gf[Inv(fg[k])];
-    //inv_a[x0[i]][i]=gf[Inv(fg[k])];
-    count++;
-      i++;    
-    }
- }
-*/
-
-/*
-  while(count<N){
-    k=rand()%N;
-    r=rand()%N;
-    s=rand()%N;
-    //s=rand()%N;
-    //a[N-1-i][i]=r;
-    a[i][x0[i]]=s;
-      //a[i][i]=k;
-      printf("%d %d\n",i,N-1-i);
-      count++;
-      i++;  
-      printf("count=%d %d %d\n",count,k,r);
-    
-  }
-  */
-/*
- for(i=0;i<N;i++){
-   for(j=0;j<N;j++){
-     PP[i][j]=a[i][j]=rand()%N;
-     //printf("%d,",a[i][j]);
-   }
-   //printf("\n");
- }
- */
 
  // printf("\n");
  for(i=0;i<N;i++){
