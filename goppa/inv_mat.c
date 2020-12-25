@@ -190,20 +190,114 @@ unsigned short cc[N][N]={0};
 */
 
 
+
+void check(){
+int i,j,k,count=0,l;
+unsigned short y0[N],y1[N];
+unsigned short R[N][N]={0},RR[N][N]={0},T1[N][N]={0},T2[N][N]={0},TT[N]={0},O1[N]={0},Q[N][N]={0},T3[N][N]={0};
+unsigned short Q1[N][N]={0},T4[N][N]={0},T5[N][N]={0},T6[N][N]={0};
+
+
+rp(y0);
+rp(y1);
+for(i=0;i<N;i++){
+R[i][y0[i]]=rand()%N;
+RR[i][y1[i]]=rand()%N;
+}
+for(i=0;i<N;i++){
+for (j=0;j<N;j++)
+{
+T1[i][j]=R[i][j]^RR[i][j];
+//printf("%d,",T1[i][j]);
+T2[i][j]=gf[Inv(fg[R[j][i]])];//*inv_a[k][j];
+T3[i][j]=gf[Inv(fg[RR[j][i]])];//*inv_a[k][j];
+T4[i][j]=gf[Inv(fg[T1[j][i]])];//*inv_a[k][j];
+T6[i][j]^=T2[i][j]^T3[i][j];
+}
+printf("\n");
+}
+
+for(i=0;i<N;i++){
+for(j=0;j<N;j++){
+  for(k=0;k<N;k++){ 
+Q[i][j]^=gf[mlt(fg[T1[i][k]],fg[T6[i][j]])];
+  }
+}
+}
+//for(i=0;i<N;i++)
+//Q[i][i]^=1;
+for(i=0;i<N;i++){
+  for(j=0;j<N;j++)
+  T5[i][j]=gf[Inv(fg[Q[j][i]])];//*inv_a[k][j];
+}
+for(i=0;i<N;i++){
+for(j=0;j<N;j++){
+  for(k=0;k<N;k++){ 
+Q1[i][j]^=gf[mlt(fg[Q[i][k]],fg[T5[k][j]])];
+  }
+}
+}
+for(i=0;i<N;i++){
+for(j=0;j<N;j++)
+printf("%d,",Q[i][j]);
+printf("\n");
+}
+exit(1);
+
+
+while(count<128){
+  l=rand()%N;
+  k=rand()%N;
+  if (k>0 && TT[l]==0){
+    TT[l]=k;
+    count++;
+  }
+}
+
+for(i=0;i<N;i++){
+//  count=0;
+  for(j=0;j<N;j++){
+  O1[i]^=gf[mlt(fg[TT[j]],fg[T1[j][i]])];
+  }
+}
+
+count=0;
+for(i=0;i<N;i++){
+  if(O1[i]>0)
+  count++;
+}
+  if(count>128){
+    printf("\nbaka %d\n",count);
+    exit(1);
+  }
+
+printf("count=%d\n",count);
+
+}
+
+
+
+
+
 //inverse matrix
 int matinv(){
-  unsigned short a[K][K]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
-unsigned short inv_a[K][K]; //ここに逆行列が入る
+  unsigned short a[N][N]={0}; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+unsigned short inv_a[N][N]={0}; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=K; //F;
+ int n=F;
 unsigned short c[N][N]={0};
-
+unsigned short y0[F]={0},y1[F]={0};
 unsigned short cc[N][N]={0};
+
+
+
 
  lab:
 
+rp(y0);
+rp(y1);
  
  for(i=0;i<F;i++){
    for(j=0;j<F;j++){
@@ -213,11 +307,34 @@ unsigned short cc[N][N]={0};
    //printf("\n");
  }
  
+/*
+i=0;
+j=0;
+while(i<N){
+  //k=rand()%N;
+//  if(k>0){
+    a[i][i]=rand()%N; 
+    a[i][y0[i]]=rand()%N; 
+    i++;
+//  }
+
+}
+*/
+
+for(i=0;i<N;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",a[i][j]);
+  printf("\n");
+}
+//exit(1);
+
+//for(i=0;i<N;i++)
+//a[i][(N-i-1)]=rand()%N;
 
  // printf("\n");
  for(i=0;i<n;i++){
    for(j=0;j<F;j++)
-     c[i][j]=a[i][j];
+     BB[i][j]=c[i][j]=a[i][j];
  }
 //単位行列を作る
 for(i=0;i<n;i++){
@@ -286,7 +403,7 @@ printf("行列を出力\n");
        printf("\nbaka\n\n");
        goto lab;
      }
-     invA0[i][j]=inv_a[i][j];
+     invBB[i][j]=inv_a[i][j];
      printf("%3d,",inv_a[i][j]);
    }
    printf("},");
@@ -294,12 +411,12 @@ printf("行列を出力\n");
  }
  printf("};\n");
 
- //exit(1); 
+// exit(1); 
 //検算
  for(i=0;i<n;i++){
    for(j=0;j<n;j++){
      for(k=0;k<n;k++)
-       b[i][j]^=gf[mlt(fg[A0[k][j]],fg[invA0[i][k]])];
+       b[i][j]^=gf[mlt(fg[BB[k][j]],fg[invBB[i][k]])];
 
      printf("%d,",b[i][j]);
      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
@@ -308,7 +425,7 @@ printf("行列を出力\n");
    }
    printf("\n");
  }
- //exit(1);
+// exit(1);
  
  return 0;
 }
@@ -318,24 +435,34 @@ printf("行列を出力\n");
 
 
 
+//MAT DDT={0};
 //inverse matrix
-int invmat(){
-  unsigned short a[N][N]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
+MAT invmat(MAT A){
+MAT a; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short inv_a[N][N]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=K; //F;
+ int n=F;
 unsigned short c[N][N]={0};
 int r,s;
 unsigned short cc[N][N]={0};
 unsigned char x0[N]={0};
 
+a=A;
+for(i=0;i<N;i++){
+  for(j=0;j<N;j++)
+  printf("%d,",a.x[i][j]);
+printf("\n");
+}
+//exit(1);
 
  lab:
 
 rp(x0);
 
+//memcpy(a,DDT,sizeof(a));
+/*
  count=0;i=0;
  while(count<N){
     k=rand()%N;
@@ -353,7 +480,7 @@ rp(x0);
       i++;    
     }
  }
-
+*/
 
 /*
   while(count<N){
@@ -384,7 +511,7 @@ rp(x0);
  // printf("\n");
  for(i=0;i<N;i++){
    for(j=0;j<N;j++)
-     BB[i][j]=c[i][j]=a[i][j];
+     BB[i][j]=c[i][j]=a.x[i][j];
  }
 //単位行列を作る
 for(i=0;i<N;i++){
@@ -394,16 +521,16 @@ for(i=0;i<N;i++){
 }
 //掃き出し法
 for(i=0;i<N;i++){
-  buf=gf[Inv(fg[a[i][i]])];
+  buf=gf[Inv(fg[a.x[i][i]])];
  for(j=0;j<N;j++){
-   a[i][j]=gf[mlt(fg[buf],fg[a[i][j]])];
+   a.x[i][j]=gf[mlt(fg[buf],fg[a.x[i][j]])];
    inv_a[i][j]=gf[mlt(fg[buf],fg[inv_a[i][j]])];
 }
 for(j=0;j<N;j++){
  if(i!=j){
-  buf=a[j][i];
+  buf=a.x[j][i];
   for(k=0;k<N;k++){
-    a[j][k]^=gf[mlt(fg[a[i][k]],fg[buf])];
+    a.x[j][k]^=gf[mlt(fg[a.x[i][k]],fg[buf])];
     inv_a[j][k]^=gf[mlt(fg[inv_a[i][k]],fg[buf])];
   }
  }
@@ -420,7 +547,8 @@ for(j=0;j<N;j++){
      count++;
    if(count==N){
      printf("\nbaka\n\n");
-     goto lab;
+     a.i=-1;
+     return a;
    }
    //printf(" %d",inv_a[i][j]);
  }
@@ -451,22 +579,23 @@ printf("行列を出力\n");
        count++;
      if(count==N){
        printf("\nbaka\n\n");
-       goto lab;
+       a.i= -1;
+       return a;
      }
-     invPP[i][j]=inv_a[i][j];
+     a.x[i][j]=inv_a[i][j];
      printf("%3d,",inv_a[i][j]);
    }
    printf("},");
    printf("\n");
  }
  printf("};\n");
-memcpy(invBB,inv_a,sizeof(invBB));
+//memcpy(invBB,inv_a,sizeof(invBB));
  //exit(1); 
 //検算
  for(i=0;i<N;i++){
    for(j=0;j<N;j++){
      for(k=0;k<N;k++)
-       b[i][j]^=gf[mlt(fg[BB[k][j]],fg[invBB[i][k]])];
+       b[i][j]^=gf[mlt(fg[c[k][j]],fg[inv_a[i][k]])];
 
      printf("%d,",b[i][j]);
      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
@@ -475,10 +604,11 @@ memcpy(invBB,inv_a,sizeof(invBB));
    }
    printf("\n");
  }
+ a.i=0;
  printf("bb\n");
 // exit(1);
  
- return 0;
+return a;
  }
 
 

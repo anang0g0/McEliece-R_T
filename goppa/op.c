@@ -62,6 +62,7 @@ static unsigned short g[K + 1] = { 0 };
 unsigned short zz[N] = { 0 };
 unsigned int AA=0,B=0,C=0;
 
+
 /*
 static unsigned short g[K+1]={1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
 		       0,0,0,0,0,0,0,0,0,0,
@@ -3631,6 +3632,8 @@ unsigned char inv_S[K][K]=
   }
 */
 
+
+
 #ifdef SRAND
   srand (SRAND);
 #else
@@ -3639,6 +3642,21 @@ unsigned char inv_S[K][K]=
   srand (seed);
 #endif
 
+//check();
+//matinv();
+//exit(1);
+MAT DDT={0};
+
+DDT.i= -1;
+while(DDT.i<0){
+for(i=0;i<N;i++){
+  for(j=0;j<N;j++)
+  DDT.x[i][j]=rand()%N;
+}
+
+DDT=invmat(DDT);
+}
+//exit(1);
 
 
 label:
@@ -3722,7 +3740,7 @@ lab:
 
   matmul ();
   matinv ();
-  //invmat();
+//  invmat();
   // makeS();
   //exit(1);
   
