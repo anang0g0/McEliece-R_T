@@ -5,9 +5,9 @@
 #include <string.h>
 
 
-#define M 1024
+#define M 512
 
-#include "1024.h"
+#include "512.h"
 /*
 typedef union {
   unsigned long long int u[8];

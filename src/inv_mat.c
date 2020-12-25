@@ -8,8 +8,8 @@
 #include <time.h>
 
 #define MAXN 4
-#define N 1024 //order of GF(q)
-#define F N //K  //dimension of matrix
+#define N 512 //order of GF(q)
+#define F 512  //dimension of matrix
 
 unsigned short PP[N][N]={0},invPP[N][N]={0};
 unsigned short BB[N][N]={0},invBB[N][N]={0};
@@ -81,8 +81,6 @@ int Inv(unsigned short b){
       }
 
 }
-
-
 /*
 //detarminant
 int det(){
@@ -288,9 +286,9 @@ unsigned short inv_a[N][N]={0}; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=N;
+ int n=K;
 unsigned short c[N][N]={0};
-unsigned short y0[N]={0},y1[N]={0};
+unsigned short y0[F]={0},y1[F]={0};
 unsigned short cc[N][N]={0};
 
 
@@ -434,14 +432,18 @@ printf("行列を出力\n");
 
 
 
+
+
+
+//MAT DDT={0};
 //inverse matrix
-MAT invmat(MAT A ){
+MAT invmat(MAT A){
 MAT a; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short inv_a[N][N]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=N;
+ int n=F;
 unsigned short c[N][N]={0};
 int r,s;
 unsigned short cc[N][N]={0};
@@ -458,6 +460,53 @@ printf("\n");
  lab:
 
 rp(x0);
+
+//memcpy(a,DDT,sizeof(a));
+/*
+ count=0;i=0;
+ while(count<N){
+    k=rand()%N;
+    r=rand()%N;
+    //s=rand()%N;
+    if(k>0 && r>0){
+    a[x0[i]][i]=k;
+    a[N-1-i][i]=k;
+    a[i][x0[i]]=k;
+    a[i][i]=1;
+    //inv_a[i][N-1-i]=gf[Inv(fg[k])];
+    //inv_a[i][inv_x[i]]=gf[Inv(fg[k])];
+    //inv_a[x0[i]][i]=gf[Inv(fg[k])];
+    count++;
+      i++;    
+    }
+ }
+*/
+
+/*
+  while(count<N){
+    k=rand()%N;
+    r=rand()%N;
+    s=rand()%N;
+    //s=rand()%N;
+    //a[N-1-i][i]=r;
+    a[i][x0[i]]=s;
+      //a[i][i]=k;
+      printf("%d %d\n",i,N-1-i);
+      count++;
+      i++;  
+      printf("count=%d %d %d\n",count,k,r);
+    
+  }
+  */
+/*
+ for(i=0;i<N;i++){
+   for(j=0;j<N;j++){
+     PP[i][j]=a[i][j]=rand()%N;
+     //printf("%d,",a[i][j]);
+   }
+   //printf("\n");
+ }
+ */
 
  // printf("\n");
  for(i=0;i<N;i++){
@@ -513,7 +562,6 @@ printf("行列を出力\n");
    for(j=0;j<N;j++){
      //a[i][j]=rand()%N;
      printf("%3d,",c[i][j]);
-     a.x[i][j]=c[i][j];
    }
    printf("},");
    printf("\n");
@@ -534,7 +582,7 @@ printf("行列を出力\n");
        a.i= -1;
        return a;
      }
-     a.y[i][j]=inv_a[i][j];
+     a.x[i][j]=inv_a[i][j];
      printf("%3d,",inv_a[i][j]);
    }
    printf("},");
@@ -547,7 +595,7 @@ printf("行列を出力\n");
  for(i=0;i<N;i++){
    for(j=0;j<N;j++){
      for(k=0;k<N;k++)
-       b[i][j]^=gf[mlt(fg[a.x[k][j]],fg[a.y[i][k]])];
+       b[i][j]^=gf[mlt(fg[c[k][j]],fg[inv_a[i][k]])];
 
      printf("%d,",b[i][j]);
      // if(j==i && b[i][j]!=1 && j!=i && b[i][j]>0)
@@ -561,9 +609,7 @@ printf("行列を出力\n");
 // exit(1);
  
 return a;
-}
-
-
+ }
 
 
 

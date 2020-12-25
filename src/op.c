@@ -59,7 +59,7 @@ unsigned short sy[K] = { 0 };
 static unsigned short g[K + 1] = { 0 };
 
 
-unsigned short zz[N] = { 0 };
+unsigned short zz[1024] = { 0 };
 unsigned int AA=0,B=0,C=0;
 
 
@@ -3303,7 +3303,7 @@ main (void)
   };
   int fail = 0;
 
-//#include "data.txt"
+#include "data.txt"
 
 /*  
   unsigned short P[N][N]=
@@ -3494,7 +3494,7 @@ for(i=0;i<N;i++){
 
 DDT=invmat(DDT);
 }
-exit(1);
+//exit(1);
 
 
 label:
@@ -3580,7 +3580,7 @@ lab:
   matinv ();
 //  invmat();
   // makeS();
-  exit(1);
+  //exit(1);
   
 
   printf("gen\n");
