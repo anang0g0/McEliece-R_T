@@ -24,7 +24,7 @@ git clone -b master https://github.com/anang0g0/McEliece-R_T
 
 ちなみに今回の暗号はオリジナルじゃないです。
 
-BBCSR方式で、Tの階数zが0、列ベクトルの重みmが1のシンプルなもの。
+BBCSR方式で、Rの階数zが0、列ベクトルTの重みmが1（置換行列）のシンプルなもの。
 
 一般化するとz=0,m=2の場合、異なる置換P,P'に対して、R=PX+P'Yで表される。
 
