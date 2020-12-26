@@ -89,9 +89,13 @@ oinv (unsigned short a)
       if (gf[mlt (fg[a], i)] == 1)
         return (unsigned short) i;
     }
-
-  printf ("no return \n");
-  exit (1);
+if(a==0){
+  printf ("a is 0 baka no return @ inv\n");
+  //return 1;
+  exit(1);
+}
+  return 1;
+  //exit (1);
 }
 
 
@@ -891,14 +895,13 @@ trace (OP f, unsigned short x)
   int i, d;
   unsigned short u = 0;
 
-
+  f=conv(f);
   d = deg (o2v (f));
 
   for (i = 0; i < d + 1; i++)
     {
       u ^= gf[mlt (fg[f.t[i].a], mltn (f.t[i].n, fg[x]))];
     }
-
 
   return u;
 }
@@ -1589,7 +1592,74 @@ ipow (unsigned int q, unsigned int u)
 }
 
 
-OP bib(int i,OP d,OP w[]){
+//多項式の形式的微分
+OP
+bb2 (vec a)
+{
+  OP w[T * 2] = { 0 };
+  OP l = { 0 }
+  , t = {
+    0
+  };
+  int i, j, n, id;
+  vec tmp = { 0 };
+
+
+
+  n = deg (a);
+  printf ("n=%d\n", n);
+  if (n == 0)
+    {
+      printf ("baka8\n");
+      //  exit(1);
+    }
+
+  //
+  for (i = 0; i < T; i++)
+    {
+      w[i].t[0].a = a.x[i];
+      w[i].t[0].n = 0;
+      w[i].t[1].a = 1;
+      w[i].t[1].n = 1;
+      ////printpol(o2v(w[i]));
+    }
+  //  exit(1);
+
+  tmp.x[0] = 1;
+  //
+
+  //#pragma omp parallel for private(i,j)
+  for (i = 0; i < T; i++)
+    {
+      t = v2o (tmp);
+      //
+      for (j = 0; j < T; j++)
+        {
+          // #pragma omp critical
+          if (i != j)
+            {
+              t = omul (t, w[j]);
+            }
+        }
+
+      ////printpol(o2v(t));
+
+      if (odeg ((t)) == 0)
+        {
+          printf ("baka9\n");
+          // exit(1);
+        }
+      l = oadd (l, t);
+      printf("i=%d\n",i);
+    }
+
+
+  return l;
+}
+
+OP ww[T]={0};
+
+OP bib(int i,OP d){
 int id,j;
 
 OP t[T]={0};
@@ -1601,7 +1671,7 @@ OP t[T]={0};
 	    // #pragma omp critical
 	    if (i != j)
 	      {
-		t[id] = omul (t[id], w[j]);
+		t[id] = omul (t[id], ww[j]);
 	      }
 	  }
 
@@ -1613,7 +1683,7 @@ return t[id];
 OP
 bibun (vec a)
 {
-  OP w[T * 2] = { 0 };
+  OP w[T*2] = { 0 };
   OP l = { 0 }
   , t = {0},d={0};
   int i, j, n, id;
@@ -1628,14 +1698,19 @@ bibun (vec a)
       printf ("baka8\n");
       //  exit(1);
     }
-
-   #pragma omp parallel num_threads(8)
+memset(ww,0,sizeof(ww));
+  // #pragma omp parallel num_threads(8)
   for (i = 0; i < T; i++)
     {
-      w[i].t[0].a = a.x[i];
-      w[i].t[0].n = 0;
-      w[i].t[1].a = 1;
-      w[i].t[1].n = 1;
+      if(a.x[i]==0){
+        printf("ia=%d\n",i);
+      wait();
+      }
+      ww[i].t[0].a = a.x[i];
+      ww[i].t[0].n = 0;
+      ww[i].t[1].a = 1;
+      ww[i].t[1].n = 1;
+
       ////printpol(o2v(w[i]));
     }
   //  exit(1);
@@ -1651,10 +1726,7 @@ bibun (vec a)
   #pragma omp for schedule(static)
     for (i = 0; i < T; i++)
       {
-  //   id = omp_get_thread_num ();  
-	//printf("5i=%d　%d\n",i,DEG);
-
-  t=bib(i,d,w);	
+    t=bib(i,d);	
 
 	l = oadd (l, t);
       }
@@ -1769,6 +1841,8 @@ decode (OP f, OP s)
   printf("aaaaaaaaaaaaaaaa");
 
   w = bibun (x);
+    //w=bb2(x);
+
   //exit(1);
   //  w=oterml(w,d1);
   //printpol (o2v (w));
@@ -1786,19 +1860,31 @@ decode (OP f, OP s)
   t2.a = t1.a;
   t2.n = 0;
 
-  if (odeg ((w)) == 0)
-    {
-      //printpol (o2v (w));
-    }
   l = oterml (w, t2);
+  if (odeg ((l)) < T-2)
+    {
+      printpol (o2v (l));
+      //wait();
+      exit(1);
+    }
+
+  printf("deg(l)=%d\n",deg(o2v(l)));
+  //wait();
 
   j = deg (x) + 1;
-  printf ("%d\n", j);
+  printf ("j!=%d\n", j);
 
   //    exit(1);
 
   for (i = 0; i < j; i++)
     {
+      /*
+      if(x.x[i]==0){
+        printf("i=%d\n",i);
+        printpol(o2v(l));
+      //exit(1);
+    }
+    */
       if (x.x[i] > 0)
         {
           //e.t[i].a =
@@ -1929,7 +2015,7 @@ deta (unsigned short g[])
 #pragma omp parallel num_threads(8)
   {
 #pragma omp for schedule(static)
-    for (i = 0; i < D; i++)
+    for (i = 0; i < N; i++)
       {
         det2 (i, g);
       }
@@ -3067,7 +3153,7 @@ unsigned char inv_S[K][K]=
 //matinv();
 //exit(1);
 MAT DDT={0};
-
+/*
 DDT.i= -1;
 while(DDT.i<0){
 for(i=0;i<N;i++){
@@ -3077,6 +3163,7 @@ for(i=0;i<N;i++){
 
 DDT=invmat(DDT);
 }
+*/
 //exit(1);
 
 
