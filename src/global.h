@@ -8,8 +8,8 @@
 //符号のパラーメータの指定。通常[N,K,T]として、
 //Nは符号の長さ、Kが符号の次元、Tは訂正エラー数
 //を表す。ここではDは符号長にしている。
-#define N 512 // (^^;)?
-#define M 512 //有限体の元の数
+#define N 1024 // (^^;)?
+#define M 1024 //有限体の元の数
 #define K (N/2) //符号の次元
 #define DEG (K)
 #define T (K/2) //エラーの数
@@ -22,7 +22,7 @@
 unsigned short tmp[E * K][N]={0};
 unsigned short pub[E * K][N]={0};
 unsigned short BH[E * K][N]={0};
-static unsigned short c[N]={0};
+static unsigned short c[K]={0};
 static unsigned short mat[N][K]={0};
 unsigned short mat2[N][N]={0};
 //unsigned short P[N][N]={0},invP[N][N]={0};
