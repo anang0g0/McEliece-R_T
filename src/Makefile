@@ -3,7 +3,7 @@ all:
 	clang -Wall -g -pg -O2 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp op.c
 
 amd:
-	clang -Wall -g -pg -O2 -mtune=znver1 -march=znver1 -ffast-math -funroll-loops  -fopenmp op.c
+	clang -Wall -g -pg -O3 -mtune=znver1 -march=znver1 -ffast-math -funroll-loops  -fopenmp op.c
 
 gcc:
 	gcc -Wall -g -pg  -DSRAND=1602886277 -mtune=native -march=native -ffast-math -funroll-loops  -fopenmp op.c
