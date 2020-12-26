@@ -1812,7 +1812,7 @@ OP bib(int i,OP d,OP w[]){
 int id,j;
 
 OP t[T]={0};
-
+ omp_set_num_threads(omp_get_max_threads());
  id = omp_get_thread_num ();  
  t[id]=d;
 	for (j = 0; j < T; j++)
@@ -1863,7 +1863,7 @@ bibun (vec a)
   //
   d = v2o (tmp);
     
-// omp_set_num_threads(omp_get_max_threads())
+// omp_set_num_threads(omp_get_max_threads());
 #pragma omp parallel num_threads(8)
   {
   //#pragma omp parallel for    
@@ -1872,7 +1872,7 @@ bibun (vec a)
       {
   //   id = omp_get_thread_num ();  
 	//printf("5i=%d　%d\n",i,DEG);
-　
+
   t=bib(i,d,w);	
 
 	l = oadd (l, t);
@@ -1899,7 +1899,7 @@ chen (OP f)
   for (x = 0; x < N; x++)
     {
       z = 0;
-#pragma omp parallel for reduction (^:z)
+//#pragma omp parallel for reduction (^:z)
       for (i = 0; i < n + 1; i++)
         {
           if (f.t[i].a > 0)
