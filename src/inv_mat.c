@@ -288,16 +288,13 @@ unsigned short buf; //一時的なデータを蓄える
  int i,j,k,count; //カウンタ
  int n=512;
 unsigned short c[N][N]={0};
-unsigned short y0[F]={0},y1[F]={0};
+//unsigned short y0[F]={0},y1[F]={0};
 unsigned short cc[N][N]={0};
 
 
 
 
  lab:
-
-rp(y0);
-rp(y1);
  
  for(i=0;i<F;i++){
    for(j=0;j<F;j++){
@@ -429,6 +426,7 @@ printf("行列を出力\n");
  
  return ;
 }
+
 
 
 
