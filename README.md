@@ -8,6 +8,8 @@ https://www.zora.uzh.ch/id/eprint/128304/1/Baldi_et_al2014.pdf
 
 https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
 
+https://user.math.uzh.ch/rosenthal/masterthesis/11720935/Weger_2017.pdf
+
 Reed-Solomonでも暗号に使えるなんて画期的です。
 
 # 20201226
