@@ -14,9 +14,9 @@ Reed-Solomonでも暗号に使えるなんて画期的です。
 
 書き忘れたけど、mainブランチはほとんどいじってません。
 
-開発用のmasterブランチで高速化や大きなパラメータを扱っているので、最新のが欲しい人はmasterブランチをクローンしてください。
+開発用のmasterブランチで高速化や大きなパラメータを扱っているので、最新のが欲しい人は以下のコマンドでmasterブランチをクローンしてください。
 
-git clone -b master 
+git clone -b master https://github.com/anang0g0/McEliece-R_T
 
 # 20201224
 
