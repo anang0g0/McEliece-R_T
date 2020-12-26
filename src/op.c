@@ -1266,7 +1266,7 @@ xgcd (OP f, OP g)
       //if(
       if (deg (o2v(f)) == T - 1 || deg (o2v(v[i])) == T - 1)
         {
-	  printf("i=%d\n",i);
+	  printf("1i=%d\n",i);
 	  //wait();
           break;
         }
@@ -1363,7 +1363,7 @@ xgcd2 (OP f, OP g ,int t)
 	//if(flg==1)
 	//printf("%d\n",deg(o2v(u[i])));
 	//printf("%d\n",deg(o2v(f)));
-	printf("i=%d\n",i);
+	printf("2i=%d\n",i);
 	//wait();
 	//break;
 	return e;
@@ -1383,7 +1383,7 @@ xgcd2 (OP f, OP g ,int t)
 
       if (deg (o2v(f)) == T - 1 || deg (o2v(v[i])) == T - 1)
         {
-	  printf("i=%d\n",i);
+	  printf("3i=%d\n",i);
 	  //wait();
           break;
         }
@@ -1485,7 +1485,7 @@ gcd (OP f, OP g)
   //u[i]=odiv(u[i],h);
   // h.t[0].a=1;
   //h.t[0].n=0;
-  printf ("i=%d\n", i);
+  printf ("4i=%d\n", i);
   //printpol (o2v (v[i]));
   printf (" v=============\n");
   //printpol (o2v (u[i]));
@@ -1808,15 +1808,33 @@ ipow (unsigned int q, unsigned int u)
 }
 
 
+OP bib(int i,OP d,OP w[]){
+int id,j;
+
+OP t[T]={0};
+
+ id = omp_get_thread_num ();  
+ t[id]=d;
+	for (j = 0; j < T; j++)
+	  {
+	    // #pragma omp critical
+	    if (i != j)
+	      {
+		t[id] = omul (t[id], w[j]);
+	      }
+	  }
+
+return t[id];
+}
+
+
 //多項式の形式的微分
 OP
 bibun (vec a)
 {
   OP w[T * 2] = { 0 };
   OP l = { 0 }
-  , t =
-  {
-   0},d={0};
+  , t = {0},d={0};
   int i, j, n, id;
   vec tmp = { 0 };
 
@@ -1825,12 +1843,12 @@ bibun (vec a)
   n = deg (a);
   printf ("n=%d\n", n);
   if (n == 0)
-    {
+    {           
       printf ("baka8\n");
       //  exit(1);
     }
 
-  //
+   #pragma omp parallel num_threads(8)
   for (i = 0; i < T; i++)
     {
       w[i].t[0].a = a.x[i];
@@ -1844,36 +1862,22 @@ bibun (vec a)
   tmp.x[0] = 1;
   //
   d = v2o (tmp);
-  //#pragma omp parallel for private(i,j)
-  //#pragma omp parallel num_threads(8)
+    
+// omp_set_num_threads(omp_get_max_threads())
+#pragma omp parallel num_threads(8)
   {
-    //#pragma omp for schedule(static)
-    //id = omp_get_thread_num ();
+  //#pragma omp parallel for    
+  #pragma omp for schedule(static)
     for (i = 0; i < T; i++)
       {
-	printf("i=%d　%d\n",i,DEG);
-	t=d;
-	//
-	for (j = 0; j < T; j++)
-	  {
-	    // #pragma omp critical
-	    if (i != j)
-	      {
-		t = omul (t, w[j]);
-	      }
-	  }
-	
-      ////printpol(o2v(t));
-	/*
-	if (odeg ((t)) == 0)
-	  {
-	    printf ("baka9\n");
-	    // exit(1);
-	  }
-	*/
+  //   id = omp_get_thread_num ();  
+	//printf("5i=%d　%d\n",i,DEG);
+　
+  t=bib(i,d,w);	
+
 	l = oadd (l, t);
       }
-  }
+}
 
   return l;
 }
