@@ -44,7 +44,7 @@
 #include "inv_mat.c"
 //#include "golay.c"
 
-//#define K 512
+#define TH 4
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -1702,10 +1702,6 @@ memset(ww,0,sizeof(ww));
   // #pragma omp parallel num_threads(8)
   for (i = 0; i < T; i++)
     {
-      if(a.x[i]==0){
-        printf("ia=%d\n",i);
-      wait();
-      }
       ww[i].t[0].a = a.x[i];
       ww[i].t[0].n = 0;
       ww[i].t[1].a = 1;
@@ -1720,7 +1716,7 @@ memset(ww,0,sizeof(ww));
   d = v2o (tmp);
     
 // omp_set_num_threads(omp_get_max_threads());
-#pragma omp parallel num_threads(8)
+#pragma omp parallel num_threads(TH)
   {
   //#pragma omp parallel for    
   #pragma omp for schedule(static)
@@ -2012,7 +2008,7 @@ deta (unsigned short g[])
 
   //
   //
-#pragma omp parallel num_threads(8)
+#pragma omp parallel num_threads(TH)
   {
 #pragma omp for schedule(static)
     for (i = 0; i < N; i++)
