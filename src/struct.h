@@ -1,4 +1,4 @@
-#define DEG N+1
+#define DEG N
 
 /* -*- mode: C; coding:utf-8 -*- */
 
