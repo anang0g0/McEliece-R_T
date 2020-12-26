@@ -8,7 +8,7 @@
 #include <time.h>
 
 #define MAXN 4
-#define N 512 //order of GF(q)
+//#define N 1024 //order of GF(q)
 #define F 512  //dimension of matrix
 
 unsigned short PP[N][N]={0},invPP[N][N]={0};
@@ -280,13 +280,13 @@ printf("count=%d\n",count);
 
 
 //inverse matrix
-int matinv(){
+void matinv(){
   unsigned short a[N][N]={0}; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
 unsigned short inv_a[N][N]={0}; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=K;
+ int n=512;
 unsigned short c[N][N]={0};
 unsigned short y0[F]={0},y1[F]={0};
 unsigned short cc[N][N]={0};
@@ -321,8 +321,8 @@ while(i<N){
 }
 */
 
-for(i=0;i<N;i++){
-  for(j=0;j<N;j++)
+for(i=0;i<K;i++){
+  for(j=0;j<K;j++)
   printf("%d,",a[i][j]);
   printf("\n");
 }
@@ -427,7 +427,7 @@ printf("行列を出力\n");
  }
 // exit(1);
  
- return 0;
+ return ;
 }
 
 
@@ -443,7 +443,7 @@ unsigned short inv_a[N][N]; //ここに逆行列が入る
 unsigned short buf; //一時的なデータを蓄える
  unsigned short b[N][N]={0},dd[N][N]={0};
  int i,j,k,count; //カウンタ
- int n=F;
+ int n=K;
 unsigned short c[N][N]={0};
 int r,s;
 unsigned short cc[N][N]={0};

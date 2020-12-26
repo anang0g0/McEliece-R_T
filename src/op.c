@@ -44,7 +44,7 @@
 #include "inv_mat.c"
 //#include "golay.c"
 
-//#define K 8
+//#define K 512
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -59,7 +59,7 @@ unsigned short sy[K] = { 0 };
 static unsigned short g[K + 1] = { 0 };
 
 
-unsigned short zz[1024] = { 0 };
+unsigned short zz[N] = { 0 };
 unsigned int AA=0,B=0,C=0;
 
 
@@ -118,7 +118,7 @@ o2v (OP f)
   vec a = { 0 };
   int i;
 
-  #pragma omp parallel for
+//  #pragma omp parallel for
   for (i = 0; i < DEG; i++)
     {
       if (f.t[i].a > 0 && f.t[i].n < DEG)
@@ -138,7 +138,7 @@ v2o (vec a)
   OP f = { 0 };
 
   //#pragma omp parallel for
-  for (i = 0; i < 400; i++)
+  for (i = 0; i < N; i++)
     {
       if (a.x[i] > 0)
         {
@@ -183,7 +183,7 @@ oprintpol (OP f)
   int i, n;
 
   f = conv (f);
-  n = odeg (f);
+  n = deg (o2v(f));
   printf ("n=%d\n", n);
   printf ("terms=%d\n", terms (f));
   printf ("deg=%d\n", odeg (f));
@@ -1152,7 +1152,7 @@ odeg (OP f)
 }
 
 //０多項式かどうかのチェック
-unsigned char
+unsigned short
 chk (OP f)
 {
   int i, flg = 0;
@@ -1547,7 +1547,6 @@ ginit (void)
     gg[j] = g[K - j];
 
   memcpy (g, gg, sizeof (g));
-
 
 }
 
@@ -2091,9 +2090,9 @@ det2 (int i, unsigned short g[])
   k = cc[K];
   w = setpol (g, K + 1);
 
-  //  omp_set_num_threads(8);
-  id = omp_get_max_threads();
-//  id = omp_get_thread_num ();
+    omp_set_num_threads(omp_get_max_threads());
+//  id = 
+  id = omp_get_thread_num ();
 
   // h[id] = x+i
   if (i == 0)
@@ -2425,7 +2424,7 @@ key2 (unsigned short g[])
   i = 0;
   do
     {
-      i = deta (g);
+      i = det (g);
     }
   while (i == -1);
 
@@ -3010,7 +3009,7 @@ decrypt (OP w)
         }
     }
 
-  char buf0[8192] = { 0 }, buf1[10] = {
+  short buf0[8192] = { 0 }, buf1[10] = {
     0
   };
 
@@ -3122,7 +3121,7 @@ test (OP w, unsigned short zz[])
      '4', '5', '6', '7', '8', '9', '+', '/',
      };
    */
-  char buf[8192] = { 0 }, buf1[10] = {
+  unsigned short buf[8192] = { 0 }, buf1[10] = {
     0
   };
   unsigned char sk[64] = { 0 };
@@ -3522,11 +3521,12 @@ label:
       if ((k > 0 && flg == 0) || (k > 1 && flg == 1))
         {
           w = setpol (g, K + 1);
-	  j=1;
+      	  j=1;
         }
 
       //w = setpol (g, K + 1);
-      //oprintpol (w);
+      printpol (o2v(w));
+      //exit(1);
 
       //多項式の値が0でないことを確認
       for (i = 0; i < D; i++)
@@ -3543,7 +3543,7 @@ label:
     }
   while (fail || j==0);
   
-  oprintpol (w);
+  printpol (o2v(w));
   printf("\n");
   printsage(o2v(w));
   printf("\n");
@@ -3568,7 +3568,7 @@ label:
   
   do
     {
-      i = det (g);
+      i = deta (g);
     }
   while (i < 0);
   
@@ -3631,7 +3631,7 @@ lab:
   for(i=0;i<K;i++){
     for(j=0;j<D;j++){
       for(k=0;k<K;k++){
-	mat2[j][i]^=gf[mlt(fg[A0[i][k]],fg[gen[j][k]])];
+	mat2[j][i]^=gf[mlt(fg[BB[i][k]],fg[gen[j][k]])];
       }
       printf("%2d,",mat2[j][i]);
     }
@@ -3664,7 +3664,7 @@ memcpy(mat,gen,sizeof(mat));
       printf("%2d,",mat[j][i]);
     printf("\n");
   }
-  //exit(1);
+//  exit(1);
   
   
   //decode開始
@@ -3701,15 +3701,16 @@ memcpy(mat,gen,sizeof(mat));
       //exit(1);
 
       f = synd (zz);
-
+printpol(o2v(f));
+//exit(1);
       
       //exit(1);
-          
+      
       f=conv(f);
       ef=o2v(f);
       for(j=0;j<K;j++){
       for(i=0;i<K;i++)
-	gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invA0[j][i]])];
+	gh.x[j]^=gf[mlt(fg[ef.x[i]],fg[invBB[j][i]])];
       }
       f=v2o(gh);
       f=conv(f);
