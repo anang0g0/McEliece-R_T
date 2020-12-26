@@ -44,7 +44,7 @@
 #include "inv_mat.c"
 //#include "golay.c"
 
-#define TH 4
+#define TH 8
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -763,7 +763,7 @@ omod (OP f, OP g)
       f = conv (f);
       if (odeg ((f)) > 0)
         //printpol (o2v (f));
-        //printf ("\nff1=====================\n");
+        //printf ("\nff1=====sb================\n");
         g = conv (g);
       if (odeg ((f)) == 0 || odeg ((g)) == 0)
         {
@@ -901,6 +901,12 @@ trace (OP f, unsigned short x)
   for (i = 0; i < d + 1; i++)
     {
       u ^= gf[mlt (fg[f.t[i].a], mltn (f.t[i].n, fg[x]))];
+    }
+    if(u==0){
+      oprintpol(f);
+      printf("\n");
+      printf("x=%d",x);
+      //wait();
     }
 
   return u;
@@ -1199,6 +1205,93 @@ ogcd (OP xx, OP yy)
 }
 
 
+// gcd for pattarson
+OP
+zgcd (OP a, OP n)
+{
+  OP d = { 0 }, x = {
+    0
+  }, s = {
+    0
+  }, q = {
+    0
+  }, r = {
+    0
+  }, t = {
+    0
+  }, u = {
+    0
+  }, v = {
+    0
+  }, w = {
+    0
+  }, tt = {
+    0
+  }, gcd = {
+    0
+  }, rt = { 0 };
+  oterm b = { 0 };
+  vec vv = { 0 }, xx = {
+    0
+  };
+
+
+  if (odeg (a) > odeg (n))
+    {
+      rt = a;
+      a = n;
+      n = rt;
+      printf ("big is good\n");
+      //exit (1);
+    }
+  if (LT (a).a == 0)
+    {
+      printf (" a ga 0\n");
+      exit (1);
+    }
+
+
+  tt = n;
+
+  d = n;
+  x.t[0].a = 0;
+  x.t[0].n = 0;
+  s.t[0].a = 1;
+  s.t[0].n = 0;
+  while (LT (a).n > T)
+    {
+
+      r = omod (d, a);
+      q = odiv (d, a);
+      
+      d = a;
+      a = r;
+      t = oadd (x, omul (q, s));
+      
+      x = s;
+      s = t;
+    }
+  
+  d = a;
+  a = r;
+  
+  x = s;
+  s = t;
+  gcd = d;			// $\gcd(a, n)$
+  
+  /*
+  printpol(o2v(x));  
+  printf(" =======x\n");
+  printpol(o2v(a));  
+  printf(" =======a\n");
+  printpol(o2v(s));  
+  printf(" =======s\n");
+  printpol(o2v(r));  
+  printf(" =======r\n");
+  */
+
+  return x;
+}
 
 
 //拡張ユークリッドアルゴリズム(Tで止まらない)
@@ -1666,6 +1759,8 @@ OP t[T]={0};
  omp_set_num_threads(omp_get_max_threads());
  id = omp_get_thread_num ();  
  t[id]=d;
+
+// #pragma omp parallel for
 	for (j = 0; j < T; j++)
 	  {
 	    // #pragma omp critical
@@ -1685,10 +1780,9 @@ bibun (vec a)
 {
   OP w[T*2] = { 0 };
   OP l = { 0 }
-  , t = {0},d={0};
+  , t[T] = {0},d={0};
   int i, j, n, id;
   vec tmp = { 0 };
-
 
 
   n = deg (a);
@@ -1722,11 +1816,11 @@ memset(ww,0,sizeof(ww));
   #pragma omp for schedule(static)
     for (i = 0; i < T; i++)
       {
-    t=bib(i,d);	
-
-	l = oadd (l, t);
+    t[i]=bib(i,d);	
       }
 }
+  for (i = 0; i < T; i++)
+      l = oadd (l, t[i]);
 
   return l;
 }
@@ -1852,16 +1946,18 @@ decode (OP f, OP s)
 
   //  exit(1);
   t1 = LT (r);
-
+  
   t2.a = t1.a;
   t2.n = 0;
 
   l = oterml (w, t2);
+  l=conv(l);
+
   if (odeg ((l)) < T-2)
     {
       printpol (o2v (l));
-      //wait();
-      exit(1);
+      wait();
+      //exit(1);
     }
 
   printf("deg(l)=%d\n",deg(o2v(l)));
@@ -1881,11 +1977,24 @@ decode (OP f, OP s)
       //exit(1);
     }
     */
+   int aa;
       if (x.x[i] > 0)
         {
-          //e.t[i].a =
-	  //gf[mlt (fg[trace (hh.d, x.x[i])], oinv (trace (l, x.x[i])))];
-          e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (trace (l, x.x[i])))];
+          aa=trace(l,x.x[i]);
+          if(aa==0){
+            printpol(o2v(l));
+            printf("\n");
+            printf("x=%d %d\n",x.x[i],i);
+            wait();
+            w=bb2(x);
+            l = oterml (w, t2);
+            aa=trace(l,x.x[i]);
+            if(aa==0){
+              printf("baka\n");
+              exit(1);
+            }
+          }
+          e.t[i].a = gf[mlt (fg[trace (h, x.x[i])], oinv (aa))];
           e.t[i].n = x.x[i];
         }
     }
