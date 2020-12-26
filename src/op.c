@@ -1934,20 +1934,21 @@ deta (unsigned short g[])
         det2 (i, g);
       }
   }
-  for (j = 0; j < D; j++)
+
+  for (j = 0; j < N; j++)
     {
       flg = 0;
       for (i = 0; i < K; i++)
         {
-          printf ("%d,", mat[i][j]);
+          printf ("%d,", mat[j][i]);
           if (mat[j][i] > 0)
             flg = 1;
         }
       printf ("\n");
+
       if (flg == 0)
         {
-          printf ("0 is %d\n", j);
-          //exit(1);
+          printf ("b0 is %d\n", j);
           return -1;
         }
     }
@@ -2054,7 +2055,7 @@ det (unsigned short g[])
       printf ("\n");
       if (flg == 0)
         {
-          printf ("0 is %d\n", j);
+          printf ("0a is %d\n", j);
           //exit(1);
         }
     }
@@ -3148,7 +3149,7 @@ label:
 
   //パリティチェックを生成する。
   //パリティチェックに0の列があったら、なくなるまでやり直す。
-  
+  i= -1;
   do
     {
       i = deta (g);
@@ -3161,7 +3162,7 @@ lab:
 
   matmul ();
   matinv ();
-//  invmat();
+//  invmat);
   // makeS();
   //exit(1);
   

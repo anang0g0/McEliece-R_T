@@ -295,6 +295,7 @@ unsigned short cc[N][N]={0};
 
 
  lab:
+
  
  for(i=0;i<F;i++){
    for(j=0;j<F;j++){
