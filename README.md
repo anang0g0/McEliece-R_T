@@ -20,6 +20,11 @@ Reed-Solomonでも暗号に使えるなんて画期的です。
 
 git clone -b master https://github.com/anang0g0/McEliece-R_T
 
+q元符号はsidelnikov-shestacov攻撃に弱いから今まで使えなかったけど、これでで安全になったかも。
+ｑ現符号なのでバイナリで使っていたpattersonアルゴリズムは使いません。
+
+削除したほうがいいかもしれないですね。
+
 # 20201224
 
 ちなみに今回の暗号はオリジナルじゃないです。
