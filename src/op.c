@@ -1632,7 +1632,7 @@ ipow (unsigned int q, unsigned int u)
 
 //多項式の形式的微分
 OP
-bb2 (vec a)
+bibun_old (vec a)
 {
   OP w[T * 2] = { 0 };
   OP l = { 0 }
@@ -1666,7 +1666,7 @@ bb2 (vec a)
   tmp.x[0] = 1;
   //
 
-  //#pragma omp parallel for private(i,j)
+  #pragma omp parallel for 
   for (i = 0; i < T; i++)
     {
       t = v2o (tmp);
@@ -1700,10 +1700,10 @@ OP ww[T]={0};
 OP bib(int i,OP d){
 int id,j;
 
-OP t[T]={0};
- //omp_set_num_threads(omp_get_max_threads());
- id = omp_get_thread_num ();  
- t[id]=d;
+OP t={0};
+
+ //id = omp_get_thread_num ();  
+ t=d;
 
 //#pragma omp parallel for
 	for (j = 0; j < T; j++)
@@ -1711,11 +1711,11 @@ OP t[T]={0};
 	    // #pragma omp critical
 	    if (i != j)
 	      {
-		t[id] = omul (t[id], ww[j]);
+		t = omul (t, ww[j]);
 	      }
 	  }
 
-return t[id];
+return t;
 }
 
 
@@ -1738,7 +1738,7 @@ bibun (vec a)
       //  exit(1);
     }
 memset(ww,0,sizeof(ww));
-  // #pragma omp parallel num_threads(8)
+  #pragma omp parallel for num_threads(omp_get_max_threads())
   for (i = 0; i < T; i++)
     {
       ww[i].t[0].a = a.x[i];
@@ -1755,7 +1755,7 @@ memset(ww,0,sizeof(ww));
   d = v2o (tmp);
     
 // omp_set_num_threads(omp_get_max_threads());
-#pragma omp parallel num_threads(TH)
+#pragma omp parallel num_threads(omp_get_max_threads())
   {
   //#pragma omp parallel for    
   #pragma omp for schedule(static)
@@ -1926,13 +1926,14 @@ decode (OP f, OP s)
    int aa;
       if (x.x[i] > 0)
         {
+            
           aa=trace(l,x.x[i]);
           if(aa==0){
             printpol(o2v(l));
             printf("\n");
             printf("x=%d %d\n",x.x[i],i);
             wait();
-            w=bb2(x);
+            w=bibun(x);
             l = oterml (w, t2);
             aa=trace(l,x.x[i]);
             if(aa==0){
@@ -1993,18 +1994,18 @@ unsigned short ta[N] = { 0 };
 void
 det2 (int i, unsigned short g[])
 {
-  OP f[16] = { 0 }, h[16] = {
+  OP f = { 0 }, h = {
     0
-  }, w, u[16] = {
+  }, w, u = {
     0
   };
   unsigned short cc[K + 1] = { 0 }, d[2] = {
     0
   };
   int j, a, b, k, t1, l = 0, flg = 0, id;
-  oterm t[16] = { 0 };
-  vec e[16] = { 0 };
-  OP ww[16] = { 0 };
+  oterm t = { 0 };
+  vec e = { 0 };
+  OP ww = { 0 };
 
 
   memcpy (cc, g, sizeof (cc));
@@ -2013,40 +2014,37 @@ det2 (int i, unsigned short g[])
   w = setpol (g, K + 1);
 
     omp_set_num_threads(omp_get_max_threads());
-//  id = 
-  id = omp_get_thread_num ();
 
-  // h[id] = x+i
   if (i == 0)
     {
-      h[id].t[0].a = 1;
-      h[id].t[0].n = 1;
+      h.t[0].a = 1;
+      h.t[0].n = 1;
     }
   else
     {
-      h[id].t[0].a = i;
-      h[id].t[1].a = 1;
-      h[id].t[1].n = 1;
+      h.t[0].a = i;
+      h.t[1].a = 1;
+      h.t[1].n = 1;
     }
 
-  t[id].n = 0;
+  t.n = 0;
 
-  f[id] = setpol (cc, K + 1);
+  f = setpol (cc, K + 1);
 
   cc[K] = k ^ ta[i];
   //tr[i];
-  f[id] = setpol (cc, K + 1);
+  f = setpol (cc, K + 1);
 
   //f.t[0].a=k^ta[i]; //cc[K];
 
-  ww[id] = odiv (f[id], h[id]);
+  ww = odiv (f, h);
 
   //b = oinv (a);
-  t[id].a = gf[tr[i]];
-  u[id] = oterml (ww[id], t[id]);
-  e[id] = o2v (u[id]);
+  t.a = gf[tr[i]];
+  u = oterml (ww, t);
+  e = o2v (u);
 
-  memcpy (mat[i], e[id].x, sizeof (mat[i]));
+  memcpy (mat[i], e.x, sizeof (mat[i]));
 
 
 }
@@ -2793,7 +2791,7 @@ synd (unsigned short zz[])
       s = 0;
 //#pragma omp parallel for        //num_threads(8)
 // 
-//#pragma omp parallel for reduction (^:uu)
+//#pragma omp parallel for private(j) reduction (^:uu)
       for (j = 0; j < M; j++)
         {
           //syn[i] ^= gf[mlt (fg[zz[j]], fg[mat[j][i]])];
@@ -3258,7 +3256,6 @@ for(i=0;i<N;i++){
   for(j=0;j<N;j++)
   DDT.x[i][j]=rand()%N;
 }
-
 DDT=invmat(DDT);
 }
 */
