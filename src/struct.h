@@ -1,6 +1,8 @@
 #define DEG N
 
 /* -*- mode: C; coding:utf-8 -*- */
+#include <xmmintrin.h>
+#include <immintrin.h>
 
 
 //monomial
@@ -33,9 +35,9 @@ typedef struct{
 
 
 typedef union{ //test(SIMN)
-  unsigned long long int u[4];
-  unsigned short s[16];
-} SU;
+  unsigned long long int u[2];
+  unsigned short s[8];
+} SIMD;
 
 typedef union {
   unsigned long long int u[8];
@@ -66,6 +68,8 @@ typedef struct pub {
 typedef struct {
   unsigned short x[N][N];
   unsigned short y[N][N];
+  unsigned short z[N][K];
+  unsigned short w[K][K];
   int i;
   int rank;
 } MAT;
@@ -76,3 +80,11 @@ typedef struct {
   int row; //行
   int col; //列
 } MTX;
+
+typedef struct {
+  /* data */
+  __m128 a;
+  __m128 b;
+  __m128 c;
+  SIMD d;
+} AVX;
