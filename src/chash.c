@@ -5,7 +5,7 @@
 #include <string.h>
 
 
-#define M  N
+//#define M  N
 
 #include "1024.h"
 /*
