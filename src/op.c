@@ -44,7 +44,7 @@
 #include "inv_mat.c"
 //#include "golay.c"
 
-#define TH 8
+#define TH omp_get_max_threads()
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -61,21 +61,6 @@ static unsigned short g[K + 1] = { 0 };
 
 unsigned short zz[N] = { 0 };
 unsigned int AA=0,B=0,C=0;
-
-
-/*
-static unsigned short g[K+1]={1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		       0,0,0,0,0,0,0,0,0,0,
-		       		       0,0,0,0,0,0,0,0,0,0,
-		       		       0,0,0,0,0,0,0,0,0,0,
-		       		       0,0,0,0,0,0,0,0,0,0,
-		       0,1};
-*/
-
-
-#ifndef DEG
-#include "struct.h"
-#endif
 
 
 //有限体の元の逆数
@@ -264,8 +249,12 @@ oadd (OP f, OP g)
   // printf("%d %d %d %d %d\n",i,f.t[i].a,f.t[i].n,g.t[i].a,g.t[i].n);
 
    //  exit(1);
-  //f=conv(f);
-  //g=conv(g);
+   /*
+  f=conv(f);
+  g=conv(g);
+  assert (op_verify (f));
+  assert (op_verify (g));
+*/
 
   a = o2v (f);
   //exit(1);
@@ -301,52 +290,6 @@ oadd (OP f, OP g)
   return h;
 }
 
-
-/*
-//20200816:正規化したいところだがうまく行かない
-//多項式の足し算
-OP
-oadd (OP f, OP g)
-{
-
-
-  //f=conv(f);
-  //g=conv(g);
-  //assert (op_verify (f));
-  //assert (op_verify (g));
-
-  vec a = { 0 }
-  , b = {
-    0
-  }
-  , c = {
-    0
-  };
-  int i, j, k, l = 0;
-  OP h = { 0 }, f2 = { 0 }, g2 = { 0 };
-
-  a = o2v (f);
-  b = o2v (g);
-
-  if (deg (o2v (f)) >= deg (o2v (g)))
-    {
-      k = deg (o2v (f)) + 1;
-    }
-  else
-    {
-      k = deg (o2v (g)) + 1;
-    }
-
-  for (i = 0; i < k; i++)
-    {
-      c.x[i] = a.x[i] ^ b.x[i];
-    }
-  h = v2o (c);
-  h=conv(h);
-  assert (op_verify (h));
-  return h;
-}
-*/
 
 
 OP
@@ -551,11 +494,12 @@ oterml (OP f, oterm t)
 OP
 omul (OP f, OP g)
 {
-  //f=conv(f);
-  //g=conv(g);
-
-  //assert (op_verify (f));
-  //assert (op_verify (g));
+  /*
+  f=conv(f);
+  g=conv(g);
+  assert (op_verify (f));
+  assert (op_verify (g));
+  */
   int i, count = 0, k,l,m;
   oterm t = { 0 };
   OP h = { 0 }, e = {
@@ -784,11 +728,12 @@ omod (OP f, OP g)
 OP
 odiv (OP f, OP g)
 {
-  
+  /*
   f=conv(f);
   g=conv(g);
   assert (op_verify (f));
   assert (op_verify (g));
+  */
   int i = 0, j, n, k;
   OP h = { 0 }, e = { 0 }, tt = { 0 };
   oterm a, b = { 0 }, c = { 0 };
@@ -1756,11 +1701,11 @@ OP bib(int i,OP d){
 int id,j;
 
 OP t[T]={0};
- omp_set_num_threads(omp_get_max_threads());
+ //omp_set_num_threads(omp_get_max_threads());
  id = omp_get_thread_num ();  
  t[id]=d;
 
-// #pragma omp parallel for
+//#pragma omp parallel for
 	for (j = 0; j < T; j++)
 	  {
 	    // #pragma omp critical
@@ -1819,6 +1764,7 @@ memset(ww,0,sizeof(ww));
     t[i]=bib(i,d);	
       }
 }
+
   for (i = 0; i < T; i++)
       l = oadd (l, t[i]);
 
@@ -1842,7 +1788,7 @@ chen (OP f)
   for (x = 0; x < N; x++)
     {
       z = 0;
-//#pragma omp parallel for reduction (^:z)
+//
       for (i = 0; i < n + 1; i++)
         {
           if (f.t[i].a > 0)
@@ -2837,20 +2783,27 @@ synd (unsigned short zz[])
 
   printf ("in synd\n");
 
-  #pragma omp parallel for        //num_threads(8)
+  //
+  unsigned short uu=0;
+// #pragma omp parallel num_threads(TH)
+{
   for (i = 0; i < K; i++)
     {
-      syn[i] = 0;
+      uu = 0;
       s = 0;
-      //#pragma omp parallel num_threads(8)
+//#pragma omp parallel for        //num_threads(8)
+// 
+//#pragma omp parallel for reduction (^:uu)
       for (j = 0; j < M; j++)
         {
           //syn[i] ^= gf[mlt (fg[zz[j]], fg[mat[j][i]])];
-          syn[i] ^= gf[mlt (fg[zz[j]], fg[mat2[j][i]])];
+          //uu^= zz[j]&mat2[j][i];
+          uu^= gf[mlt (fg[zz[j]], fg[mat2[j][i]])];
         }
-      sy[i] = syn[i];           //=s;
+      syn[i] = uu;           //=s;
       //printf ("syn%d,", syn[i]);
     }
+}
   //printf ("\n");
 
   for (int j = 0; j < K / 2; j++)
@@ -3044,6 +2997,46 @@ readkey ()
 }
 
 
+MAT nknn(MAT a,MAT b){
+int i,j,k;
+MAT g={0};
+
+    printf("gen\n");
+  //置換行列をかける時
+  for(i=0;i<K;i++){
+    for(j=0;j<M;j++){
+      for(k=0;k<M;k++)
+	g.z[j][i]^=gf[mlt(fg[a.z[k][i]],fg[b.x[k][j]])];
+    printf("%2d,",g.z[j][i]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+
+return g;
+}
+
+
+MAT kknk(MAT a,MAT b){
+int i,j,k;
+MAT c={0};
+
+
+
+  for(i=0;i<K;i++){
+    for(j=0;j<D;j++){
+      for(k=0;k<K;k++){
+	c.z[j][i]^=gf[mlt(fg[b.x[i][k]],fg[a.z[j][k]])];
+      }
+      printf("%d,",c.z[j][k]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+//exit(1);
+return c;
+}
+
 //言わずもがな
 int
 main (void)
@@ -3053,7 +3046,7 @@ main (void)
   FILE *fp, *fq;
   unsigned short z1[N] = {0}; //{1,0,1,1,1,0,0,0,0,0,1,1,1,0,0,1};
   //  {0};
-
+MAT a={0},b={0};
 
   int flg, o1 = 0;
   OP f = { 0 }, r = {
@@ -3324,7 +3317,7 @@ label:
   printsage(o2v(w));
   printf("\n");
   printf("sagemath で既約性を検査してください！\n");
-  wait();
+  //wait();
   
   
 #pragma omp parallel for
@@ -3358,20 +3351,29 @@ lab:
   // makeS();
   //exit(1);
   
-
   printf("gen\n");
-  //置換行列をかける時
+ // exit(1);  
+
+  
+  //置換行列をかける時(NK*NN) 
+  memcpy(a.z,mat,sizeof(mat));
+memcpy(b.x,PP,sizeof(PP));
+a=nknn(a,b);
+
+/*
   for(i=0;i<K;i++){
     for(j=0;j<M;j++){
-      for(k=0;k<M;k++)
-	gen[j][i]^=gf[mlt(fg[mat[k][i]],fg[PP[k][j]])];
-    printf("%2d,",gen[j][i]);
+      for(k=0;k<M;k++){
+    	//printf("%2d,",a.x[j][i]);
+      gen[j][i]=a.x[j][i];
+      //gen[j][i]^=gf[mlt(fg[mat[k][i]],fg[PP[k][j]])];
+      }
     }
     printf("\n");
   }
   printf("\n");
-  
-
+*/
+memcpy(gen,a.z,sizeof(gen));
 
   printf("mat\n");
 
@@ -3402,32 +3404,19 @@ lab:
   //exit(1);
   */
 
+memcpy(a.z,gen,sizeof(a.z));
+memcpy(b.x,BB,sizeof(b.x));
 
-  //スクランブル行列をかける時
-  for(i=0;i<K;i++){
-    for(j=0;j<D;j++){
-      for(k=0;k<K;k++){
-	mat2[j][i]^=gf[mlt(fg[BB[i][k]],fg[gen[j][k]])];
-      }
-      printf("%2d,",mat2[j][i]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-  
-  printf("mat\n");
-  for(i=0;i<K;i++){
-    for(j=0;j<N;j++){
-      printf("%2d,",mat2[j][i]);
-    }
-    printf("\n");
-  }
-  printf("\n");
+
+  //スクランブル行列をかける時(KK*NK)
+  a=kknk(a,b);
+
+ memcpy(mat2,a.z,sizeof(mat2));
 
   
   vec ef={0},gh={0};
 
-memcpy(mat,gen,sizeof(mat));
+//memcpy(mat,gen,sizeof(mat));
   /*  
   for(i=0;i<8;i++){
     for(j=0;j<M;j++)
@@ -3435,12 +3424,12 @@ memcpy(mat,gen,sizeof(mat));
   }
   */
   printf("gen2mat\n");
-  for(i=0;i<8;i++){
+  for(i=0;i<K;i++){
     for(j=0;j<M;j++)
-      printf("%2d,",mat[j][i]);
+      printf("%2d,",mat2[j][i]);
     printf("\n");
   }
-//  exit(1);
+  //exit(1);
   
   
   //decode開始
