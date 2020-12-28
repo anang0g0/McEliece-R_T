@@ -1702,10 +1702,11 @@ int id,j;
 
 OP t={0};
 
- printf("thread=%d\n", omp_get_thread_num ());  
+ //id = omp_get_thread_num ();  
+  printf("thread=%d\n", omp_get_thread_num ());  
  t=d;
 
-//#pragma omp parallel for thread_num(8)
+//#pragma omp parallel for
 	for (j = 0; j < T; j++)
 	  {
 	    // #pragma omp critical
@@ -2013,7 +2014,7 @@ det2 (int i, unsigned short g[])
   k = cc[K];
   w = setpol (g, K + 1);
 
-   
+    omp_set_num_threads(omp_get_max_threads());
 
   if (i == 0)
     {
@@ -2061,8 +2062,7 @@ deta (unsigned short g[])
 
   //
   //
-   omp_set_num_threads(omp_get_max_threads());
-#pragma omp parallel num_threads(omp_get_max_threads())
+#pragma omp parallel num_threads(TH)
   {
 #pragma omp for schedule(static)
     for (i = 0; i < N; i++)
@@ -2996,47 +2996,6 @@ readkey ()
 }
 
 
-MAT nn(MAT a,MAT b){
-    int i,j,k;
-    MAT h={0};
-
-for(i=0;i<N;i++){
-    for ( j = 0; j < N; j++)
-    {
-        for ( k = 0; k < N; k++)
-        {
-            /* code */
-            h.z[i][j]^=gf[mlt(fg[a.z[i][k]],b.z[k][j])];
-        }
-        
-        /* code */
-    }
-}
-
-return j;
-}
-
-MAT nkkn(MAT a,MAT b){
-    int i,j,k;
-    MAT g={0};
-    
-    for(i=0;i<N;i++){
-        for (j = 0; j < N; j++)
-        {
-            for ( k = 0; k < K; k++)
-            {
-                /* code */
-                g.z[i][j]^=gf[mlt(fg[a.x[i][k]],fg[b.x[j][k]])];
-            }
-            
-            /* code */
-        }
-        
-    }
-
-return g;
-}
-
 MAT nknn(MAT a,MAT b){
 int i,j,k;
 MAT g={0};
@@ -3077,8 +3036,10 @@ MAT c={0};
 return c;
 }
 
-
-void code(){
+//言わずもがな
+int
+main (void)
+{
   int i, j, k, l;
   int count = 0;
   FILE *fp, *fq;
@@ -3378,19 +3339,9 @@ label:
     }
   while (i < 0);
   
-
-}
-
-//言わずもがな
-int
-main (void)
-{
-
   unsigned short gen[N][K]={0};
   
 lab:
-
-code();
 
   matmul ();
   matinv ();
