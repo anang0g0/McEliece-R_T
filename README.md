@@ -8,7 +8,43 @@ https://www.zora.uzh.ch/id/eprint/128304/1/Baldi_et_al2014.pdf
 
 https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
 
+https://user.math.uzh.ch/rosenthal/masterthesis/11720935/Weger_2017.pdf
+
 Reed-Solomonでも暗号に使えるなんて画期的です。
+
+# 20201226
+
+書き忘れたけど、mainブランチはほとんどいじってません。
+
+開発用のmasterブランチで並列化や大きなパラメータを扱っているので、最新のが欲しい人は以下のコマンドでmasterブランチをクローンしてください。
+
+git clone -b master https://github.com/anang0g0/McEliece-R_T
+
+q元符号はsidelnikov-shestacov攻撃に弱いから今まで使えなかったけど、これでで安全になったかも。
+ｑ現符号なのでバイナリで使っていたpattersonアルゴリズムは使いません。
+
+削除したほうがいいかもしれないですね。
+
+# 20201224
+
+ちなみに今回の暗号はオリジナルじゃないです。
+
+BBCSR方式で、Rの階数zが0、列ベクトルTの重みmが1（置換行列）のシンプルなもの。
+
+一般化するとz=0,m=2の場合、異なる置換P,P'に対して、R=PX+P'Yで表される。
+
+今回の場合、Q=0+Tなので、一応定義に従っている。
+
+T = n × n permutation matrix,
+
+R = n × n rank 1 matrix, R = α^T β,
+
+Q = n × n invertible matrix, Q = R + T,
+
+# 20201223
+
+q元Niederreiter暗号を、現実的なパラメータで実装できた。
+セキュリティパラメータは大体2^80くらいである。
 
 # 20201221
 
