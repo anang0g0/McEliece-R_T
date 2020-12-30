@@ -10,6 +10,8 @@ https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
 
 https://user.math.uzh.ch/rosenthal/masterthesis/11720935/Weger_2017.pdf
 
+http://algo.epfl.ch/_media/en/projects/lorenz_thesis.pdf （攻撃法）
+
 Reed-Solomonでも暗号に使えるなんて画期的です。
 
 # 20201231
