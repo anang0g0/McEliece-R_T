@@ -43,6 +43,8 @@
 #include "sha3.c"
 #include "inv_mat.c"
 #include "op.c"
+#include "golay.c"
+
 
 extern unsigned long xor128 (void);
 extern int mlt (int x, int y);
@@ -2055,12 +2057,31 @@ main (void)
   srand (seed);
 #endif
 
+unsigned int m=0;
+
 label:
 
   //makeS();
   //exit(1);
 
+  for(j=0;j<11;j++){
+    for(i=0;i<24;i++){
+      l=gt[i]; 
+      printf("%d",bit(l,j));
 
+    }
+    printf("\n");
+  }
+  
+  for(j=0;j<11;j++){
+    for(i=0;i<24;i++){
+      m=ht[i]; 
+      printf("%d",bit(m,j));
+
+    }
+    printf("\n");
+  }
+exit(1);
   
   do
     {
