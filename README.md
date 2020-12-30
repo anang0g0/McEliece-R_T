@@ -12,6 +12,13 @@ https://user.math.uzh.ch/rosenthal/masterthesis/11720935/Weger_2017.pdf
 
 Reed-Solomonでも暗号に使えるなんて画期的です。
 
+# 20201231
+
+なぜ符号の構造を隠すことが難しいのかを考えています。
+
+sidelnikovとshestakovの攻撃の一般化について論文を読む必要があり、
+それを自分の考えた暗号化にも適用できるかを研究するつもりです。
+
 # 20201226
 
 書き忘れたけど、mainブランチはほとんどいじってません。
