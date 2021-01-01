@@ -192,6 +192,7 @@ unsigned short cc[N][N]={0};
   //exit(1); 
 }
 
+
 //inverse matrix
 int matinv(){
   unsigned short a[N][N]; //={{1,2,0,1},{1,1,2,0},{2,0,1,1},{1,2,1,1}}; //入力用の配列
@@ -298,6 +299,7 @@ printf("行列を出力\n");
    }
    printf("\n");
  }
+// memcpy(inv_A,inv_a,sizeof(inv_a));
  //exit(1);
  
  return 0;

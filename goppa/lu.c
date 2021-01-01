@@ -6,7 +6,7 @@
 #include <time.h>
 
 //#define D 4096
-#define F 256*13 //2040
+#define F 24  //2040
 
 unsigned char a[F][F]={0};
 unsigned char cc[F][F]={0};
@@ -61,7 +61,7 @@ void g2(){
     }
   }
 }
-
+unsigned short inv_AA[F][F]={0};
 
 void makeS(){
   int i,j,k,l;
@@ -225,6 +225,7 @@ for(i=0;i<F;i++){
   for(i=0;i<F;i++){
     for(j=0;j<F;j++){
       printf("%d,",inv_a[i][j]);
+      inv_AA[i][j]=inv_a[i][j];
       dd[j]=inv_a[i][j];
     }
     printf("\n");
@@ -235,10 +236,11 @@ for(i=0;i<F;i++){
       printf("%d, ",b[i][j]);
     printf("\n");
   }
-  //  exit(1);   
+  // exit(1);   
  }
-  
   }
+  
+  /*
   fq=fopen("S.key","wb");
   for(i=0;i<F;i++){
     for(j=0;j<F;j++)
@@ -255,6 +257,7 @@ for(i=0;i<F;i++){
     fwrite(dd,1,n,fq);  
   }
   fclose(fq);
+*/
 
   free(b);
   
