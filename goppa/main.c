@@ -2057,12 +2057,13 @@ main (void)
   srand (seed);
 #endif
 */
-
+unsigned char gn[24]={0};
 unsigned char gl[24][24]={0};
 unsigned char hl[12][24]={0};
 unsigned char ll[24][24]={0};
 unsigned char mm[12][24]={0};
-
+unsigned char nn[24][24]={0};
+unsigned char sl[24][24]={0};
 unsigned int m=0;
 
 label:
@@ -2105,13 +2106,127 @@ label:
     printf("\n");
   }
   printf("\n");
-  
+
+//for(i=0;i<12;i++)
+//hl[i][i+12]^=1;
+
   for(i=0;i<12;i++){
   for(j=0;j<24;j++)
     printf("%d,",hl[i][j]);
     printf("\n");
   }
   printf("\n");
+printf("aa\n");
+
+unsigned char yy[F]={0},inv_yy[F]={0};
+
+/*
+rp(yy);
+makeS();
+unsigned char pp[12]={1,0,1,0,0,0,0,0,0,0,0,0};
+
+for(i=0;i<12;i++){
+  for(j=0;j<12;j++)
+  printf("%d,",inv_AA[i][j]);
+  printf("\n");
+}
+printf("\n");
+//exit(1);
+
+//for(i=0;i<12;i++)
+//hl[i][i+12]^=1;
+
+for(i=0;i<12;i++){
+  for(j=0;j<24;j++){
+    //ll[i][j]^=hl[i][yy[j]];
+    for(k=0;k<12;k++)
+      ll[i][j]^=inv_AA[i][k]&hl[k][j];
+      printf("%d,",ll[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+for(i=0;i<12;i++)
+ll[i][i+12]^=1;
+
+for(i=0;i<12;i++){
+  for(j=0;j<24;j++)
+  printf("%d,",ll[i][j]);
+  printf("\n");
+}
+printf("\n");
+//exit(1);
+
+
+for(i=0;i<12;i++){
+  for(j=0;j<24;j++){
+    //ll[i][j]^=hl[i][yy[j]];
+    for(k=0;k<12;k++)
+      nn[i][j]^=cl[i][k]&ll[k][j];
+      printf("%d,",nn[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+//exit(1);
+
+
+for(i=0;i<24;i++)
+inv_yy[yy[i]]=i;
+
+for(i=0;i<24;i++){
+//  for(j=0;j<12;j++)
+  gn[i]^=ll[0][i]^ll[2][i];
+}
+for(i=0;i<24;i++)
+  printf("%d,",gn[i]);
+printf("ah--------!\n\n");
+
+//gn[12]^=1;
+
+unsigned char s[12]={0},t0[12]={0};
+unsigned char s0[12]={0};
+unsigned char st[24]={0};
+
+for(i=0;i<12;i++){
+  for(j=0;j<24;j++)
+  s[i]^=gn[j]&mm[i][j];
+  printf("%d,",s[i]);
+}
+printf(" ======s\n");
+
+for(i=0;i<12;i++){
+  for(j=0;j<12;j++)
+  s0[i]^=cl[i][j]&s[j];
+  printf("%d,",s0[i]);
+}
+printf(" ======sk2\n");
+//exit(1);
+
+memset(s,0,sizeof(s));
+
+for(i=0;i<24;i++)
+st[i]=hl[0][i]^hl[2][i];
+st[12]^=1;
+st[14]^=1;
+
+
+for(i=0;i<12;i++){
+  for(j=0;j<24;j++)
+  s[i]^=st[j]&mm[i][j];
+  printf("%d,",s[i]);
+    
+}
+printf("\n");
+
+
+//exit(1);
+*/
+
+
+
 
 for(i=0;i<24;i++){
   for(j=0;j<24;j++){
@@ -2122,22 +2237,22 @@ printf("%d,",gl[i][j]);
   printf("\n");
 }
   printf("\n");
+//exit(1);
 
-
-unsigned char ha[12][12]={0};
-  for(i=0;i<12;i++){
+unsigned char ha[24][24]={0};
+  for(i=0;i<24;i++){
     for(j=0;j<12;j++){
       for(k=0;k<24;k++)
-      ha[i][j]^=gl[i][k]&mm[j][k];
+      ha[i][j]^=gl[k][i]&mm[j][k];
 printf("%d,",ha[i][j]);
 
     }
 printf("\n");
   }
   printf("\n");
-//  exit(1);
+// exit(1);
 
-
+/*
 for(i=0;i<12;i++){
   for(j=0;j<12;j++){
     for(k=0;k<24;k++)
@@ -2147,50 +2262,126 @@ printf("%d,",ll[i][j]);
   printf("\n");
 }
 //exit(1);
+*/
 
 makeS();
 unsigned char ra[24][24]={0};
 unsigned char rb[24][24]={0};
 unsigned char rc[24][24]={0};
 unsigned char rv[24][24]={0};
+unsigned char ru[24][24]={0};
+unsigned char rr[24][24]={0};
+unsigned char ps[12]={0};
 
+rp(yy);
 for(i=0;i<24;i++){
   for(j=0;j<24;j++){
     for(k=0;k<24;k++)
 ra[i][j]^=inv_AA[i][k]&gl[k][j];
+printf("%d,",ra[i][j]);
   }
+  printf("\n");
 }
+printf("\n");
+
+printf("rb==\n");
+for(i=0;i<24;i++){
+  for(j=0;j<24;j++){
+for(k=0;k<24;k++)
+rb[i][j]^=gl[i][k]&inv_AA[k][j];
+printf("%d,",rb[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+
+for(i=0;i<24;i++){
+  for(j=0;j<12;j++){
+for(k=0;k<24;k++)
+rc[i][j]^=ra[i][k]&mm[j][k];
+printf("%d,",rc[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+for(i=0;i<24;i++){
+  for(j=0;j<12;j++){
+for(k=0;k<24;k++)
+rv[i][j]^=rb[k][i]&mm[j][k];
+printf("%d,",rv[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+
+exit(1);
+
+
+for(i=0;i<24;i++){
+  for(j=0;j<12;j++){
+for(k=0;k<24;k++)
+rc[i][j]^=ra[k][i]&mm[j][k];
+printf("%d,",rc[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+for(i=0;i<24;i++){
+  for(j=0;j<12;j++){
+for(k=0;k<24;k++)
+rv[i][j]^=cl[k][i]&rc[k][j];
+printf("%d,",rv[i][j]);
+  }
+  printf("\n");
+}
+printf("\n");
+
+exit(1);
+
+
+for(i=0;i<24;i++)
+  inv_yy[yy[i]]=i;
+  exit(1);
+
 
 unsigned char rs[24][24]={0};
 //exit(1);
-
+/*
 for(i=0;i<24;i++){
   for(j=0;j<24;j++){
     for(k=0;k<24;k++)
 rb[i][j]^=ra[i][k]&cl[k][j];//&inv_AA[k][j];
   }
 }
+*/
 
-//rb[12][12]^=1;
+ra[12][12]^=1;
 
 for(i=0;i<24;i++){
   for(j=0;j<24;j++){
     for(k=0;k<24;k++)
-rc[i][j]^=cl[i][k]&rb[k][j];//&inv_AA[k][j];
+rc[i][j]^=cl[i][k]&ra[k][inv_yy[j]];//&inv_AA[k][j];
   }
 }
+
+/*
 for(i=0;i<24;i++){
   for(j=0;j<24;j++){
     for(k=0;k<24;k++)
 rv[i][j]^=rc[i][k]&inv_AA[k][j];//&inv_AA[k][j];
   }
 }
+*/
 
 count=0;
 for(i=0;i<24;i++){
   for(j=0;j<24;j++){
-printf("%d,",rv[i][j]);
-if(gl[i][j]!=rv[i][j])
+printf("%d,",rc[i][j]);
+if(gl[i][j]!=rc[i][j])
 count++;
   }
   printf("\n");
@@ -2198,11 +2389,21 @@ count++;
  printf("\n");
  printf("diff=%d\n",count);
 
-unsigned char pp[12]={0};
+unsigned short pe[24]={0};
+//unsigned short pp[12]={0};
+
+unsigned char ss[24]={0};
+for(i=0;i<24;i++)
+ss[i]=rb[0][i];
+for(i=0;i<24;i++)
+printf("%d,",ss[i]);
+printf("\n");
+
+ss[12]^=1;
 for(i=0;i<12;i++){
   for(j=0;j<24;j++)
-  pp[i]^=gl[j][0]&mm[i][j];
-printf("%d,",pp[i]);
+  ps[i]^=ss[j]&mm[i][j];
+printf("%d,",ps[i]);
 }
 printf("\n");
 exit(1);
