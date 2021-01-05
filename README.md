@@ -14,8 +14,7 @@ http://algo.epfl.ch/_media/en/projects/lorenz_thesis.pdf （攻撃法）
 
 https://core.ac.uk/download/pdf/52650821.pdf
 
-Reed-Solomonでも暗号に使えるなんて画期的です。
-
+https://eprint.iacr.org/2007/382.pdf
 
 # 20200105
 
