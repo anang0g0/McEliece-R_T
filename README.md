@@ -16,6 +16,8 @@ https://core.ac.uk/download/pdf/52650821.pdf
 
 https://eprint.iacr.org/2007/382.pdf
 
+https://eprint.iacr.org/2010/331.pdf
+
 # 20200105
 
 符号を使った忘却転送（紛失通信）のデモを作る予定。
