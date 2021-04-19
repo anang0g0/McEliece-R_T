@@ -23,10 +23,15 @@ https://eprint.iacr.org/2007/382.pdf
 Alternant Codeってなんだろう？
 1変数Goppa符号を、関数の列f_iで作ったらどうなるんだろう？
 例えば、
+
 1,1,1,1            1
+
 a_1,a_1,a_1,a_1    f_1
+
 a_1^2,a_2^2,a_3^2  f_2
+
 ...                ...
+
 a_{t-1},...        f_{t-1}
 
 =Code(L,f_i)
