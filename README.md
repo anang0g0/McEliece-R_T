@@ -22,7 +22,7 @@ https://eprint.iacr.org/2007/382.pdf
 休眠中の、このリポジトリを使ってオリジナルのテーマをやってみるつもり。
 Altanant Codeってなんだろう？
 
-Code(L,${f_i}$)
+Code(L,f_i)
 
 # 20210105
 
