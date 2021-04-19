@@ -17,6 +17,10 @@ https://core.ac.uk/download/pdf/52650821.pdf
 https://eprint.iacr.org/2007/382.pdf
 
 
+# 20210419
+
+休眠中の、このリポジトリを使ってオリジナルのテーマをやってみるつもり。
+Altanant Codeってなんだろう？
 
 # 20210105
 
