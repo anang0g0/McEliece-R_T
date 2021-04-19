@@ -20,7 +20,7 @@ https://eprint.iacr.org/2007/382.pdf
 # 20210419
 
 休眠中の、このリポジトリを使ってオリジナルのテーマをやってみるつもり。
-Altanant Codeってなんだろう？
+Alternant Codeってなんだろう？
 
 Code(L,f_i)
 
