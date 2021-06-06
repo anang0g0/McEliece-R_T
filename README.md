@@ -1,5 +1,6 @@
 # McEliece-R_T(謎ｗ)
 
+
 https://hal.inria.fr/file/index/docid/607772/filename/69.pdf
 
 https://arxiv.org/pdf/1108.2462.pdf
@@ -15,6 +16,11 @@ http://algo.epfl.ch/_media/en/projects/lorenz_thesis.pdf （攻撃法）
 https://core.ac.uk/download/pdf/52650821.pdf
 
 https://eprint.iacr.org/2007/382.pdf
+
+
+# 20210606
+
+https://link.springer.com/content/pdf/10.1007/0-387-34805-0_54.pdf
 
 
 # 20210419
