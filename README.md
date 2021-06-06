@@ -1,16 +1,6 @@
 # McEliece-R_T(謎ｗ)
 
 
-https://hal.inria.fr/file/index/docid/607772/filename/69.pdf
-
-https://arxiv.org/pdf/1108.2462.pdf
-
-https://www.zora.uzh.ch/id/eprint/128304/1/Baldi_et_al2014.pdf
-
-https://www.math.unl.edu/~ckelley2/bgklmr2017.pdf
-
-https://user.math.uzh.ch/rosenthal/masterthesis/11720935/Weger_2017.pdf
-
 http://algo.epfl.ch/_media/en/projects/lorenz_thesis.pdf （攻撃法）
 
 https://core.ac.uk/download/pdf/52650821.pdf
